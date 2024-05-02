@@ -1,0 +1,3824 @@
+@media (max-width: 1920px) {
+}
+
+@media (max-width: 1680px) {
+  .container {
+    max-width: 1450px;
+  }
+
+  html {
+    font-size: 53%;
+  }
+
+  /* moumi */
+  .pass h6 {
+    font-size: 18px;
+  }
+
+  .pass h6 br {
+    display: block;
+  }
+
+  /* ayon paul 09.02.24  */
+  .tb_cntct_bth .tb_cntct_lft {
+    width: 32%;
+  }
+
+  .dbrd_inv_ttlinr_rght .form-control {
+    width: 11.4rem;
+  }
+
+  .payment_filter_lft select.form-control {
+    width: 9.4rem;
+  }
+
+  /* ayon apul  / 15.02.2024 */
+  .product_tp_hdng .form-control {
+    width: 9rem;
+  }
+
+  /* moumi 16.2.24 */
+  .sdbr_oprtr_inpt_top .oprt_inpt_info input {
+    width: 260px;
+  }
+
+  /* .d-flex input {
+  width: 190px;
+} */
+  .oprt_inpt_info span {
+    width: 80px;
+  }
+
+  .brcd input {
+    /* width: 110px; */
+  }
+
+  /* .brcd input {
+  width: 117px;
+} */
+  .brcd.oprt_inpt_info input {
+    width: 100px;
+  }
+
+  /* ayon paul start / 19.02.2024 */
+
+  .payment_filter_lft select.form-control {
+    width: 152px;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+  /* moumi 6.3.24 */
+  .batch_info .btns {
+    display: flex;
+    gap: 5px;
+  }
+  .batch_info table th {
+    font-size: 14px;
+  }
+  .batch_info tbody td {
+    font-size: 13px;
+  }
+  .btns .edit {
+    font-size: 12px;
+  }
+  /* .prchase_order_main.snow_trnsctn .ordr_tbl table tr td,
+  .prchase_order_main.snow_trnsctn .ordr_tbl table tr td:nth-child(4) {
+    width: 116px;
+  }
+  .prchase_order_main.snow_trnsctn .ordr_tbl table tr td:nth-child(1),
+  .prchase_order_main.snow_trnsctn .ordr_tbl table tr th:nth-child(1) {
+    width: 180px;
+  } */
+  .prchase_order_main.snow_trnsctn .ordr_tbl table tr td:nth-child(4),
+  .prchase_order_main.snow_trnsctn .ordr_tbl table tr td:nth-child(7) {
+    width: auto;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 1440px) {
+  .container {
+    max-width: 1340px;
+  }
+
+  html {
+    font-size: 47%;
+  }
+
+  /* moumi 9.2.24 */
+  .pass h6 {
+    text-align: center;
+  }
+
+  .pass h6 br {
+    display: block;
+  }
+
+  /* ayon paul 09.02.24  */
+  .stngs_lft_logo_txt h4 {
+    font-size: 20px;
+  }
+
+  .stngs_lft_logo_pc h5 {
+    font-size: 18px;
+  }
+
+  .stngs_lft_logo_pc {
+    padding: 23px;
+  }
+
+  .stngs_rght_prt svg {
+    font-size: 14px;
+  }
+
+  .stngs_rght_prt {
+    width: 23px;
+    height: 23px;
+  }
+
+  .dbrd_stngs_tb_inr {
+    padding-inline: 32px;
+  }
+
+  .dbrd_stngs_tab .tabs-container nav ul li {
+    font-size: 13px;
+  }
+
+  .tb_cntct_rght_form form label {
+    font-size: 13px;
+  }
+
+  .tb_cntct_rght_form form .form-control {
+    font-size: 13px;
+  }
+
+  .tb_cntct_bth .tb_cntct_rght.bttm .tb_cntct_rght_form form label {
+    font-size: 16px;
+  }
+
+  .tb_cntct_lft form label {
+    font-size: 13px;
+  }
+
+  .tb_cntct_bth .tb_cntct_rght.bttm .tb_cntct_rght_form form span {
+    font-size: 14px;
+  }
+
+  .tb_cntct_lft_txt h6 {
+    font-size: 17px;
+    padding-bottom: 5px;
+  }
+
+  .btod_txt {
+    font-size: 14px;
+  }
+
+  .btod_img {
+    width: 18px;
+  }
+
+  .btod_flx {
+    gap: 10px;
+  }
+
+  .btod_ottr {
+    padding: 10px 17px;
+  }
+
+  .tb_cntct_lft_txt p {
+    font-size: 14px;
+  }
+
+  .dbrd_stngs_tab .tab-content {
+    padding: 10px;
+  }
+
+  .dbrd_stngs_tab .tab-content.current {
+    row-gap: 20px;
+  }
+
+  .tb_cntct_rght_form form label {
+    margin-bottom: 6px;
+  }
+
+  .rprt_stng_top_left h5 {
+    font-size: 18px;
+  }
+
+  .rprt_stng_form_innr label {
+    font-size: 13px;
+  }
+
+  .rprt_stng_form_innr span {
+    font-size: 13px;
+  }
+
+  .rprt_stng_top_rght .sv_btn {
+    font-size: 14px;
+  }
+
+  /* bkng_tbl */
+  .tbl_sngl_bx {
+    width: 18%;
+  }
+
+  .t-h-l h3 {
+    font-size: 5rem;
+  }
+
+  .t-h-l p {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  /* moumi 12.02.24  */
+  .top_div {
+    padding: 35px 30px;
+  }
+
+  .t-h-l h3 {
+    font-size: 4rem;
+  }
+
+  .t-h-l p {
+    font-size: 17px;
+    padding-top: 5px;
+  }
+
+  .tb_top button {
+    font-size: 17px;
+  }
+
+  /* order_history */
+  .ordr_srch_bx {
+    width: 43.4rem;
+  }
+
+  .ordre_lft {
+    padding-left: 40px;
+  }
+
+  .ordre_lft h6 {
+    font-size: 2.6rem;
+  }
+
+  .pagination {
+    width: 30%;
+    padding: 20px 0 0 0;
+  }
+
+  .outr-right-content.order {
+    padding: 40px 50px 20px;
+  }
+
+  .t-h-l h3 {
+    padding-top: 6px;
+    padding-bottom: 0px;
+  }
+
+  .tbl_hdr {
+    padding: 15px 0;
+  }
+
+  .payment_stngs_part p {
+    font-size: 14px;
+    padding-bottom: 10px;
+  }
+
+  .payment_updates_both p {
+    font-size: 14px;
+  }
+
+  .dbrd_inv_hdng h5 {
+    font-size: 18px;
+  }
+
+  .dbrd_inv_rght_box label {
+    font-size: 13px;
+  }
+
+  .dbrd_inv_ttlinr_rght .form-control {
+    font-size: 13px;
+  }
+
+  .payment_stngs_part h6 {
+    font-size: 18px;
+  }
+
+  .payment_stngs_part h6 span {
+    font-size: 15px;
+  }
+
+  .payment_filter_lft select.form-control {
+    font-size: 13px;
+  }
+
+  .payment_filter_date .form-control {
+    font-size: 13px;
+  }
+
+  .payment_filter_search .form-control {
+    font-size: 13px;
+  }
+
+  .ordr_tbl.dbrd_inv_ordr_tbl th {
+    font-size: 14px;
+  }
+
+  .dbrd_inv_cl p,
+  .dbrd_inv_cl_flx p,
+  .dbrd_inv_cl_dt p,
+  .dbrd_inv_cl_rp p,
+  .dbrd_inv_cl_amnt p {
+    font-size: 13px;
+  }
+
+  .dbrd_inv_cl_dots a svg {
+    font-size: 13px;
+  }
+
+  .dbrd_inv_ttlinr_rght .form-control {
+    width: 12.4rem;
+  }
+
+  .ordr_tbl table tr td:nth-child(1) {
+    width: 230px;
+  }
+
+  .ordr_tbl table tr td:nth-child(5) {
+    width: 134px;
+  }
+
+  .frm_innr .button,
+  .v_frm_innr button {
+    font-size: 18px;
+  }
+
+  /* ayon paul / 15.02.2024 */
+
+  .product_tp_hdng h6 span,
+  .sls_ctg_left h6 span {
+    font-size: 15px;
+  }
+
+  .product_tp_hdng .form-control {
+    width: 10rem;
+  }
+
+  .product_tp_tbl_inr th,
+  .product_tp_tbl_inr td {
+    font-size: 13px;
+  }
+
+  .sv_btn {
+    font-size: 14px;
+  }
+
+  .product_mx_bttm_table th {
+    font-size: 14px;
+  }
+
+  .product_mx_bttm_table td {
+    font-size: 13px;
+  }
+
+  .product_mx_bttm_table td select {
+    font-size: 13px;
+  }
+
+  .product_mx_bttm_sales {
+    margin-top: 2rem;
+  }
+
+  .product_tp_prt {
+    width: 49%;
+  }
+
+  .product_mx_tp_flx {
+    row-gap: 20px;
+  }
+
+  /* moumi strats 16.2.24 */
+  .oprt_inpt_info span {
+    width: 70px;
+  }
+
+  .d-flex input {
+    width: 153px;
+  }
+
+  .sdbr_oprtr_inpt_top .oprt_inpt_info input {
+    width: 210px;
+  }
+
+  .modal-content {
+    width: 55%;
+  }
+
+  .m_modal .stngs_lft_logo_txt h6 {
+    font-size: 18px;
+  }
+
+  /* moumi ends 16.2.24 */
+
+  /* ayon paul start / 19.02.2024 */
+
+  .prp_time_otr .prp_time_flex label {
+    font-size: 16px;
+  }
+
+  .prp_time_otr .prp_time_flex .form-control {
+    font-size: 13px;
+  }
+
+  .add_mnu_ordrs .mnu_ordr_prt_tp h6 {
+    font-size: 15px;
+  }
+
+  .mnu_bkng_left_innr h6 span {
+    font-size: 15px;
+  }
+
+  .mnu_pgrs_ttl span {
+    font-size: 13px;
+  }
+
+  .sv_btn {
+    font-size: 13px;
+  }
+
+  .combo_pack_start h6 {
+    font-size: 15px;
+  }
+
+  .combo_pack_box label {
+    font-size: 13px;
+  }
+
+  .mnu_bkng_right .inner_field.st5 p {
+    font-size: 14px;
+  }
+
+  .mnu_bkng_right .inner_field.st6 .inpt_grp_otr p {
+    font-size: 14px;
+  }
+
+  .mnu_bkng_right .inner_field.st3 {
+    gap: 10px;
+  }
+
+  .mnu_bkng_right .inner_field.st3 .form-group {
+    gap: 7px;
+  }
+
+  .mnu_bkng_right .inner_field.st5 .inpt_grp .form-group {
+    gap: 7px;
+  }
+
+  .mnu_bkng_right .inner_field.st5 .inpt_grp {
+    width: 31%;
+  }
+
+  .combo_pack_box .box_item {
+    gap: 8px;
+  }
+
+  .combo_pack_box .box_prmt {
+    gap: 8px;
+  }
+
+  .mnu_bkng_right {
+    width: 63.5%;
+  }
+
+  .mnu_bkng_left {
+    width: 32.5%;
+  }
+
+  .sv_btn {
+    width: 75%;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+
+  /* ayon paul start / 26.02.24 */
+
+  #price_tab .tab_lst_add {
+    width: 23px;
+    height: 23px;
+  }
+
+  #price_tab .tab_lst_add svg {
+    font-size: 14px;
+  }
+
+  #price_tab .resp-tabs-list li {
+    font-size: 13px;
+  }
+
+  /* ayon paul start / 26.02.24 */
+  /* moumi 6.3.24 */
+  .batch_info tbody td:nth-child(6) {
+    width: 18%;
+  }
+  /* ayon paul start / 6.3.24 */
+  .ivnt_units span {
+    font-size: 14px;
+  }
+  .ivnt_tbl_hdng h5 {
+    font-size: 18px;
+  }
+  .ivnt_tbl_form .ivnt_tbl_prt label,
+  .ivnt_tbl_chk label,
+  .ivnt_ottr .payment_filter.ivnt_filter .payment_filter_lft label,
+  .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_bttm_td_ottr td {
+    font-size: 13px;
+  }
+  .ivnt_trns_actv .ivnt_trns_tbl th {
+    font-size: 14px;
+  }
+  .payment_filter_both.ivnt_filter_btn .sv_btn {
+    width: auto;
+  }
+  .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr {
+    overflow: auto;
+  }
+  .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr table {
+    width: 2000px;
+    overflow: hidden;
+  }
+  .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr td {
+    width: 100px !important;
+  }
+  .ordr_tbl.dbrd_inv_ordr_tbl th {
+    width: 100px;
+  }
+  .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr {
+    overflow: hidden;
+  }
+  .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr td {
+    width: fit-content !important;
+  }
+  .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr table {
+    width: 100%;
+  }
+  .dashbrd__invc .ordr_tbl.dbrd_inv_ordr_tbl th {
+    width: auto;
+  }
+  .prchase_order_main.snow_trnsctn .ordr_tbl table tr td:nth-child(1) {
+    width: 200px !important;
+  }
+  .prchase_order_main.snow_trnsctn .ordr_tbl.dbrd_inv_ordr_tbl th {
+    width: 196px;
+  }
+  .prchase_order_main.snow_trnsctn .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr {
+    overflow: scroll;
+  }
+  .td_table th {
+    padding: 9px;
+    font-size: 14px;
+  }
+  .payment_ii .td_i_span {
+    padding: 10px 0px;
+  }
+  .td_i_c .td_i_span span:nth-child(1) {
+    width: 30%;
+  }
+  .td_i_l {
+    width: 60%;
+  }
+  /* .td_i_span span:nth-child(1) {
+    width: 30%;
+  } */
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 1366px) {
+  .container {
+    max-width: 1240px;
+  }
+
+  /* moumi 9.2.24 */
+  .apple,
+  .ggle {
+    width: 48%;
+  }
+
+  .nt_txt p {
+    font-size: 14px;
+  }
+
+  .t-h-l h3 {
+    padding-top: 20px;
+  }
+
+  /* moumi 12.02.24  */
+  .top_div {
+    padding: 35px;
+  }
+
+  .tb_rght select option {
+    font-size: 15px;
+  }
+
+  .sngl_rght h5 {
+    font-size: 2.1rem;
+  }
+
+  .ordr_tbl td:nth-child(5) .div2 span h6 {
+    font-size: 12px;
+  }
+
+  .o_div_img {
+    width: 7rem;
+    height: 7rem;
+  }
+
+  /* ayon paul / 15.02.2024 */
+  .product_mx_tp_flx {
+    row-gap: 15px;
+  }
+
+  .product_tp_prt {
+    width: 49.3%;
+  }
+
+  .product_tp_hdng .form-control {
+    width: 11rem;
+  }
+
+  /* moumi 16.2.24 */
+  .sdbr_oprtr_inpt_top .oprt_inpt_info input {
+    width: 190px;
+  }
+
+  .oprt_inpt_info span {
+    width: 64px;
+  }
+
+  .brcd.oprt_inpt_info input {
+    width: 90px;
+  }
+
+  .cube_box {
+    width: 15.5%;
+    height: 12rem;
+  }
+
+  .ritghtftwo_btn {
+    width: 32%;
+  }
+
+  .left_ftwobtn {
+    width: 67%;
+  }
+
+  .left_ftwobtn .upper .cube_box {
+    width: 32%;
+  }
+
+  .left_ftwobtn .lower .cube_box {
+    width: 32%;
+  }
+
+  .oprt_inpt_info {
+    gap: 5px;
+  }
+
+  .oprt_inpt_info span {
+    width: 50px;
+  }
+
+  .brcd.oprt_inpt_info input {
+    width: 80px;
+  }
+
+  .from-to-cnt h6 {
+    font-size: 15px;
+  }
+
+  .mdl_ftr h5 {
+    font-size: 17px;
+  }
+
+  .mdl_ftr p {
+    font-size: 13px;
+  }
+
+  .itm_lft_ds h4 span {
+    font-size: 20px;
+  }
+
+  .p_c_lft input {
+    width: 30%;
+    font-size: 16px;
+  }
+
+  .edit {
+    padding: 7px 15px;
+  }
+  /* moumi 6.3.24 */
+  .tp_txt_mdl h6 {
+    font-size: 18px;
+  }
+  .btm_mdl_cls .batch_top.edit {
+    font-size: 13px;
+  }
+  ul.breadcrumb li a {
+    font-size: 15px;
+  }
+  .td_table th {
+    padding: 10px 3px;
+  }
+  .td_main {
+    padding: 0;
+  }
+  .td_btm_btn {
+    padding-right: 0;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 1280px) {
+  .container {
+    max-width: 1140px;
+  }
+
+  html {
+    font-size: 42%;
+  }
+
+  /* moumi 9.2.24 */
+  .sgn_hdr p {
+    font-size: 17px;
+    padding-top: 0;
+  }
+
+  .or_wth h6 {
+    font-size: 18px;
+  }
+
+  .frm_innr .inpt input {
+    font-size: 19px;
+  }
+
+  .frm_innr .inpt:nth-child(4),
+  .frm_innr .inpt:nth-child(5) {
+    margin-top: 10px;
+  }
+
+  .inpt .checkbox label {
+    font-size: 17px;
+  }
+
+  .btm_snp_lnk a {
+    font-size: 18px;
+  }
+
+  .inpt_icn {
+    font-size: 19px;
+  }
+
+  .a_txt p {
+    font-size: 17px;
+  }
+
+  .apple,
+  .ggle {
+    padding: 7px;
+  }
+
+  .sgn_hdr.v_hdr p br {
+    display: block;
+  }
+
+  .sgn_hdr.v_hdr p {
+    font-size: 16px;
+  }
+
+  /* ayon paul 09.02.24  */
+  .stngs_lft_logo_txt h4 {
+    font-size: 19px;
+  }
+
+  .stngs_lft_logo_pc h5 {
+    font-size: 17px;
+  }
+
+  .stngs_lft_logo_pc {
+    padding: 20px;
+  }
+
+  .dbrd_stngs_tb_inr {
+    padding-inline: 30px;
+  }
+
+  .dbrd_stngs_tab .tabs-container nav ul li {
+    font-size: 13px;
+  }
+
+  .tb_cntct_bth .tb_cntct_rght.bttm .tb_cntct_rght_form form label {
+    font-size: 15px;
+  }
+
+  .tb_cntct_lft_txt h6 {
+    font-size: 16px;
+  }
+
+  .dbrd_stngs_tab .tab-content.current {
+    row-gap: 17px;
+  }
+
+  .stngs_lft_flx {
+    gap: 14px;
+  }
+
+  .stngs_rght_prt {
+    width: 22px;
+    height: 22px;
+  }
+
+  .dbrd_stngs_tab .tab-content {
+    padding-block: 0;
+  }
+
+  .tb_cntct_lft form .frm-grp-ttl {
+    gap: 25px;
+  }
+
+  .rprt_stng_top_left h5 {
+    font-size: 17px;
+  }
+
+  /* moumi 10.2.24 */
+  .order_btns {
+    flex-direction: column;
+  }
+
+  .nt_icn span {
+    padding: 5px 7px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .ntfcn_div {
+    align-items: start;
+    gap: 12px;
+  }
+
+  .orde-hdr h6 {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  .ntfcn_hdr h6 {
+    font-size: 17px;
+  }
+
+  .t-h-r span {
+    width: auto;
+    height: auto;
+  }
+
+  /* moumi 12.02.24  */
+  .top_div {
+    padding: 31px;
+    width: 32%;
+  }
+
+  .order_hdr {
+    padding: 6rem 0;
+  }
+
+  .ordr_tbl table tr td:nth-child(1) {
+    width: 260px;
+  }
+
+  .dbrd_inv_hdng h5 {
+    font-size: 17px;
+  }
+
+  .payment_stngs_part h6 {
+    font-size: 17px;
+  }
+
+  .payment_stngs_part h6 span {
+    font-size: 14px;
+  }
+
+  .payment_stngs_part p {
+    font-size: 13px;
+  }
+
+  .dbrd_inv_ttlinr_rght .form-control {
+    width: 13.4rem;
+  }
+
+  .payment_updates_both p {
+    font-size: 13px;
+  }
+
+  .payment_filter_lft select.form-control {
+    width: 10.4rem;
+  }
+
+  .ordr_tbl.dbrd_inv_ordr_tbl th {
+    font-size: 13px;
+  }
+
+  .frm_innr .button,
+  .v_frm_innr button {
+    font-size: 16px;
+  }
+
+  /* ayon paul / 15.02.2024 */
+  .product_tp_hdng h6 span,
+  .sls_ctg_left h6 span {
+    font-size: 14px;
+  }
+
+  .product_mx_bttm_table th {
+    font-size: 13px;
+  }
+
+  /* moumi 16.2.24 */
+  .oprt_inpt_info label {
+    font-size: 13px;
+  }
+
+  .oprt_inpt_info_thrd {
+    font-size: 13px;
+  }
+
+  .oprt_inpt_info input,
+  .oprt_inpt_info span {
+    font-size: 11px;
+  }
+
+  .total {
+    font-size: 13px !important;
+  }
+
+  .modal_hdr h6 {
+    font-size: 14px;
+  }
+
+  .from-to-cnt h6 {
+    font-size: 14px;
+  }
+
+  .item_ds_sec h6 {
+    font-size: 14px;
+  }
+
+  /* ayon paul start / 19.02.2024 */
+
+  .combo_pack_start h6 {
+    font-size: 14px;
+  }
+
+  .mnu_bkng_right .inner_field.st5 .inpt_grp {
+    width: 31.3%;
+  }
+
+  .mnu_bkng_left_innr h6 span {
+    font-size: 14px;
+  }
+
+  .sv_btn {
+    width: 78%;
+  }
+
+  .mnu_bkng_right {
+    width: 65%;
+  }
+
+  .add_mnu_ordrs .mnu_ordr_prt_tp h6 {
+    font-size: 14px;
+  }
+
+  .add_mnu_ordrs .mnu_ordrs_flx .mnu_ordrs_prt {
+    width: 28%;
+  }
+
+  .prp_time_otr .prp_time_flex label {
+    font-size: 15px;
+  }
+
+  .payment_filter_lft select.form-control {
+    width: 150px;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+
+  /* ayon paul start / 26.02.24 */
+
+  #price_tab .tab_lst_add {
+    width: 22px;
+    height: 22px;
+  }
+
+  #price_tab .tab_lst_add svg {
+    font-size: 13px;
+  }
+
+  /* ayon paul start / 26.02.24 */
+  /* ayon paul start / 6.3.24 */
+  .ivnt_units span {
+    font-size: 13px;
+  }
+  .ivnt_tbl_hdng h5 {
+    font-size: 17px;
+  }
+  .ivnt_trns_actv .ivnt_trns_tbl th {
+    font-size: 13px;
+  }
+  .td_i_l {
+    width: 65%;
+  }
+  /* moumi 19.3.24 */
+  .po_mains h3 {
+    font-size: 17px;
+  }
+  .td_hdr h6,
+  .td_hdr h6 span {
+    font-size: 14px;
+  }
+  .td_hdr > div {
+    padding-bottom: 5px;
+  }
+  .td_hdr div .edt {
+    font-size: 13px;
+  }
+  /* .td_i_span span {
+  font-size: 13px;
+} */
+  .td_i_l {
+    width: 59%;
+  }
+  .td_i_r h6,
+  .td_i_r h6 span {
+    /* font-size: 13px; */
+    padding-bottom: 2px;
+  }
+
+  .td_i_r h6:nth-child(6) {
+    margin-top: 13px;
+  }
+  .td_table th {
+    /* font-size: 13px; */
+    padding-left: 7px;
+  }
+  .td_table .item h5 {
+    font-size: 13px;
+  }
+  /* .td_table td span {
+    font-size: 13px;
+  } */
+  .td_table td {
+    font-size: 13px;
+    padding: 5px;
+  }
+  .t_foot.po_mains h3 {
+    font-size: 13px;
+  }
+  .t_foot.po_mains {
+    margin-bottom: 0;
+  }
+  .td_i_span span:nth-child(1) {
+    width: 50%;
+  }
+  /* .td_i_span span:nth-child(1) {
+  width: auto;
+} */
+  .td_btm_btn .edit {
+    font-size: 13px;
+  }
+  .t_foot {
+    gap: 50px;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 1199px) {
+  .container {
+    max-width: 100%;
+  }
+
+  /* moumi 9.2.24 */
+  .a_txt p {
+    font-size: 15px;
+  }
+
+  .innr_ordr {
+    margin: 15px 0;
+  }
+
+  .innr_tbl_bkn {
+    margin: 7rem 0;
+  }
+
+  /* moumi 10.2.24 */
+  .ntfcn_div {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .order_btns .btn a {
+    font-size: 13px;
+  }
+
+  .order_btns.tbl .btn span {
+    font-size: 12px;
+  }
+
+  /* .tbl_sngl_bx {
+  width: 23%;
+} */
+  /* moumi 12.02.24  */
+  .tbl_sngl_bx {
+    width: 23%;
+  }
+
+  .tb_top button {
+    font-size: 16px;
+  }
+
+  .o_div_txt h5,
+  .div2 h5 {
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  .pagination a {
+    font-size: 14px;
+  }
+
+  .orders {
+    padding: 10px 30px 30px;
+  }
+
+  /* moumi 16.2.24 */
+  .sdbr_oprtr_inpt_top .oprt_inpt_info input {
+    width: 177px;
+  }
+
+  .sdbr_oprtr_inpt_btm .oprt_inpt_info.oprt_inpt_info_thrd {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .d-flex input {
+    width: 236px;
+  }
+
+  .brcd.oprt_inpt_info input {
+    width: 253px;
+  }
+
+  .modal_hdr {
+    padding-inline: 26px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .m_modal .dbrd_stngs_tb_inr {
+    padding-bottom: 22px;
+  }
+
+  .from-to-cnt,
+  .itm_ds_hdr,
+  .mdl_cnt,
+  .mdl_ftr {
+    padding-inline: 27px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .from-to-cnt h6,
+  .item_ds_sec h6,
+  .item_ds_sec h6 {
+    font-size: 13px;
+  }
+
+  .itm_lft_ds h4 span {
+    font-size: 22px;
+  }
+
+  /* ayon paul start / 19.02.2024 */
+
+  .mnu_bkng_left {
+    width: 40%;
+  }
+
+  .mnu_bkng_right {
+    width: 100%;
+  }
+
+  .add_mnu_bkng_mn {
+    width: 100%;
+    row-gap: 20px;
+  }
+
+  .add_mnu_ordrs .mnu_ordrs_flx .mnu_ordrs_prt {
+    width: 32%;
+  }
+
+  .bkng_left_img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+  /* moumi 6.3.24 */
+  /* .batch_info .btns {
+    flex-direction: column;
+} */
+  .batch_info {
+    overflow: auto;
+  }
+  /* moumi 19.3.24 */
+  /* .td_i_span span {
+    font-size: 13px;
+  } */
+  ul.breadcrumb li a {
+    font-size: 14px;
+  }
+  .t_foot {
+    gap: 40px;
+  }
+  .trnsct_tbl_dtls tr td:nth-child(2) {
+    width: 230px;
+  }
+  .trnsct_tbl_dtls tr td:nth-child(4) {
+    width: 111px;
+    word-wrap: break-word;
+    word-break: break-all;
+  }
+  .trnsct_tbl_dtls tr td:nth-child(6),
+  .trnsct_tbl_dtls tr td:nth-child(7) {
+    width: 100px;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 1080px) {
+  /* moumi 9.2.24 */
+
+  .a_txt p {
+    font-size: 16px;
+  }
+
+  .sign_up_otr {
+    width: 50%;
+  }
+
+  .p_num h5 {
+    font-size: 2.4rem;
+  }
+
+  .p_num p {
+    font-size: 15px;
+  }
+
+  .vryfctn .btm_snp_lnk a {
+    font-size: 16px;
+  }
+
+  /* ayon paul 09.02.24  */
+  .dbrd_stngs_tab {
+    width: 100%;
+  }
+
+  .dbrd_stngs_tab .tabs-container nav ul {
+    padding-inline: 20px;
+  }
+
+  .dbrd_stngs_tb_inr {
+    padding-inline: 20px;
+  }
+
+  .tb_cntct_bth .tb_cntct_rght {
+    width: 62%;
+    padding: 13px 20px;
+  }
+
+  .tb_cntct_rght_top {
+    margin-bottom: 15px;
+  }
+
+  .tb_cntct_rght_bttm {
+    margin-bottom: 15px;
+  }
+
+  .tb_cntct_lft form .frm-grp-ttl {
+    gap: 15px;
+  }
+
+  .tb_cntct_lft_chkbx .frm-grp-ttl .form-group {
+    gap: 5px;
+  }
+
+  .tb_cntct_rght.bttm .tb_cntct_rght_top .form-group {
+    gap: 8px;
+  }
+
+  .stngs_lft_logo_txt h4 {
+    font-size: 17px;
+  }
+
+  .stngs_lft_logo_pc h5 {
+    font-size: 15px;
+  }
+
+  .stngs_rght_prt svg {
+    font-size: 13px;
+  }
+
+  .stngs_rght_prt {
+    width: 20px;
+    height: 20px;
+  }
+
+  .tb_cntct_lft_txt h6 {
+    font-size: 15px;
+  }
+
+  .tb_cntct_bth .tb_cntct_rght.bttm .tb_cntct_rght_form form label {
+    font-size: 14px;
+  }
+
+  .tb_cntct_bth .tb_cntct_rght.bttm .tb_cntct_rght_form form span {
+    font-size: 13px;
+  }
+
+  .tb_cntct_lft_txt p {
+    font-size: 13px;
+  }
+
+  .btod_txt {
+    font-size: 13px;
+  }
+
+  .btod_img {
+    width: 16px;
+  }
+
+  .btod_ottr {
+    padding: 10px 15px;
+  }
+
+  .btod_flx {
+    gap: 8px;
+  }
+
+  .tb_cntct_bth .tb_cntct_rght.bttm .tb_cntct_rght_form .form-control {
+    width: 25%;
+  }
+
+  .rprt_stng_top_left h5 {
+    font-size: 15px;
+  }
+
+  .rprt_stng_top_rght .sv_btn {
+    font-size: 13px;
+    padding: 10px 18px;
+  }
+
+  .rprt_stng_bttm_innr {
+    width: 62%;
+  }
+
+  /* moumi 10.2.24 */
+  .ntfcn_hdr h6 {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .nt_txt p {
+    font-size: 12px;
+    padding-top: 5px;
+  }
+
+  .nt_txt h6 {
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .orde-hdr h6 {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .order_btns.tbl .btn span {
+    width: 14px;
+    height: 14px;
+  }
+
+  .order_btns {
+    gap: 10px;
+  }
+
+  /* moumi 12.02.24  */
+  .top_div {
+    padding: 31px 15px;
+  }
+
+  .tbl_sngl_bx {
+    width: 22%;
+  }
+
+  .ordr_tbl table tr td .div1 {
+    margin-right: 0;
+    gap: 10px;
+  }
+
+  .ordre_lft {
+    padding-left: 0;
+  }
+
+  .ordre_lft h6 {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+  }
+
+  .ordre_lft p {
+    font-size: 13px;
+  }
+
+  .ordre_rght {
+    gap: 9px;
+  }
+
+  .ordr_tbl th {
+    padding: 0 10px 10px 0;
+  }
+
+  .ordr_tbl table tr td .div1 {
+    align-items: center;
+  }
+
+  .o_div_txt h5,
+  .div2 h5 {
+    padding-bottom: 0;
+  }
+
+  .order_hdr {
+    padding: 4rem 0;
+  }
+
+  .dbrd_inv_hdng h5 {
+    font-size: 15px;
+  }
+
+  .payment_stngs_part h6 {
+    font-size: 15px;
+  }
+
+  .payment_stngs_part h6 span {
+    font-size: 13px;
+  }
+
+  .dbrd_inv_ttlinr_rght .form-control {
+    background-size: 8px;
+  }
+
+  .payment_filter_lft select.form-control {
+    background-size: 8px;
+  }
+
+  .nav_btm_logo {
+    width: 13rem;
+  }
+
+  /* ayon paul / 15.02.2024 */
+
+  .product_tp_hdng .form-control {
+    width: 13rem;
+  }
+
+  .sv_btn {
+    font-size: 13px;
+  }
+
+  .sls_ctg_right .stngs_rght_prt {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* moumi 16.2.24 */
+  .sdbr_oprtr_inpt_top {
+    padding: 10px;
+  }
+
+  .sdbr_oprtr_inpt_top .oprt_inpt_info input {
+    width: 165px;
+  }
+
+  .outr_rightsbcntnt {
+    padding: 15px 0;
+  }
+
+  .oprt_inpt_info_thrd {
+    padding-top: 10px;
+  }
+
+  .modal-content {
+    width: 63%;
+  }
+
+  /* ayon paul start / 19.02.2024 */
+
+  .prp_time_otr .prp_time_flex label {
+    font-size: 14px;
+  }
+
+  .mnu_bkng_right .inner_field.st6 .inpt_grp_otr .form-control {
+    background-size: 8px;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+  .p_c_lft input {
+    width: 50%;
+  }
+
+  /* ayon paul start / 26.02.24 */
+
+  #price_tab .tab_lst_add {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* ayon paul start / 26.02.24 */
+  /* shreyasi */
+  .img_contains {
+    width: 58%;
+  }
+  .img_upload {
+    width: 40%;
+  }
+  .img_upload input {
+    margin-top: 10px;
+  }
+  .img_upload p,
+  .img_upload form input,
+  .img_text p {
+    font-size: 16px;
+  }
+  .img_text p,
+  .img_icons {
+    padding-top: 5px;
+  }
+  /* moumi 6.3.24 */
+  .modal-content.batches_ {
+    width: 45%;
+  }
+
+  /* ayon paul start / 6.3.24 */
+  .ivnt_tbl_hdng h5 {
+    font-size: 15px;
+  }
+  .prchase_order_main .ordr_tbl table tr td:last-child {
+    gap: 8px;
+  }
+  .orders_purchase {
+    overflow: auto;
+  }
+  .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr table {
+    overflow: auto;
+  }
+  .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr {
+    overflow: auto;
+  }
+  .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr td {
+    width: 200px !important;
+  }
+  .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr table {
+    width: 1000px;
+  }
+  .po_odr .po_main_info {
+    width: 70%;
+  }
+  /* moumi 19.3.24 */
+  .td_hdr h6,
+  .td_hdr h6 span {
+    font-size: 13px;
+  }
+
+  .td_hdr h6,
+  .td_hdr h6 span {
+    font-size: 13px;
+  }
+  .td_i_l {
+    width: 61%;
+  }
+  .trnsct_tbl_dtls {
+    overflow: auto;
+  }
+  .td_table table {
+    width: 1000px;
+    table-layout: auto;
+    overflow: hidden;
+  }
+  .trnsct_tbl_dtls tr td:nth-child(2) {
+    width: auto;
+  }
+  .trnsct_tbl_dtls tr td:nth-child(4) {
+    width: auto;
+    word-wrap: unset;
+    word-break: unset;
+  }
+  .trnsct_tbl_dtls tr td:nth-child(6),
+  .trnsct_tbl_dtls tr td:nth-child(7) {
+    width: auto;
+  }
+  .td_i_c .td_i_span span:nth-child(1) {
+    width: 24%;
+  }
+  .fnl_r .td_i_c .td_i_span span:nth-child(1) {
+    width: auto;
+  }
+
+  .fnl_r .td_i_span span:nth-child(1) {
+    width: auto;
+  }
+}
+
+/* ============================================================= */
+@media (max-width: 1024px) {
+  /* moumi 12.02.24  */
+  .ordr_tbl table tr td:nth-child(1) {
+    width: 235px;
+  }
+
+  /* ayon paul / 15.02.2024 */
+
+  .product_mx_tp_flx {
+    row-gap: 13px;
+  }
+
+  .right_parent_element.side {
+    width: 60%;
+    margin-left: 0;
+  }
+
+  .right_sidebar_content {
+    width: 33%;
+  }
+
+  .cube_box {
+    width: 18.5%;
+  }
+
+  .firsttwo_btn {
+    flex-direction: column;
+  }
+
+  .left_ftwobtn {
+    width: 98%;
+    padding-left: 5px;
+  }
+
+  .ritghtftwo_btn {
+    width: 98%;
+    height: 100px;
+    padding-left: 5px;
+    padding-top: 5px;
+  }
+
+  .upper,
+  .lower {
+    flex-wrap: wrap;
+    padding: 0 10px 0 5px;
+  }
+
+  .lower .cube_box.yellow {
+    width: 30%;
+  }
+
+  .outr_quantity {
+    margin-top: 7rem;
+  }
+
+  .mdl_hdr_r {
+    width: 55%;
+  }
+
+  .ttl h6 {
+    padding-top: 5px;
+  }
+
+  .mdl_ftr p {
+    font-size: 13px;
+  }
+
+  .itm_lft_ds h4 span {
+    font-size: 20px;
+  }
+  /* moumi 6.3.24 */
+  .p_info_hdr h6 {
+    font-size: 18px;
+  }
+  .batch_top .edit {
+    font-size: 12px;
+  }
+  .tp_txt_mdl h6 {
+    font-size: 17px;
+  }
+  .mddl_mdl table th {
+    padding-bottom: 14px;
+  }
+  .mddl_mdl td {
+    font-size: 13px;
+  }
+  .mddl_mdl {
+    padding: 10px;
+  }
+  .tp_mdl {
+    padding: 20px 10px;
+  }
+  /* shreyasu(14.3.24) */
+  .prnt_info h4 {
+    font-size: 17px;
+  }
+  .prnt_lbl_prt label {
+    font-size: 15px;
+  }
+  .po_main .hdr h3 {
+    font-size: 20px;
+  }
+  .edit {
+    font-size: 14px;
+  }
+  .prnt_info {
+    margin: 9px 0 16px;
+    padding-bottom: 10px;
+  }
+  /* moumi 19.3.24 */
+  .td_i_l .td_i_c .td_i_span span:nth-child(1) {
+    width: 28%;
+  }
+  .payment_ii .td_i_span span:nth-child(1) {
+    width: 100%;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 991px) {
+  /* moumi 9.2.24 */
+  .frm_innr button,
+  .v_frm_innr button {
+    font-size: 16px;
+  }
+
+  /* ayan dey 09.02.23  */
+  .left_parent_element {
+    transform: translateY(-100%);
+
+    position: absolute;
+    width: 100%;
+    left: 0;
+    z-index: 9999;
+  }
+
+  .right_parent_element {
+    width: 100%;
+  }
+
+  .left_parent_element.active {
+    width: 100%;
+    transform: translateY(0);
+    opacity: 1;
+    top: 85px;
+    padding-bottom: 70px;
+    background-color: var(--primary-color);
+  }
+
+  .left_parent_element.active .nav-item span {
+    display: block;
+  }
+
+  .left_parent_element.active .parent_nav_menu .dropdown-menu.show .nav-link,
+  .left_parent_element.active .dropdown,
+  .left_parent_element.active .parent_nav_menu .nav-item,
+  .parent_nav_menu .nav-item {
+    width: 200px;
+    margin-inline: auto;
+  }
+
+  .logo_area {
+    height: 0;
+  }
+
+  /* ayon paul 09.02.24  */
+  .dbrd_stngs_tab .tabs-container nav ul {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  .tb_cntct_bth .tb_cntct_rght {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .tb_cntct_bth .tb_cntct_lft {
+    width: 100%;
+  }
+
+  .dbrd_stngs_tab .tabs-container nav ul li.active:after {
+    right: 3.3%;
+  }
+
+  .dbrd_stngs_tab .tabs-container nav ul {
+    width: 1000px;
+  }
+
+  .dbrd_stngs_tab .tabs-container nav {
+    overflow-x: auto;
+  }
+
+  .outr_parent_nav {
+    width: 100%;
+  }
+
+  .rprt_stng_bttm_innr {
+    width: 100%;
+  }
+
+  /* moumi 12.02.24  */
+  .outr-right-content.order {
+    padding: 40px 30px 20px;
+  }
+
+  .dbrd_inv_rght_box {
+    gap: 5px;
+  }
+
+  .dbrd_inv_ttlinr_rght form {
+    gap: 2rem;
+  }
+
+  .dbrd_ttl.dbrd_inv_ttl .dbrd_inv_ttlinr_lft {
+    gap: 1.5rem;
+  }
+
+  .payment_updates_lft,
+  .payment_updates_rght {
+    gap: 5px;
+  }
+
+  .breadcrumb-item a {
+    font-size: 18px;
+  }
+
+  .pagination {
+    justify-content: center;
+  }
+
+  /* moumi 16.2.24 */
+  .upper,
+  .lower {
+    padding: 0 0px 0 2px;
+  }
+
+  .btns .cube_box {
+    padding: 0 6px;
+  }
+
+  .cube_box.ylw .cmn_hdr p {
+    font-size: 16px;
+  }
+
+  .modal_hdr h6 {
+    font-size: 13px;
+  }
+
+  .from-to-cnt h6 {
+    padding-bottom: 5px;
+  }
+
+  .p_info {
+    padding: 12px 0;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 900px) {
+  /* moumi 9.2.24 */
+  .a_txt p {
+    font-size: 14px;
+  }
+
+  .or_wth h6 {
+    font-size: 16px;
+  }
+
+  .frm_innr .inpt input {
+    font-size: 16px;
+  }
+
+  .inpt_icn {
+    font-size: 17px;
+  }
+
+  .pass h6 {
+    font-size: 17px;
+  }
+
+  .btm_snp_lnk a {
+    font-size: 17px;
+  }
+
+  .v_frm_innr button {
+    width: 90%;
+  }
+
+  /* moumi */
+  .tab_4_hdr_rght button {
+    font-size: 13px;
+  }
+
+  .order_btns.tbl .btn {
+    gap: 4px;
+  }
+
+  .order_btns.tbl .btn span {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* moumi 12.02.24  */
+  .tb_top button {
+    font-size: 15px;
+  }
+
+  .tb_rght select,
+  .tb_rght select option {
+    font-size: 15px;
+  }
+
+  /* ayon paul / 15.02.2024 */
+
+  .product_tp_prt {
+    width: 65%;
+  }
+
+  .product_tp_hdng h6 span {
+    padding-block: 15px;
+  }
+
+  /* moumi 16.2.24 */
+  .oprt_inpt_info {
+    gap: 5px;
+    flex-direction: column;
+  }
+
+  .sdbr_oprtr_inpt_top .oprt_inpt_info input {
+    width: 208px;
+  }
+
+  .oprt_inpt_info label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .oprt_inpt_info_thrd {
+    gap: 6rem;
+  }
+
+  .d-flex input {
+    width: 218px;
+  }
+
+  .brcd.oprt_inpt_info {
+    display: block;
+  }
+
+  .outr_quantity {
+    flex-wrap: wrap;
+  }
+
+  .outr_quantity .q_box {
+    width: 48%;
+  }
+
+  .cube_box {
+    width: 32.5%;
+    height: 13.5rem;
+  }
+
+  .upper,
+  .lower {
+    padding: 0 7px 0 7px;
+  }
+
+  .mdl_hdr_l {
+    width: 46%;
+  }
+
+  .modal_hdr {
+    padding-inline: 15px;
+  }
+
+  .from-to-cnt,
+  .itm_ds_hdr,
+  .mdl_cnt,
+  .mdl_ftr {
+    padding-inline: 15px;
+  }
+
+  .mdl_ftr h5 {
+    font-size: 17px;
+  }
+  /* moumi 6.3.24 */
+  .batch_info table th {
+    font-size: 13px;
+  }
+  .btm_mdl_cls .batch_top.edit {
+    font-size: 11px;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 840px) {
+  /* moumi 9.2.24 */
+  .sign_up_otr {
+    width: 60%;
+  }
+
+  /* ayon paul 09.02.24  */
+  .dbrd_stngs_tab .tabs-container nav ul li.active:after {
+    right: 4%;
+  }
+
+  /* moumi 10.2.24 */
+  .innr_tbl_bkn {
+    margin: 5rem 0;
+  }
+
+  .outr_notifictaion {
+    padding: 10px;
+  }
+
+  /* moumi 12.02.24  */
+  .t-h-l h3 {
+    font-size: 3.4rem;
+  }
+
+  .sngl_rght p {
+    font-size: 13px;
+  }
+
+  .o_div_txt h5,
+  .div2 h5 {
+    font-size: 12px;
+  }
+
+  /* ayon paul / 15.02.2024 */
+  .product_mx_bttm_table table {
+    width: 1000px;
+  }
+
+  .product_mx_bttm_table {
+    overflow: auto;
+  }
+
+  /* moumi 16.2.24 */
+  .cube_box {
+    width: 30.5%;
+    height: 13.5rem;
+  }
+
+  .sdbr_oprtr_inpt_top .oprt_inpt_info input {
+    width: 177px;
+  }
+
+  .op_inpt_div {
+    gap: 6px;
+  }
+
+  .oprt_inpt_info_thrd {
+    gap: 3rem;
+  }
+
+  .d-flex input {
+    width: 177px;
+  }
+
+  .outr-right-content {
+    padding: 20px 10px 10px 15px;
+  }
+
+  .brcd.oprt_inpt_info input {
+    width: 226px;
+  }
+
+  .outr_quantity .q_box {
+    margin-top: 7px;
+  }
+
+  .left_ftwobtn .upper .cube_box,
+  .left_ftwobtn .lower .cube_box,
+  .upper .cube_box.wht,
+  .lower .cube_box.yellow {
+    height: 11.5rem;
+  }
+
+  .ritghtftwo_btn {
+    width: 96%;
+    padding-left: 12px;
+  }
+
+  .modal_hdr {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mdl_hdr_r {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .from-to-cnt {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .to_r {
+    text-align: left;
+  }
+
+  .mdl_hdr_l {
+    width: 90%;
+  }
+
+  /* ayon paul start / 19.02.2024 */
+
+  .mnu_bkng_left {
+    width: 45%;
+  }
+
+  .outr-right-content.food_bkng_top .tb_cntct_bth .tb_cntct_lft {
+    width: 100%;
+  }
+
+  .outr-right-content.food_bkng_top .tb_cntct_bth .tb_cntct_rght {
+    width: 50%;
+  }
+
+  .outr-right-content.food_bkng_top .tb_cntct_bth .prp_time_otr {
+    width: 50%;
+  }
+
+  .tb_cntct_bth .tb_cntct_rght.bttm .tb_cntct_rght_form .form-control {
+    width: auto;
+  }
+
+  .prp_time_otr .prp_time_flex .form-control {
+    width: auto;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+  /* moumi 6.3.24 */
+  .batch_info tbody td {
+    font-size: 12px;
+  }
+  .btns .edit {
+    font-size: 11px;
+  }
+  .modal-content.batches_ {
+    width: 55%;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 768px) {
+  /* moumi 10.2.24 */
+  .nt_txt h6 {
+    font-size: 13px;
+  }
+
+  .ntfcn_div {
+    margin-bottom: 22px;
+  }
+
+  .orde-hdr h6 {
+    font-size: 13px;
+  }
+
+  /* moumi 12.02.24  */
+  .top_div {
+    width: 31%;
+    padding: 20px 15px;
+  }
+
+  .tbl_sngl_bx {
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .mid_tables .tbl_hdr h3 {
+    font-size: 2.6rem;
+  }
+
+  .order_hdr {
+    display: flex;
+    padding: 4rem 0;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .ordre_lft {
+    text-align: center;
+  }
+
+  /* moumi 16.2.24 */
+  .oprt_inpt_info_thrd {
+    gap: 17px;
+  }
+
+  .oprt_inpt_info label {
+    font-size: 13px;
+  }
+
+  .oprt_inpt_info span {
+    margin: auto;
+  }
+
+  .oprt_inpt_info_thrd {
+    font-size: 12px;
+  }
+
+  .d-flex input {
+    width: 180px;
+  }
+
+  .right_sidebar_content.side {
+    width: 40%;
+    margin-top: 66px;
+    padding-right: 10px;
+  }
+
+  .right_parent_element.side {
+    width: 60% !important;
+    margin-left: 0;
+  }
+
+  .sdbr_oprtr_inpt_top .oprt_inpt_info input {
+    width: 180px;
+    margin-left: 20px;
+  }
+
+  .brcd .d-flex span {
+    padding: 10px;
+  }
+
+  .brcd.oprt_inpt_info input {
+    width: 236px;
+  }
+
+  .oprt_inpt_info_thrd {
+    gap: 46px;
+  }
+
+  /* ayon paul start / 19.02.2024 */
+
+  .mnu_bkng_left {
+    width: 50%;
+  }
+
+  .fbt_top-flx {
+    width: 100%;
+  }
+
+  .outr-right-content.food_bkng_top .tb_cntct_bth.last {
+    flex-direction: column;
+    row-gap: 20px;
+  }
+
+  .outr-right-content.food_bkng_top .tb_cntct_bth .tb_cntct_rght {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .outr-right-content.food_bkng_top .tb_cntct_bth .prp_time_otr {
+    width: 100%;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+  /* moumi 6.3.24 */
+  .tp_txt_mdl h6 {
+    font-size: 16px;
+  }
+  .mddl_mdl table th {
+    font-size: 14px;
+  }
+  .mddl_mdl td {
+    font-size: 12px;
+  }
+  tbody tr td {
+    padding: 13px 0;
+  }
+  /* ayon paul start / 6.3.24 */
+  .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr table {
+    width: 1800px;
+  }
+  /* moumi 19.3.24 */
+  .td_info {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .td_i_l {
+    width: 77%;
+  }
+  .td_i_r h6 {
+    text-align: left;
+    padding-bottom: 5px;
+  }
+  .fnl_r {
+    width: 60%;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 767px) {
+  /* Responsive NavBar */
+
+  header .navbar {
+    position: static;
+  }
+
+  header .navbar-toggler {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 20px;
+    border: none;
+  }
+
+  header .navbar-toggler:focus {
+    box-shadow: none;
+    outline: none;
+    border: none;
+  }
+
+  .MenuBar {
+    font-size: 20px;
+    display: inline-block;
+    fill: #fff;
+  }
+
+  header .navbar-collapse {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: coral;
+  }
+
+  header .navMenus {
+    padding: 20px 0;
+  }
+
+  /* Responsive NavBar End*/
+  /* ayon paul 09.02.24  */
+  .tb_cntct_rght_top .form-group {
+    width: 100%;
+  }
+
+  .tb_cntct_rght_top.drpn .form-group:nth-child(1) {
+    width: 100%;
+  }
+
+  .dbrd_stngs_tab .tabs-container nav ul li.active:after {
+    right: 4.4%;
+  }
+
+  .tb_cntct_rght_top.drpn .form-group.slct {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .tb_cntct_rght_top {
+    margin-bottom: 0px;
+  }
+
+  .tb_cntct_rght_top .form-group {
+    margin-top: 10px;
+  }
+
+  .tb_cntct_rght_bttm {
+    margin-top: 10px;
+  }
+
+  .tb_cntct_rght_form .tb_cntct_rght_top.drpn:last-child {
+    margin-bottom: 15px;
+  }
+
+  .tb_cntct_rght_form
+    form
+    .tb_cntct_rght_top.drpn:nth-child(2)
+    .form-group.slct:nth-child(3) {
+    width: 100%;
+  }
+
+  /* moumi 10.2.24 */
+  .tb4-r-mid {
+    flex-direction: column;
+  }
+
+  .tb4-r-mid .form-group {
+    width: 100%;
+  }
+
+  .order_btns.tbl .btn span {
+    width: 12px;
+    height: 12px;
+    padding: 8px;
+  }
+
+  /* moumi 12.02.24  */
+  .tb_top_bx {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .top_div {
+    width: 100%;
+    padding: 30px 40px;
+    margin: auto;
+  }
+
+  .ordr_tbl table tr td:nth-child(1) {
+    width: 225px;
+  }
+
+  .ordr_tbl td:nth-child(5) .div2 span h6 {
+    font-size: 11px;
+  }
+
+  .ordr_tbl td:nth-child(5) .div2 {
+    padding: 2px 15px;
+  }
+
+  .orders {
+    padding: 10px 30px 10px;
+  }
+
+  .payment_stngs_part_txt {
+    width: 100%;
+    text-align: center;
+  }
+
+  .payment_stngs_flx {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .payment_stngs_part {
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid var(--secondary-thirteen-color);
+    margin-block: 0;
+    margin-top: 0;
+  }
+
+  .payment_stngs_part:last-child {
+    border-bottom: 0;
+  }
+
+  .payment_updates_both {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .visa_img {
+    margin-top: 2px;
+  }
+
+  .dbrd_inv_cl_flx {
+    gap: 6px;
+  }
+
+  .payment_filter {
+    margin-bottom: 2rem;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  .orders.dbrd_inv_orders {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-top: 1px solid var(--secondary-thirteen-color);
+  }
+
+  .ordr_tbl.dbrd_inv_ordr_tbl {
+    overflow: auto;
+  }
+
+  .ordr_tbl.dbrd_inv_ordr_tbl table {
+    width: 1000px;
+    table-layout: auto;
+    overflow: hidden;
+  }
+
+  .ordr_tbl td:nth-child(5) .div2 span h6 {
+    padding: 5px 4px;
+  }
+
+  /* ayon paul / 15.02.2024 */
+  .product_tp_prt {
+    width: 80%;
+  }
+
+  .product_tp_hdng .form-control {
+    width: 14rem;
+  }
+
+  /* moumi 16.2.24 */
+  .sdbr_oprtr_inpt_top {
+    padding: 20px 10px 10px;
+  }
+
+  /* ayon paul start / 19.02.2024 */
+
+  .fbt_top-flx {
+    flex-direction: column;
+    align-items: start;
+    row-gap: 15px;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+  .p_c_lft input {
+    font-size: 15px;
+  }
+
+  .add_btn svg {
+    font-size: 14px;
+  }
+  /* moumi 6.3.24 */
+  .batch_info {
+    overflow: auto;
+  }
+  /* ayon paul start / 6.3.24 */
+  .ivnt_tbl_form .ivnt_tbl_strt {
+    flex-wrap: wrap;
+  }
+  .ivnt_tbl_form .ivnt_tbl_prt:last-child {
+    width: 20%;
+  }
+  .ivnt_tbl_form .ivnt_tbl_prt {
+    width: 49%;
+  }
+  .payment_filter_both.ivnt_filter_btn .sv_btn {
+    margin-left: auto;
+  }
+  .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_bttm_td_ottr td {
+    width: 35% !important;
+  }
+  .sv_btn {
+    padding: 10px 14px;
+  }
+  .ivnt_tp_btns {
+    gap: 22px;
+  }
+  .prchs_ctgry a {
+    font-size: 14px;
+  }
+  .prchs_ctgry {
+    padding: 6px 20px;
+  }
+  .po_odr .po_main_info {
+    width: 100%;
+  }
+  .po_odr .labl label {
+    padding: 10px 5px;
+    font-size: 15px;
+  }
+  .po_main .hdr h6 {
+    font-size: 15px;
+  }
+  .optn select,
+  .optn input {
+    font-size: 14px;
+  }
+  .po_btm_info {
+    overflow: auto;
+  }
+  .prchase_order.po_odr .order_btn {
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: auto;
+    justify-content: center;
+  }
+  .prchase_order .po_order_info .po_main_info .txt {
+    margin-bottom: 0;
+  }
+  .po_btm_info table th {
+    font-size: 14px;
+  }
+  .po_info select {
+    font-size: 15px;
+  }
+  /* shreyasi(14.3.24) */
+  .prnt_info {
+    margin: 8px 0;
+  }
+  .prnt_info h4 {
+    font-size: 16px;
+  }
+  .po_main .hdr h3 {
+    font-size: 19px;
+  }
+  .prnt_label_dtls {
+    flex-wrap: wrap;
+  }
+  .prnt_lbl_prt {
+    width: 50%;
+  }
+  .prnt_lbl_prt .optn {
+    width: 95%;
+  }
+  .prnt_info {
+    gap: 16%;
+  }
+  /* moumi 19.3.24 */
+  .td_i_c {
+    padding-right: 5px;
+  }
+  .td_btm_btn {
+    gap: 13px;
+  }
+  .td_btm_btn {
+    gap: 13px;
+  }
+}
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 667px) {
+  /* moumi 9.2.24 */
+  .sign_up_otr {
+    width: 70%;
+  }
+
+  .outr_notifictaion {
+    padding: 13px 8px;
+    text-align: center;
+  }
+
+  /* ayan dey 12.02.23  */
+  .right_notifictaion.active {
+    width: 80%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: var(--primary-two-color);
+  }
+
+  /* moumi 12.02.24  */
+  .top_div {
+    width: 90%;
+  }
+
+  .tbl_sngl_bx {
+    width: 30%;
+  }
+
+  .tb_top button {
+    font-size: 14px;
+  }
+
+  .tb_rght select,
+  .tb_rght select option {
+    font-size: 14px;
+  }
+
+  .t-h-l h5 {
+    font-size: 18px;
+  }
+
+  .t-h-l h3 {
+    font-size: 20px;
+    padding-top: 15px;
+  }
+
+  .orders {
+    padding: 10px;
+  }
+
+  .ordr_tbl table tr td:nth-child(1) {
+    width: 202px;
+  }
+
+  .o_div_txt h5,
+  .div2 h5 {
+    font-weight: normal;
+  }
+
+  .o_div_txt p {
+    font-size: 12px;
+  }
+
+  .ordr_tbl th {
+    font-size: 12px;
+  }
+
+  .outr-right-content.order {
+    padding: 25px 10px;
+  }
+
+  .o_div_img {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  /* moumi 16.2.24 */
+  .oprt_inpt_info_thrd {
+    gap: 25px;
+  }
+
+  .cube_box.ylw .cmn_hdr p {
+    font-size: 15px;
+  }
+
+  .from_l,
+  .to_r {
+    width: 70%;
+    margin: auto;
+    text-align: center;
+  }
+
+  .modal_hdr {
+    text-align: center;
+  }
+
+  .mdl_hdr_l {
+    text-align: center;
+    margin: auto;
+  }
+
+  .mdl_hdr_r {
+    width: 90%;
+    margin: auto;
+  }
+
+  /* ayon paul start / 19.02.2024 */
+
+  .mnu_bkng_left {
+    width: 65%;
+  }
+
+  .mnu_bkng_right .inner_field.st1 .form-group:nth-child(1) {
+    width: 100%;
+  }
+
+  .mnu_bkng_right .inner_field.st1 .form-group:nth-child(2) {
+    width: 100%;
+  }
+
+  .mnu_bkng_right .inner_field.st2 .form-group:nth-child(1) {
+    width: 100%;
+  }
+
+  .mnu_bkng_right .inner_field.st2 .form-group:nth-child(2) {
+    width: 100%;
+  }
+
+  .mnu_bkng_right .inner_field {
+    row-gap: 10px;
+  }
+
+  .mnu_bkng_right .inner_field.st4 .inpt_grp {
+    width: 100%;
+  }
+
+  .mnu_bkng_right .inner_field.st4 .form-group:nth-child(2) {
+    width: 100%;
+  }
+
+  .mnu_bkng_right .inner_field.st5 p {
+    padding-bottom: 0;
+  }
+
+  .add_mnu_ordrs .mnu_ordrs_flx {
+    row-gap: 15px;
+  }
+
+  .add_mnu_ordrs .mnu_ordrs_flx .mnu_ordrs_prt {
+    width: 60%;
+  }
+
+  .add_mnu_bkng_mn {
+    padding-bottom: 0;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+  .sidebar {
+    width: 3.5rem;
+  }
+
+  .lft_p_nav {
+    padding-left: 4rem;
+  }
+
+  .breadcrumb-item a {
+    font-size: 16px;
+  }
+
+  .breadcrumb-item.active {
+    font-size: 16px;
+  }
+
+  .lft_p_nav {
+    gap: 7px;
+  }
+
+  .rgt_p_nav,
+  .lft_p_nav {
+    padding: 15px;
+  }
+  /* shreyasi */
+  .img_part {
+    width: 100%;
+  }
+  .img_part_img img {
+    width: 80%;
+  }
+  /* moumi 6.3.24 */
+  .btm_mdl_cls {
+    padding: 20px 10px;
+  }
+  .modal-content.batches_ {
+    width: 70%;
+  }
+  .td_i_l {
+    width: 90%;
+  }
+  .fnl_r {
+    width: 80%;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 600px) {
+  /* moumi 9.2.24 */
+  .sign_up_innr {
+    padding: 4rem;
+  }
+
+  /* moumi 12.02.24  */
+  .ordr_srch_bx {
+    height: 40px;
+  }
+
+  .ordr_date_bx {
+    padding: 8px 15px;
+    height: 40px;
+  }
+
+  .ordr_tbl table tr td:nth-child(1) {
+    width: 187px;
+  }
+
+  .pagination {
+    width: 45%;
+  }
+
+  .modal-content {
+    width: 70%;
+  }
+
+  .itm_lft_ds h4 span {
+    font-size: 18px;
+  }
+
+  /* moumi 16.2.24 */
+  .from-to-cnt,
+  .itm_ds_hdr,
+  .mdl_cnt,
+  .mdl_ftr {
+    padding-inline: 0px;
+  }
+
+  .sdbr_oprtr_inpt_top .oprt_inpt_info input {
+    width: 152px;
+    margin-left: 0;
+  }
+
+  .oprt_inpt_info_thrd {
+    gap: 12px;
+  }
+
+  .d-flex input {
+    width: 146px;
+  }
+
+  .brcd.oprt_inpt_info input {
+    width: 200px;
+  }
+
+  .brcd label {
+    padding-bottom: 5px;
+  }
+
+  .desc_table table th {
+    font-size: 11px;
+  }
+
+  .desc_table table td {
+    padding: 5px;
+    font-size: 12px;
+  }
+
+  .left_ftwobtn {
+    padding-left: 0;
+  }
+
+  .upper,
+  .lower {
+    padding: 0 0px 0 7px;
+  }
+
+  .btns .cube_box .cmn_hdr p {
+    padding-bottom: 0;
+  }
+
+  .total {
+    font-size: 12px !important;
+  }
+  .po_odr .po_btns {
+    margin-top: 20px;
+  }
+  /* moumi 19.3.24 */
+  .td_i_l {
+    width: 90%;
+  }
+  .td_i_c .td_i_span span:nth-child(1) {
+    width: 35%;
+  }
+  .po_tp_hdr_div ul.breadcrumb {
+    padding: 11px;
+  }
+  .td_main .td_hdr h3 {
+    padding-bottom: 14px;
+  }
+  .td_i_h.po_mains {
+    margin-bottom: 0;
+  }
+  .td_i_l .td_i_c .td_i_span span:nth-child(1) {
+    width: 24%;
+  }
+  .td_i_l {
+    width: 95%;
+  }
+  .po_mains h3 {
+    font-size: 16px;
+    padding-bottom: 10px;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 575px) {
+  /* moumi 9.2.24 */
+  .sign_up_otr {
+    width: 80%;
+  }
+
+  .pass h6 {
+    font-size: 16px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+
+  .frm_innr .inpt input {
+    font-size: 15px;
+  }
+
+  .btm_snp_lnk a {
+    font-size: 16px;
+  }
+
+  .inpt_icn {
+    font-size: 15px;
+  }
+
+  /* ayon paul 09.02.24  */
+  .stngs_lft_logo_txt h4 {
+    font-size: 15px;
+  }
+
+  .stngs_lft_logo_pc h5 {
+    font-size: 14px;
+  }
+
+  .stngs_lft_logo_pc {
+    padding: 18px;
+  }
+
+  .rprt_stng_top_left h5 {
+    font-size: 14px;
+  }
+
+  /* moumi 10.2.24 */
+  .tab_4_hdr_rght button {
+    padding: 6px 15px;
+  }
+
+  .payment_filter_lft form {
+    flex-direction: column;
+  }
+
+  .payment_filter_both {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .payment_filter_rght {
+    width: 100%;
+    margin-top: 2rem;
+  }
+
+  .payment_filter_lft {
+    width: 100%;
+  }
+
+  .dbrd_inv_ttlinr_rght .form-control {
+    width: 14.4rem;
+  }
+
+  .payment_filter_lft select.form-control {
+    width: 12.4rem;
+  }
+
+  .payment_filter_date {
+    width: 50%;
+  }
+
+  .payment_updates_both p {
+    word-wrap: break-word;
+  }
+
+  /* ayon paul / 15.02.2024 */
+  .product_tp_prt {
+    width: 100%;
+  }
+
+  .sls_ctg_flx {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .sls_left_btns {
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  /* moumi 16.2.24 */
+  .modal-content {
+    width: 440px;
+  }
+
+  .m_modal .stngs_lft_logo_txt h6 {
+    font-size: 16px;
+    padding-top: 0;
+  }
+
+  /* ayon paul start / 19.02.2024 */
+
+  .mnu_bkng_left {
+    width: 100%;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+  .snow_sidebar .right_sidebar_content.side {
+    margin-top: 0;
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .snow_sidebar.total_parent_element {
+    display: block;
+  }
+
+  .snow_sidebar .parent_table {
+    margin-top: 2rem;
+  }
+
+  .snow_sidebar .right_parent_element.side {
+    width: 100% !important;
+    padding: 0 20px;
+  }
+
+  .snow_sidebar .oprt_inpt_info {
+    flex-direction: row;
+  }
+
+  .snow_sidebar .sdbr_oprtr_inpt_btm .oprt_inpt_info.oprt_inpt_info_thrd {
+    flex-direction: row;
+  }
+
+  .payment_filter_lft select.form-control {
+    width: 150px;
+  }
+
+  .tb_top button {
+    font-size: 12px;
+  }
+
+  .tb_lft.product_i {
+    /* overflow-x: scroll; */
+  }
+  /* shreyasi */
+  .quick-btn {
+    font-size: 13px;
+    padding: 6px 7px;
+  }
+  .img_upload p,
+  .img_upload form input,
+  .img_text p {
+    font-size: 14px;
+  }
+  .img_upload {
+    width: 45%;
+  }
+  /* moumi 6.3.24 */
+  .batch_top .edit,
+  .btns .edit {
+    font-size: 10px;
+  }
+  .p_info_hdr h6 {
+    font-size: 16px;
+  }
+  .batch_info table th {
+    font-size: 12px;
+  }
+  .batch_info tbody td {
+    font-size: 11px;
+  }
+  .batch_info {
+    margin-top: 30px;
+  }
+  /* ayon paul start / 6.3.24 */
+  .ivnt_tbl_form .ivnt_tbl_prt {
+    width: 100%;
+  }
+  .ivnt_tbl_hdng h5 {
+    font-size: 14px;
+  }
+  .ivnt_tbl_form .ivnt_tbl_prt:last-child {
+    width: 35%;
+  }
+  .ivnt_tp_btns {
+    flex-direction: column;
+    gap: 22px;
+    align-items: flex-start;
+  }
+  .ivnt_ottr {
+    padding: 30px 20px;
+  }
+  .orders.dbrd_inv_orders {
+    overflow-x: auto;
+  }
+  .payment_filter_both.ivnt_filter_btn .sv_btn {
+    margin-left: 0;
+    margin-right: auto;
+  }
+  .ivnt_trns_actv .ivnt_trns_tbl th {
+    padding: 10px;
+  }
+  .prchs_ctgry {
+    flex-wrap: wrap;
+  }
+  /* shreyasi(14.3.24) */
+  .prnt_info h4 {
+    font-size: 14px;
+  }
+  .po_main .hdr h3 {
+    font-size: 18px;
+  }
+  .edit {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+  .prnt_info {
+    gap: 14%;
+  }
+  .prnt_lbl_prt label {
+    font-size: 14px;
+  }
+  .prnt_lbl_prt .optn select,
+  .prnt_lbl_prt .optn input,
+  .prnt_lbl_prt .optn input::placeholder {
+    font-size: 13px;
+  }
+  .po_tp_hdr_div ul.breadcrumb {
+    padding: 8px 14px;
+  }
+  ul.breadcrumb li a {
+    font-size: 14px;
+  }
+  .trans-info {
+    padding: 0 1px;
+  }
+  .snow_trnsctn .tb_lft.product_i {
+    overflow-x: scroll !important;
+  }
+  /* moumi  */
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 480px) {
+  /* moumi 9.2.24 */
+  .sign_up_otr {
+    width: 100%;
+  }
+
+  .vryfctn {
+    padding: 6rem 4rem;
+  }
+
+  /* a */
+  .outr_parent_nav {
+    flex-direction: column;
+  }
+
+  .lft_p_nav {
+    justify-content: center;
+  }
+
+  .rprt_stng_form_innr {
+    padding: 10px 4px;
+  }
+
+  .rprt_stng_form_innr label {
+    font-size: 12px;
+  }
+
+  .rprt_stng_bttm_innr {
+    padding: 16px 10px;
+  }
+
+  /* moumi 12.02.24  */
+  .tb_lft {
+    gap: 13px;
+  }
+
+  .tb_top button {
+    padding: 10px;
+  }
+
+  .t-h-l h5 {
+    font-size: 16px;
+  }
+
+  .top_div {
+    width: 90%;
+    padding: 30px;
+  }
+
+  .t-h-l h3 {
+    font-size: 19px;
+  }
+
+  .tbl_sngl_bx {
+    width: 45%;
+  }
+
+  .o_div_txt p {
+    font-size: 10px;
+  }
+
+  .ordr_tbl tr td:nth-child(2) {
+    padding: 0 12px;
+  }
+
+  .dbrd_inv_ttl_both {
+    display: block;
+  }
+
+  .dbrd_inv_ttlinr_rght {
+    margin-top: 2rem;
+  }
+
+  .payment_updates_both {
+    padding-inline: 0;
+  }
+
+  .visa_img {
+    margin-top: -3px;
+  }
+
+  .payment_updates_rght {
+    align-items: flex-start;
+  }
+
+  .payment_updates_both {
+    row-gap: 1rem;
+  }
+
+  .orders {
+    overflow-x: scroll;
+  }
+
+  /* moumi 16.2.24 */
+  .modal-content {
+    width: 400px;
+  }
+
+  .right_sidebar_content.side {
+    margin-top: 143px;
+  }
+
+  .op_inpt_div {
+    flex-direction: column;
+  }
+
+  .op_inpt_div span {
+    margin-left: 0;
+  }
+
+  .oprt_inpt_info_thrd {
+    padding-left: 2px;
+    gap: 10px;
+    font-size: 10px;
+  }
+
+  .d-flex {
+    flex-direction: column;
+  }
+
+  .oprt_inpt_info label {
+    font-size: 11px;
+  }
+
+  .brcd .d-flex span {
+    margin-left: 0;
+  }
+
+  .brcd.oprt_inpt_info input {
+    width: 145px;
+  }
+
+  .desc_table table td {
+    padding: 2px;
+    font-size: 11px;
+  }
+
+  .left_ftwobtn .upper .cube_box,
+  .left_ftwobtn .lower .cube_box,
+  .upper .cube_box.wht,
+  .lower .cube_box.yellow {
+    width: 98%;
+  }
+
+  .cube_box {
+    width: 47.5%;
+  }
+
+  /* ayon paul start / 19.02.2024 */
+
+  .mnu_bkng_right .inner_field.st5 .inpt_grp {
+    width: 60%;
+  }
+
+  .mnu_bkng_right .inner_field.st5 .inpt_grp_otr {
+    row-gap: 10px;
+  }
+
+  .add_mnu_ordrs .mnu_ordrs_flx .mnu_ordrs_prt {
+    width: 70%;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+  .snow_sidebar .op_inpt_div {
+    flex-direction: row;
+  }
+
+  .snow_sidebar .oprt_inpt_info label {
+    font-size: 13px;
+  }
+
+  .snow_sidebar .sdbr_oprtr_inpt_btm .oprt_inpt_info.oprt_inpt_info_thrd {
+    flex-direction: column;
+  }
+
+  .snow_sidebar .brcd .d-flex {
+    flex-direction: row;
+  }
+
+  .p_c_lft input {
+    width: 60%;
+  }
+
+  .p_rows {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  .p_info {
+    padding: 13px 8px;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  /* ayon paul start / 26.02.2024 */
+
+  #price_tab .p_inform .p_rows {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  /* ayon paul end / 26.02.2024 */
+  /* moumi 6.3.24 */
+  .batch_info table th {
+    font-size: 11px;
+  }
+  .p_info_hdr h6 {
+    font-size: 14px;
+  }
+  .p_info.batch {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .modal-content.batches_ {
+    width: 80%;
+  }
+  .tp_txt_mdl h6 {
+    font-size: 15px;
+  }
+  .mddl_mdl table th {
+    font-size: 13px;
+  }
+  .mddl_mdl td {
+    font-size: 11px;
+  }
+  ul.breadcrumb li a {
+    font-size: 13px;
+  }
+  /* .po_tp_hdr_div ul.breadcrumb {
+    padding: 20px 10px;
+  } */
+  .edit {
+    padding: 5px 8px;
+    font-size: 13px;
+  }
+  .prchs_ctgry {
+    margin: 20px 10px;
+  }
+  .payment_filter_rght.prchs_srch {
+    margin: 10px;
+    width: auto;
+  }
+  .orders_purchase {
+    margin: 10px;
+  }
+  .prnt_info {
+    gap: 5%;
+  }
+  .prnt_lbl_prt .optn {
+    padding: 6px 0;
+  }
+  .rgt_p_nav,
+  .lft_p_nav {
+    padding: 10px;
+  }
+  .breadcrumb-item a {
+    font-size: 15px;
+  }
+  /* moumi 19.3.24 */
+  .td_i_l .td_i_c .td_i_span span:nth-child(2) {
+    width: 68%;
+  }
+  .td_i_l .td_i_c .td_i_span span:nth-child(1) {
+    width: 30%;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 430px) {
+  /* ayon paul 09.02.24  */
+  .outr-right-content {
+    padding: 20px;
+  }
+
+  /* moumi 12.02.24  */
+  .ordre_rght {
+    flex-direction: column;
+  }
+
+  .ordr_srch_bx {
+    padding: 9px;
+  }
+
+  .pagination {
+    width: 61%;
+  }
+
+  .ordr_tbl td:nth-child(5) .div2 {
+    margin-right: 5px;
+  }
+
+  /* moumi 16.2.24 */
+  .modal-content {
+    width: 360px;
+  }
+
+  .from-to-cnt h6,
+  .item_ds_sec h6,
+  .item_ds_sec h6 {
+    font-size: 12px;
+  }
+
+  .mdl_ftr h5 {
+    font-size: 15px;
+  }
+
+  .mdl_ftr p {
+    font-size: 12px;
+  }
+
+  .itm_lft_ds h4 span {
+    font-size: 16px;
+  }
+  /* moummi 6.3.24 */
+  .modal_hdr h6 {
+    font-size: 12px;
+  }
+  .p_info.batch {
+    padding-left: 10px;
+  }
+  .batch_top {
+    padding-right: 0;
+  }
+  .e-edit {
+    padding-right: 0;
+  }
+  .batch_info {
+    margin-right: 0px;
+  }
+  .modal-content.batches_ {
+    width: 90%;
+  }
+  /* moumi 19.3.24 */
+  .td_i_l {
+    width: 100%;
+  }
+  .td_i_l .td_i_c .td_i_span span:nth-child(1) {
+    width: 35%;
+  }
+  .td_i_l .td_i_c .td_i_span span:nth-child(2) {
+    width: 68%;
+  }
+  .final_orders {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .fnl_r {
+    width: 100%;
+  }
+  .td_btm_btn {
+    flex-direction: column;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 390px) {
+  /* moumi 9.2.24 */
+  .a_txt p {
+    font-size: 13px;
+  }
+
+  .sgn_hdr p {
+    font-size: 15px;
+  }
+
+  .pass h6 {
+    font-size: 14px;
+  }
+
+  .or_wth h6 {
+    font-size: 15px;
+  }
+
+  .inpt .checkbox label {
+    font-size: 15px;
+  }
+
+  .btm_snp_lnk a {
+    font-size: 15px;
+  }
+
+  .vryfctn .btm_snp_lnk a {
+    font-size: 15px;
+  }
+
+  .frm_innr button,
+  .v_frm_innr button {
+    font-size: 16px;
+  }
+
+  .outr-right-content {
+    padding: 10px 0;
+  }
+
+  .tb_cntct_bth .tb_cntct_rght {
+    padding: 13px 10px;
+  }
+
+  .tb_cntct_bth.last {
+    padding: 10px;
+  }
+
+  .btod_ottr {
+    margin-left: 21px;
+  }
+
+  /* moumi 12.02.24  */
+  .tb_top button {
+    font-size: 13px;
+  }
+
+  .tb_lft {
+    gap: 10px;
+  }
+
+  .tb_cntnts {
+    padding: 30px 0 20px 0;
+  }
+
+  .ordre_lft p {
+    font-size: 12px;
+  }
+
+  .pagination a {
+    padding: 8px;
+  }
+
+  .pagination {
+    width: 44%;
+  }
+
+  .dbrd_inv_ttlinr_rght {
+    padding-left: 25px;
+  }
+
+  .dbrd_inv_ttlinr_rght .form-control {
+    width: 15.4rem;
+  }
+
+  .payment_filter_date {
+    width: 65%;
+  }
+
+  .payment_filter_lft select.form-control {
+    width: 14.4rem;
+  }
+
+  /* moumi 16.2.24 */
+  .modal-content {
+    width: 320px;
+  }
+
+  .m_modal .dbrd_stngs_tb_inr {
+    margin-top: 0;
+  }
+
+  .dbrd_stngs_tb_inr {
+    padding-inline: 0px;
+  }
+
+  /* ayon paul start / 19.02.2024 */
+
+  .add_mnu_ordrs .mnu_ordrs_flx .mnu_ordrs_prt {
+    width: 100%;
+  }
+
+  .outr-right-content.food_bkng_top {
+    padding: 20px;
+  }
+
+  .outr-right-content.food_bkng_top .btod_ottr {
+    margin-left: 0;
+  }
+
+  .mnu_bkng_left {
+    width: 100%;
+  }
+
+  .add_mnu_ordrs {
+    padding-block: 10px;
+  }
+
+  .outr-right-content.food_bkng_top .tb_cntct_bth.last {
+    row-gap: 10px;
+  }
+
+  .payment_filter_lft select.form-control {
+    width: 150px;
+  }
+
+  /* ayon paul end / 19.02.2024 */
+
+  /* ayon paul start / 26.02.2024 */
+
+  #price_tab {
+    padding-inline: 2rem;
+  }
+
+  /* ayon paul end / 26.02.2024 */
+  /* shreyasi */
+  .img_upload,
+  .img_contains {
+    width: 100%;
+    padding-left: 10px;
+  }
+  .img_info {
+    display: block;
+  }
+  /* ayon paul start / 6.3.24 */
+  .ivnt_ottr {
+    margin-inline: 10px;
+  }
+  .trans-info {
+    padding: 0 10px;
+  }
+  /* moumi 19.3.24 */
+  .po_odr {
+    padding: 10px;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 375px) {
+  /* moumi 9.2.24 */
+  .apple,
+  .ggle {
+    padding: 7px 2px;
+  }
+
+  .v_frm_innr button {
+    width: 97%;
+  }
+
+  /* moumi 12.02.24  */
+  .t-h-l h5 {
+    font-size: 15px;
+  }
+
+  .t-h-l h3 {
+    font-size: 18px;
+  }
+
+  .t-h-l p {
+    font-size: 13px;
+  }
+
+  .sngl_rght h5 {
+    font-size: 13px;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
+
+@media (max-width: 360px) {
+  /* moumi 9.2.24 */
+  .sign_up_innr {
+    padding: 4rem 2rem;
+  }
+
+  .or_wth h6 {
+    font-size: 14px;
+  }
+
+  .frm_innr .inpt input {
+    font-size: 14px;
+  }
+
+  .inpt .checkbox label {
+    font-size: 14px;
+  }
+
+  .btm_snp_lnk a {
+    font-size: 14px;
+  }
+}
+
+/*** ==================<<<<<>>>>>================== ***/
