@@ -1,13 +1,40 @@
 import React, { useEffect, useRef, useState } from "react";
 import img from "../../assets/images/vryfctn_icn.png";
-import { sellerLoginWithOtp } from "../../redux/features/sellers/sellerLoginSlice";
-import { useDispatch } from "react-redux";
+import {
+  loginSeller,
+  sellerLoginWithOtp,
+} from "../../redux/features/sellers/sellerLoginSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import OtpTimer from "otp-timer";
+import { Bounce, toast } from "react-toastify";
 
-const Otp = ({ length = 4, onOtpSubmit = () => {} }) => {
+const Otp = ({ length = 4, onOtpSubmit = () => {}, email, password }) => {
+  console.log(email, password, "999");
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [otp, setOtp] = useState(new Array(length).fill(""));
+  const [error, setError] = useState({});
   const inputRefs = useRef([]);
   console.log(otp, "otp");
+  const { loading, withOtp } = useSelector((state) => state.loginSeller);
+  console.log(loading, "otp_loading");
+  console.log(withOtp, "withOtp");
+
+  const validateForm = () => {
+    let isValid = true;
+    const newError = {};
+    console.log(otp, "otp996");
+    console.log(new Array(length).fill(""), "666");
+    if (otp.includes("")) {
+      isValid = false;
+      newError.otp = "Please Enter OTP";
+    } else {
+      newError.otp = "";
+    }
+    setError(newError);
+    return isValid;
+  };
 
   useEffect(() => {
     if (inputRefs.current[0]) {
@@ -72,18 +99,47 @@ const Otp = ({ length = 4, onOtpSubmit = () => {} }) => {
     const OTP = Number(otp.join(""));
     console.log(OTP, typeof OTP, "333");
     const credentials = {
-      email: "mahendra@hih7.com",
-      password: "123456",
+      email: email,
+      password: password,
       otp: OTP,
     };
     console.log(credentials, "credentials");
-    dispatch(sellerLoginWithOtp(credentials));
+    console.log(validateForm(), "validateForm");
+    if (validateForm()) {
+      dispatch(sellerLoginWithOtp(credentials));
+    } else {
+      toast.error(error.otp, {
+        className: "toast-message",
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        // theme: 'dark',
+        transition: Bounce,
+      });
+    }
+    setOtp(new Array(length).fill(""));
   };
 
   const resendOtp = () => {
     console.log("resend otp", "otp");
+    const OTP = Number(otp.join(""));
+    console.log(OTP, typeof OTP, "333");
+    const credentials = {
+      email: email,
+      password: password,
+    };
+    console.log(credentials, "credentials");
+    dispatch(loginSeller(credentials));
   };
 
+  if (withOtp) {
+    console.log("withOtp", "222");
+    navigate("/");
+  }
   return (
     <>
       <section className="sign_up">
@@ -100,7 +156,7 @@ const Otp = ({ length = 4, onOtpSubmit = () => {} }) => {
               </p>
             </div>
             <div className="p_num text-center">
-              <h5>+852 19850622</h5>
+              <h5>{email}</h5>
               <p>Type your 4 digit security code</p>
             </div>
             <form onSubmit={(e) => submitCredentials(e)}>
@@ -145,11 +201,20 @@ const Otp = ({ length = 4, onOtpSubmit = () => {} }) => {
             </form>
             <div className="btm_snp_lnk text-center">
               <a href="javascript:void(0);">Didn’t get the code ? </a>
-              <a href="javascript:void(0);" onClick={resendOtp}>
+              {/* <a href="javascript:void(0);" onClick={resendOtp}>
                 Resend{" "}
-              </a>
-              <span>or</span>
-              <a href="javascript:void(0);">Call Us </a>
+              </a> */}
+              <OtpTimer
+                minutes={1}
+                seconds={1}
+                text="Resend OTP in:"
+                ButtonText="Resend"
+                resend={resendOtp}
+                buttonColor="blue"
+                background="white"
+              />
+              {/* <span>or</span>
+              <a href="javascript:void(0);">Call Us </a> */}
             </div>
           </div>
         </div>

@@ -1,21 +1,26 @@
-import React, { useState } from 'react'
-import { Link, Outlet } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Box, Toolbar } from "@mui/material";
 import colorConfigs from "../../configs/colorConfigs";
 import sizeConfigs from "../../configs/sizeConfigs";
 import Sidebar from "../common/Sidebar";
 // import Topbar from "../common/Topbar";
 
-import { faStar, faUser } from '@fortawesome/free-regular-svg-icons';
-import { faBug, faEllipsisVertical, faTowerBroadcast } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Topbar from '../HomePageComponets/Topbar';
-import Notification from '../common/Notification/Notification';
-import HomePage from '../../pages/home/HomePage';
+import { faStar, faUser } from "@fortawesome/free-regular-svg-icons";
+import {
+  faBug,
+  faEllipsisVertical,
+  faTowerBroadcast,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Topbar from "../HomePageComponets/Topbar";
+import Notification from "../common/Notification/Notification";
+import HomePage from "../../pages/home/HomePage";
 
 const MainLayout = () => {
+  const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
-  const [toggleClick, setToggleClick] = useState(false)
+  const [toggleClick, setToggleClick] = useState(false);
   return (
     <>
       {/* <Box sx={{ display: "flex" }}>
@@ -54,23 +59,30 @@ const MainLayout = () => {
                   <h4>Dashboards</h4>
                   <div className="parent_nav_menu">
                     <Sidebar />
-
                   </div>
                 </div>
               </div>
               <div className="nav_btm_logo">
-                <img src={require('../../assets/images/nav_btm_logo.png')} alt="btm-logo" />
+                <img
+                  src={require("../../assets/images/nav_btm_logo.png")}
+                  alt="btm-logo"
+                />
               </div>
             </div>
           </div>
           <div className="right_parent_element">
-            <div className={toggle ? "outr_parent_nav active" : "outr_parent_nav"}>
+            <div
+              className={toggle ? "outr_parent_nav active" : "outr_parent_nav"}
+            >
               <div className="lft_p_nav">
                 <div className="sidebar">
-                  <img src={require('../../assets/images/Sidebar.png')} alt="sidebar" />
+                  <img
+                    src={require("../../assets/images/Sidebar.png")}
+                    alt="sidebar"
+                  />
                 </div>
                 <div className="star">
-                  <FontAwesomeIcon icon={faStar} size='2xl' />
+                  <FontAwesomeIcon icon={faStar} size="2xl" />
                 </div>
                 <nav aria-label="breadcrumb">
                   <ol className="breadcrumb">
@@ -93,36 +105,52 @@ const MainLayout = () => {
                     />
                     <input type="button" className="search-btn" />
                     <div className="icon">
-                      <img src={require('../../assets/images/Text.png')} alt="text" />
+                      <img
+                        src={require("../../assets/images/Text.png")}
+                        alt="text"
+                      />
                     </div>
                   </form>
                 </div>
                 <div className="all_r_btn">
                   <div className="user_icon">
-
                     <div className="user">
-                      <FontAwesomeIcon icon={faUser} onClick={() => setToggleClick(!toggleClick)} />
-                      {
-                        toggleClick &&
+                      <FontAwesomeIcon
+                        icon={faUser}
+                        onClick={() => setToggleClick(!toggleClick)}
+                      />
+                      {toggleClick && (
                         <div className="user_login">
                           <Link to="/signup">Login</Link>
-                          <a href='javascript:void(0)'>Registration</a>
+                          <a href="javascript:void(0)">Registration</a>
+                          <a href="/update-password">Update Password</a>
                         </div>
-                      }
+                      )}
                     </div>
                   </div>
                   <div className="dark_light">
                     <div className="sun">
-                      <img src={require('../../assets/images/sun.png')} alt="sun" />
+                      <img
+                        src={require("../../assets/images/sun.png")}
+                        alt="sun"
+                      />
                     </div>
                   </div>
                   <div className="counter">
-                    <img src={require('../../assets/images/counter_btn.png')} alt="counter" />
+                    <img
+                      src={require("../../assets/images/counter_btn.png")}
+                      alt="counter"
+                    />
                   </div>
-                  <div className="notification" onClick={() => setToggle(!toggle)}>
-                    <img src={require('../../assets/images/bell.png')} alt="bell" />
+                  <div
+                    className="notification"
+                    onClick={() => setToggle(!toggle)}
+                  >
+                    <img
+                      src={require("../../assets/images/bell.png")}
+                      alt="bell"
+                    />
                   </div>
-
                 </div>
               </div>
             </div>
@@ -473,10 +501,13 @@ const MainLayout = () => {
               {/* <HomePage/> */}
               <Outlet />
             </div>
-
           </div>
           {/* <Notification/> */}
-          <div className={toggle ? "right_notifictaion active" : "right_notifictaion"}>
+          <div
+            className={
+              toggle ? "right_notifictaion active" : "right_notifictaion"
+            }
+          >
             <div className="outr_notifictaion">
               <div className="outr_notifictaion">
                 <div className="innr_top">
@@ -569,7 +600,6 @@ const MainLayout = () => {
               </div>
             </div>
           </div>
-
         </section>
       </main>
     </>

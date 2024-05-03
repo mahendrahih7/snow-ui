@@ -4,9 +4,11 @@ import { loginSeller } from "../../redux/features/sellers/sellerLoginSlice";
 import Otp from "./Otp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 // import { loginUser } from "../../redux/features/loginSlice";
 
 const SellerLogin = () => {
+  const navigate = useNavigate();
   const [login, setLogin] = useState({
     email: "",
     password: "",
@@ -28,10 +30,10 @@ const SellerLogin = () => {
     const newError = {};
     if (!login.email) {
       isValid = false;
-      newError.email = "Invalid email format";
+      newError.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(login.email)) {
       isValid = false;
-      newError.email = "Invalid email format";
+      newError.email = "Invalid email";
     } else {
       newError.email = "";
     }
@@ -55,10 +57,10 @@ const SellerLogin = () => {
       console.log(login, "login-seller");
       dispatch(loginSeller(login));
       //   dispatch(loginUser(login));
-      setLogin({
-        email: "",
-        password: "",
-      });
+      // setLogin({
+      //   email: "",
+      //   password: "",
+      // });
     }
   };
 
@@ -66,7 +68,7 @@ const SellerLogin = () => {
     <>
       {otpStatus ? (
         <>
-          <Otp />
+          <Otp email={email} password={password} />
         </>
       ) : (
         <>
@@ -123,6 +125,17 @@ const SellerLogin = () => {
                         type="submit"
                         value={loading ? "Submitting.." : "Submit"}
                       />
+                    </div>
+                    <div className="forget-password">
+                      <a
+                        href="/forgot-password"
+                        // style={{ textDecoration: "underline" }}
+                        // onClick={() => navigate("/forgot-password")}
+                      >
+                        <h2>
+                          <u>Forgot Password?</u>
+                        </h2>
+                      </a>
                     </div>
                   </div>
                 </form>

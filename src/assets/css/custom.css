@@ -4792,3 +4792,9 @@ iframe {
 .toast-message {
   font-size: 15px;
 }
+
+/* 02.05.24(m) */
+.forget-password {
+  text-align: center;
+  margin-top: 20px;
+}
