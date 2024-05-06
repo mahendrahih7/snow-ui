@@ -108,7 +108,7 @@ const Otp = ({ length = 4, onOtpSubmit = () => {}, email, password }) => {
     if (validateForm()) {
       dispatch(sellerLoginWithOtp(credentials));
     } else {
-      toast.error(error.otp, {
+      toast.error("Please Enter OTP", {
         className: "toast-message",
         position: "top-right",
         autoClose: 5000,

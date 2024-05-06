@@ -16,10 +16,6 @@ const SellerLogin = () => {
   const [error, setError] = useState({});
   const { email, password } = login;
   const dispatch = useDispatch();
-  const handleRegChange = (e) => {
-    //console.log(e.target.value, "e")
-    setLogin({ ...login, [e.target.name]: e.target.value });
-  };
 
   const { loading, otpStatus } = useSelector((state) => state.loginSeller);
   console.log(loading, "loading");
@@ -48,6 +44,17 @@ const SellerLogin = () => {
     }
     setError(newError);
     return isValid;
+  };
+
+  const handleRegChange = (e) => {
+    //console.log(e.target.value, "e")
+    setLogin({ ...login, [e.target.name]: e.target.value });
+    if (login.email) {
+      setError({ ...error, email: "" });
+    }
+    if (login.password) {
+      setError({ ...error, password: "" });
+    }
   };
 
   const handleRegSubmission = (e) => {

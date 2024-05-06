@@ -16,11 +16,81 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Topbar from "../HomePageComponets/Topbar";
 import Notification from "../common/Notification/Notification";
 import HomePage from "../../pages/home/HomePage";
+import { useDispatch, useSelector } from "react-redux";
+import { sellerLogout } from "../../redux/features/sellers/sellerLoginSlice";
+
+import axios from "axios";
+import { Seller_logout } from "../../constants/Api/Api";
+import { Bounce, toast } from "react-toastify";
+import Swal from "sweetalert2";
+import swal from "sweetalert";
 
 const MainLayout = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
   const [toggleClick, setToggleClick] = useState(false);
+
+  const { loading } = useSelector((state) => state.loginSeller);
+
+  const handleLogout = () => {
+    // e.preventDefault();
+    console.log("called", "logout");
+    swal({
+      title: "Are you sure?",
+      // text: "Once deleted, you will not be able to recover this imaginary file!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        dispatch(sellerLogout()).then((res) => {
+          console.log(res);
+          toast.success(res.payload.message, {
+            className: "toast-message",
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            // theme: 'dark',
+            transition: Bounce,
+          });
+          navigate("/seller-login");
+        });
+      }
+    });
+
+    // Swal.fire({
+    //   title: "Are you sure?",
+    //   // text: "You won't be able to revert this!",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#3085d6",
+    //   cancelButtonColor: "#d33",
+    //   confirmButtonText: "Logout",
+    // }).then((result) => {
+    //   dispatch(sellerLogout()).then((res) => {
+    //     console.log(res);
+    //     toast.success(res.payload.message, {
+    //       className: "toast-message",
+    //       position: "top-right",
+    //       autoClose: 5000,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //       // theme: 'dark',
+    //       transition: Bounce,
+    //     });
+    //     navigate("/seller-login");
+    //   });
+    // });
+  };
+
   return (
     <>
       {/* <Box sx={{ display: "flex" }}>
@@ -124,6 +194,7 @@ const MainLayout = () => {
                           <Link to="/signup">Login</Link>
                           <a href="javascript:void(0)">Registration</a>
                           <a href="/update-password">Update Password</a>
+                          <Link onClick={handleLogout}>Logout</Link>
                         </div>
                       )}
                     </div>

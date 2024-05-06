@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Seller_Send_otp, Seller_forgot_password, Seller_login, Seller_reset_password, Seller_update_password } from "../../../constants/Api/Api";
+import { Seller_Send_otp, Seller_forgot_password, Seller_login, Seller_logout, Seller_reset_password, Seller_update_password } from "../../../constants/Api/Api";
 import swal from "sweetalert";
 import { Bounce, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -58,13 +58,40 @@ export const sellerLoginWithOtp = createAsyncThunk("loginWithOtp", async(Credent
   try {
     const loginWithOtp = await axios.post(Seller_login, Credentials, { withCredentials: true })
     console.log(loginWithOtp.data.message, 'loginWithOtp')
-    swal("Done!", loginWithOtp.data.message, "success");
+    // swal("Done!", loginWithOtp.data.message, "success");
     return loginWithOtp.data
   } catch(err) {
     console.log(err, 'err')
-    swal("Error!", err.response.data.message, "error");
+    // swal("Error!", err.response.data.message, "error");
+    toast.error(err.response.data.message, {
+        className: "toast-message",
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        // theme: 'dark',
+        transition: Bounce
+      });
     return rejectWithValue(err)
   }
+})
+
+//Seller Logout
+export const sellerLogout = createAsyncThunk("sellerLogout", async() => {
+  console.log(sellerLogout, 'sellerLogout')
+  const logout = await axios.get(Seller_logout,{ withCredentials: true } )
+  return logout.data
+  // try {
+  //   const logOut = await axios.get(Seller_logout, { withCredentials: true })
+  //   console.log(logOut.data.message, 'loginWithOtp')
+  //   return logOut.data
+  // } catch(err) {
+  //   console.log(err, 'err')
+  //   return rejectWithValue(err)
+  // }
 })
 
 //For update password
@@ -192,13 +219,35 @@ const sellerLoginSlice = createSlice({
         state.loading = false,
         // state.otpStatus = false
         state.withOtp = true
-      
+        // state.otpStatus = false
       })
       .addCase(sellerLoginWithOtp.rejected, (state) => {
         // console.log(action.payload, 'rejected'),
         state.loading = false
         // state.error = action.payload
   })
+
+  //For Seller logout
+    .addCase(sellerLogout.pending, (state) =>({
+      ...state,
+      loading : true
+    }
+      
+    ))
+    .addCase(sellerLogout.fulfilled, (state) =>(
+      {
+      ...state,
+      loading : false,
+      otpStatus: false,
+      withOtp: false
+    }
+    ))
+    .addCase(sellerLogout.rejected, (state) => (
+     {
+      ...state,
+      loading : false
+    }
+    ))
 
       //For seller update password
       .addCase(sellerUpdatePassword.pending, (state) =>{

@@ -3,17 +3,13 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/features/loginSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [login, setLogin] = useState({
     email: "",
     password: "",
   });
   const [error, setError] = useState({});
   const { email, password } = login;
-  const dispatch = useDispatch();
-  const handleRegChange = (e) => {
-    //console.log(e.target.value, "e")
-    setLogin({ ...login, [e.target.name]: e.target.value });
-  };
 
   const validateFormLogin = () => {
     let isValid = true;
@@ -38,6 +34,11 @@ const Login = () => {
     }
     setError(newError);
     return isValid;
+  };
+
+  const handleRegChange = (e) => {
+    //console.log(e.target.value, "e")
+    setLogin({ ...login, [e.target.name]: e.target.value });
   };
 
   const handleRegSubmission = (e) => {
