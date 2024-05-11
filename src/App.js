@@ -15,20 +15,24 @@ import UpdatePassword from "./components/sellers/UpdatePassword";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from "./routes/PrivateRoute";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<MainLayout />}></Route>
-          <Route path="/signup" element={<SignUp />}></Route>
+          {/*................ user login.............................. */}
+          {/* <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/login" element={<Login />}></Route>
-          <Route path="/verification" element={<Verification />}></Route>
+          <Route path="/verification" element={<Verification />}></Route> */}
 
           {/* seller login */}
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<MainLayout />}></Route>
+            <Route path="/update-password" element={<UpdatePassword />}></Route>
+          </Route>
           <Route path="/seller-login" element={<SellerLogin />}></Route>
-          <Route path="/update-password" element={<UpdatePassword />}></Route>
           <Route path="/forgot-password" element={<ForgotPassword />}></Route>
           <Route
             path="/reset-password/:token"

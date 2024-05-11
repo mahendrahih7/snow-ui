@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import DashboardPageLayout from "../pages/dashboard/DashboardPageLayout";
 import HomePage from "../pages/home/HomePage";
 import DefaultPage from "../pages/dashboard/DefaultPage";
@@ -16,6 +16,7 @@ import AlertPage from "../pages/component/AlertPage";
 import ButtonPage from "../pages/component/ButtonPage";
 // import InstallationPage from "../pages/installation/InstallationPage";
 import DocumentationPage from "../pages/documentation/DocumentationPage";
+import SellerLogin from "../components/sellers/SellerLogin";
 
 const appRoutes = [
   // {
@@ -23,14 +24,15 @@ const appRoutes = [
   //   element: <HomePage />,
   //   state: "home"
   // },
+
   {
     path: "/",
     element: <HomePage />,
     state: "installation",
     sidebarProps: {
       displayText: "Overview",
-      icon: 'nav_icon1.png'
-    }
+      icon: "nav_icon1.png",
+    },
   },
   {
     path: "/dashboard",
@@ -38,20 +40,20 @@ const appRoutes = [
     state: "dashboard",
     sidebarProps: {
       displayText: "Dashboard",
-      icon: 'nav_icon2.png'
+      icon: "nav_icon2.png",
     },
     child: [
       {
         index: true,
         element: <DashboardIndex />,
-        state: "dashboard.index"
+        state: "dashboard.index",
       },
       {
         path: "/dashboard/default",
         element: <DefaultPage />,
         state: "dashboard.default",
         sidebarProps: {
-          displayText: "Default"
+          displayText: "Default",
         },
       },
       {
@@ -59,18 +61,18 @@ const appRoutes = [
         element: <AnalyticsPage />,
         state: "dashboard.analytics",
         sidebarProps: {
-          displayText: "Analytic"
-        }
+          displayText: "Analytic",
+        },
       },
       {
         path: "/dashboard/saas",
         element: <SaasPage />,
         state: "dashboard.saas",
         sidebarProps: {
-          displayText: "Saas"
-        }
-      }
-    ]
+          displayText: "Saas",
+        },
+      },
+    ],
   },
   {
     path: "/component",
@@ -78,7 +80,7 @@ const appRoutes = [
     state: "component",
     sidebarProps: {
       displayText: "Components",
-      icon: 'nav_icon3.png'
+      icon: "nav_icon3.png",
     },
     child: [
       {
@@ -86,7 +88,7 @@ const appRoutes = [
         element: <AlertPage />,
         state: "component.alert",
         sidebarProps: {
-          displayText: "Alert"
+          displayText: "Alert",
         },
       },
       {
@@ -94,240 +96,238 @@ const appRoutes = [
         element: <ButtonPage />,
         state: "component.button",
         sidebarProps: {
-          displayText: "Button"
-        }
-      }
-    ]
+          displayText: "Button",
+        },
+      },
+    ],
   },
   {
-    path: '/analytics',
-    element: '',
-    state: 'analytics',
+    path: "/analytics",
+    element: "",
+    state: "analytics",
     sidebarProps: {
-      displayText: 'Analytics',
-      icon: 'nav_icon4.png'
+      displayText: "Analytics",
+      icon: "nav_icon4.png",
     },
-    child:[
+    child: [
       {
-        path:'/analytics/action',
-        element:'',
-        state:'analytics.action',
-        sidebarProps:{
-          displayText:'Action',
-        }
-      }
-    ]
+        path: "/analytics/action",
+        element: "",
+        state: "analytics.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   {
-    path:'/invoice',
-    element:'',
-    state:'invoice',
-    sidebarProps:{
-      displayText:'Invoice',
-      icon:'nav_icon5.png'
+    path: "/invoice",
+    element: "",
+    state: "invoice",
+    sidebarProps: {
+      displayText: "Invoice",
+      icon: "nav_icon5.png",
     },
-    child:[
+    child: [
       {
-      path:'/invoice/action',
-      element:'',
-      state:'/invoice.action',
-      sidebarProps:{
-        displayText:'Action'
-      }
-      }
-      
-    ]
+        path: "/invoice/action",
+        element: "",
+        state: "/invoice.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   {
-    path:'/customer',
-    element:'',
-    state:'customer',
-    sidebarProps:{
-      displayText:'Customer',
-      icon:'nav_icon6.png'
+    path: "/customer",
+    element: "",
+    state: "customer",
+    sidebarProps: {
+      displayText: "Customer",
+      icon: "nav_icon6.png",
     },
-    child:[
+    child: [
       {
-      path:'/customer/action',
-      element:'',
-      state:'/customer.action',
-      sidebarProps:{
-        displayText:'Action'
-      }
-      }
-      
-    ]
+        path: "/customer/action",
+        element: "",
+        state: "/customer.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   {
-    path:'/sales',
-    element:'',
-    state:'sales',
-    sidebarProps:{
-      displayText:'Sales',
-      icon:'nav_icon7.png'
+    path: "/sales",
+    element: "",
+    state: "sales",
+    sidebarProps: {
+      displayText: "Sales",
+      icon: "nav_icon7.png",
     },
-    child:[
+    child: [
       {
-      path:'/sales/action',
-      element:'',
-      state:'/sales.action',
-      sidebarProps:{
-        displayText:'Action'
-      }
-      }
-    ]
+        path: "/sales/action",
+        element: "",
+        state: "/sales.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   {
-    path:'/widgets',
-    element:'',
-    state:'widgets',
-    sidebarProps:{
-      displayText:'Widgets',
-      icon:'nav_icon8.png'
+    path: "/widgets",
+    element: "",
+    state: "widgets",
+    sidebarProps: {
+      displayText: "Widgets",
+      icon: "nav_icon8.png",
     },
-    child:[
+    child: [
       {
-      path:'/widgets/action',
-      element:'',
-      state:'/widgets.action',
-      sidebarProps:{
-        displayText:'Action'
-      }
-      }
-    ]
+        path: "/widgets/action",
+        element: "",
+        state: "/widgets.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   {
-    path:'/settings',
-    element:'',
-    state:'settings',
-    sidebarProps:{
-      displayText:'Settings',
-      icon:'nav_icon9.png'
+    path: "/settings",
+    element: "",
+    state: "settings",
+    sidebarProps: {
+      displayText: "Settings",
+      icon: "nav_icon9.png",
     },
-    child:[
+    child: [
       {
-      path:'/settings/action',
-      element:'',
-      state:'/settings.action',
-      sidebarProps:{
-        displayText:'Action'
-      }
-      }
-    ]
+        path: "/settings/action",
+        element: "",
+        state: "/settings.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   {
-    path:'/reviews',
-    element:'',
-    state:'reviews',
-    sidebarProps:{
-      displayText:'Reviews',
-      icon:'nav_icon10.png'
+    path: "/reviews",
+    element: "",
+    state: "reviews",
+    sidebarProps: {
+      displayText: "Reviews",
+      icon: "nav_icon10.png",
     },
-    child:[
+    child: [
       {
-      path:'/reviews/action',
-      element:'',
-      state:'/reviews.action',
-      sidebarProps:{
-        displayText:'Action'
-      }
-      }
-    ]
+        path: "/reviews/action",
+        element: "",
+        state: "/reviews.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   {
-    path:'/food',
-    element:'',
-    state:'food',
-    sidebarProps:{
-      displayText:'Food',
-      icon:'nav_icon11.png'
+    path: "/food",
+    element: "",
+    state: "food",
+    sidebarProps: {
+      displayText: "Food",
+      icon: "nav_icon11.png",
     },
-    child:[
+    child: [
       {
-      path:'/food/action',
-      element:'',
-      state:'/food.action',
-      sidebarProps:{
-        displayText:'Action'
-      }
-      }
-    ]
+        path: "/food/action",
+        element: "",
+        state: "/food.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   {
-    path:'/food-detail',
-    element:'',
-    state:'food-detail',
-    sidebarProps:{
-      displayText:'Food Detail',
-      icon:'nav_icon12.png'
+    path: "/food-detail",
+    element: "",
+    state: "food-detail",
+    sidebarProps: {
+      displayText: "Food Detail",
+      icon: "nav_icon12.png",
     },
-    child:[
+    child: [
       {
-      path:'/food-detail/action',
-      element:'',
-      state:'/food-detail.action',
-      sidebarProps:{
-        displayText:'Action'
-      }
-      }
-    ]
+        path: "/food-detail/action",
+        element: "",
+        state: "/food-detail.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   {
-    path:'/wallet',
-    element:'',
-    state:'wallet',
-    sidebarProps:{
-      displayText:'Wallet',
-      icon:'nav_icon13.png'
+    path: "/wallet",
+    element: "",
+    state: "wallet",
+    sidebarProps: {
+      displayText: "Wallet",
+      icon: "nav_icon13.png",
     },
-    child:[
+    child: [
       {
-      path:'/wallet/action',
-      element:'',
-      state:'/wallet.action',
-      sidebarProps:{
-        displayText:'Action'
-      }
-      }
-    ]
+        path: "/wallet/action",
+        element: "",
+        state: "/wallet.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   {
-    path:'/chart',
-    element:'',
-    state:'chart',
-    sidebarProps:{
-      displayText:'Chart',
-      icon:'nav_icon14.png'
+    path: "/chart",
+    element: "",
+    state: "chart",
+    sidebarProps: {
+      displayText: "Chart",
+      icon: "nav_icon14.png",
     },
-    child:[
+    child: [
       {
-      path:'/chart/action',
-      element:'',
-      state:'/chart.action',
-      sidebarProps:{
-        displayText:'Action'
-      }
-      }
-    ]
+        path: "/chart/action",
+        element: "",
+        state: "/chart.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   {
-    path:'/calender',
-    element:'',
-    state:'calender',
-    sidebarProps:{
-      displayText:'Calender',
-      icon:'nav_icon15.png'
+    path: "/calender",
+    element: "",
+    state: "calender",
+    sidebarProps: {
+      displayText: "Calender",
+      icon: "nav_icon15.png",
     },
-    child:[
+    child: [
       {
-      path:'/calender/action',
-      element:'',
-      state:'/calender.action',
-      sidebarProps:{
-        displayText:'Action'
-      }
-      }
-    ]
+        path: "/calender/action",
+        element: "",
+        state: "/calender.action",
+        sidebarProps: {
+          displayText: "Action",
+        },
+      },
+    ],
   },
   // {
   //   path: "/documentation",

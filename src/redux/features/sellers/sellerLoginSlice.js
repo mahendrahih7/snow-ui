@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Seller_Send_otp, Seller_forgot_password, Seller_login, Seller_logout, Seller_reset_password, Seller_update_password } from "../../../constants/Api/Api";
 import swal from "sweetalert";
@@ -12,7 +12,8 @@ const initialState = {
   error: null,
   otpStatus: false,
   withOtp : false,
-  resetPassword: false
+  resetPassword: false,
+  currentUser: null
   // isAuthenticated: false,
   // token: ""
 };
@@ -59,6 +60,9 @@ export const sellerLoginWithOtp = createAsyncThunk("loginWithOtp", async(Credent
     const loginWithOtp = await axios.post(Seller_login, Credentials, { withCredentials: true })
     console.log(loginWithOtp.data.message, 'loginWithOtp')
     // swal("Done!", loginWithOtp.data.message, "success");
+    console.log(loginWithOtp, 'loginWithOtp')
+    localStorage.setItem('token', loginWithOtp.data.token)
+    console.log(loginWithOtp.data.sellerInformation, 'loginWithOtpdata')
     return loginWithOtp.data
   } catch(err) {
     console.log(err, 'err')
@@ -80,19 +84,20 @@ export const sellerLoginWithOtp = createAsyncThunk("loginWithOtp", async(Credent
 })
 
 //Seller Logout
-export const sellerLogout = createAsyncThunk("sellerLogout", async() => {
-  console.log(sellerLogout, 'sellerLogout')
-  const logout = await axios.get(Seller_logout,{ withCredentials: true } )
-  return logout.data
-  // try {
-  //   const logOut = await axios.get(Seller_logout, { withCredentials: true })
-  //   console.log(logOut.data.message, 'loginWithOtp')
-  //   return logOut.data
-  // } catch(err) {
-  //   console.log(err, 'err')
-  //   return rejectWithValue(err)
-  // }
-})
+// export const sellerLogout = createAsyncThunk("sellerLogout", async() => {
+//   console.log(sellerLogout, 'sellerLogout')
+//   const logout = await axios.get(Seller_logout,{ withCredentials: true } )
+//   console.log(logout, 'logout')
+//   return logout.data
+//   // try {
+//   //   const logOut = await axios.get(Seller_logout, { withCredentials: true })
+//   //   console.log(logOut.data.message, 'loginWithOtp')
+//   //   return logOut.data
+//   // } catch(err) {
+//   //   console.log(err, 'err')
+//   //   return rejectWithValue(err)
+//   // }
+// })
 
 //For update password
 export const sellerUpdatePassword = createAsyncThunk("sellerUpdatePassword", async(passwordDetail, {rejectWithValue}) =>{
@@ -192,6 +197,15 @@ return rejectWithValue(error)
 const sellerLoginSlice = createSlice({
   name: "loginSeller",
   initialState,
+  reducers: {
+    logout: (state) =>{
+      state.loading = false,
+      state.otpStatus= false,
+      state.withOtp= false
+
+    }
+
+  },
   extraReducers: (builder) => {
     builder
     //Seller login with email and password
@@ -215,11 +229,12 @@ const sellerLoginSlice = createSlice({
       .addCase(sellerLoginWithOtp.pending, (state) =>{
         state.loading = true;
       })
-      .addCase(sellerLoginWithOtp.fulfilled, (state) =>{
+      .addCase(sellerLoginWithOtp.fulfilled, (state, action) =>{
         state.loading = false,
         // state.otpStatus = false
         state.withOtp = true
         // state.otpStatus = false
+        state.currentUser = action.payload.sellerInformation
       })
       .addCase(sellerLoginWithOtp.rejected, (state) => {
         // console.log(action.payload, 'rejected'),
@@ -228,26 +243,26 @@ const sellerLoginSlice = createSlice({
   })
 
   //For Seller logout
-    .addCase(sellerLogout.pending, (state) =>({
-      ...state,
-      loading : true
-    }
+    // .addCase(sellerLogout.pending, (state) =>({
+    //   ...state,
+    //   loading : true
+    // }
       
-    ))
-    .addCase(sellerLogout.fulfilled, (state) =>(
-      {
-      ...state,
-      loading : false,
-      otpStatus: false,
-      withOtp: false
-    }
-    ))
-    .addCase(sellerLogout.rejected, (state) => (
-     {
-      ...state,
-      loading : false
-    }
-    ))
+    // ))
+    // .addCase(sellerLogout.fulfilled, (state) =>(
+    //   {
+    //   ...state,
+    //   loading : false,
+    //   otpStatus: false,
+    //   withOtp: false
+    // }
+    // ))
+    // .addCase(sellerLogout.rejected, (state) => (
+    //  {
+    //   ...state,
+    //   loading : false
+    // }
+    // ))
 
       //For seller update password
       .addCase(sellerUpdatePassword.pending, (state) =>{
@@ -273,4 +288,6 @@ const sellerLoginSlice = createSlice({
       ))
   },
 });
+
+export const { logout } = sellerLoginSlice.actions
 export default sellerLoginSlice.reducer;

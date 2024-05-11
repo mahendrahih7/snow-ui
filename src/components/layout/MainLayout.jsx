@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Box, Toolbar } from "@mui/material";
 import colorConfigs from "../../configs/colorConfigs";
 import sizeConfigs from "../../configs/sizeConfigs";
@@ -17,21 +17,36 @@ import Topbar from "../HomePageComponets/Topbar";
 import Notification from "../common/Notification/Notification";
 import HomePage from "../../pages/home/HomePage";
 import { useDispatch, useSelector } from "react-redux";
-import { sellerLogout } from "../../redux/features/sellers/sellerLoginSlice";
+import {
+  logout,
+  sellerLogout,
+} from "../../redux/features/sellers/sellerLoginSlice";
 
 import axios from "axios";
 import { Seller_logout } from "../../constants/Api/Api";
 import { Bounce, toast } from "react-toastify";
 import Swal from "sweetalert2";
 import swal from "sweetalert";
+import Cookies from "js-cookie";
 
 const MainLayout = () => {
   const dispatch = useDispatch();
+  // const location = useLocation();
   const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
   const [toggleClick, setToggleClick] = useState(false);
-
+  console.log(Cookies.get(), "Hello..");
   const { loading } = useSelector((state) => state.loginSeller);
+
+  // const token = JSON.parse(localStorage.getItem("token"));
+  // console.log(token, "token");
+
+  // useEffect(() => {
+  //   console.log(location, "location");
+  // }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleLogout = () => {
     // e.preventDefault();
@@ -44,51 +59,24 @@ const MainLayout = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        dispatch(sellerLogout()).then((res) => {
-          console.log(res);
-          toast.success(res.payload.message, {
-            className: "toast-message",
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            // theme: 'dark',
-            transition: Bounce,
-          });
-          navigate("/seller-login");
+        dispatch(logout());
+        // console.log(res, "response");
+        localStorage.removeItem("token");
+        toast.success("logout successfully", {
+          className: "toast-message",
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          // theme: 'dark',
+          transition: Bounce,
         });
+        navigate("/seller-login");
       }
     });
-
-    // Swal.fire({
-    //   title: "Are you sure?",
-    //   // text: "You won't be able to revert this!",
-    //   icon: "warning",
-    //   showCancelButton: true,
-    //   confirmButtonColor: "#3085d6",
-    //   cancelButtonColor: "#d33",
-    //   confirmButtonText: "Logout",
-    // }).then((result) => {
-    //   dispatch(sellerLogout()).then((res) => {
-    //     console.log(res);
-    //     toast.success(res.payload.message, {
-    //       className: "toast-message",
-    //       position: "top-right",
-    //       autoClose: 5000,
-    //       hideProgressBar: false,
-    //       closeOnClick: true,
-    //       pauseOnHover: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //       // theme: 'dark',
-    //       transition: Bounce,
-    //     });
-    //     navigate("/seller-login");
-    //   });
-    // });
   };
 
   return (

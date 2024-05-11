@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSeller } from "../../redux/features/sellers/sellerLoginSlice";
 import Otp from "./Otp";
@@ -18,8 +18,14 @@ const SellerLogin = () => {
   const dispatch = useDispatch();
 
   const { loading, otpStatus } = useSelector((state) => state.loginSeller);
-  console.log(loading, "loading");
-  console.log(otpStatus, "otpStatus");
+  // console.log(loading, "loading");
+  // console.log(otpStatus, "otpStatus");
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, []);
 
   const validateFormLogin = () => {
     let isValid = true;
@@ -130,7 +136,7 @@ const SellerLogin = () => {
                     <div className="">
                       <input
                         type="submit"
-                        value={loading ? "Submitting.." : "Submit"}
+                        value={loading ? "Sending.." : "Send OTP"}
                       />
                     </div>
                     <div className="forget-password">

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import OtpTimer from "otp-timer";
 import { Bounce, toast } from "react-toastify";
+// import Cookies from "js-cookie";
 
 const Otp = ({ length = 4, onOtpSubmit = () => {}, email, password }) => {
   console.log(email, password, "999");
@@ -20,6 +21,8 @@ const Otp = ({ length = 4, onOtpSubmit = () => {}, email, password }) => {
   const { loading, withOtp } = useSelector((state) => state.loginSeller);
   console.log(loading, "otp_loading");
   console.log(withOtp, "withOtp");
+
+  // console.log(Cookies.get(), "Hello..");
 
   const validateForm = () => {
     let isValid = true;
@@ -95,18 +98,21 @@ const Otp = ({ length = 4, onOtpSubmit = () => {}, email, password }) => {
 
   const submitCredentials = (e) => {
     e.preventDefault();
-    console.log(otp, "otpInSub");
+    // console.log(otp, "otpInSub");
     const OTP = Number(otp.join(""));
-    console.log(OTP, typeof OTP, "333");
+    // console.log(OTP, typeof OTP, "333");
     const credentials = {
       email: email,
       password: password,
       otp: OTP,
     };
-    console.log(credentials, "credentials");
-    console.log(validateForm(), "validateForm");
+    // console.log(credentials, "credentials");
+    // console.log(validateForm(), "validateForm");
     if (validateForm()) {
       dispatch(sellerLoginWithOtp(credentials));
+      // console.log("koushik");
+      // const cookie = document;
+      // console.log(cookie, "hello world", "documentcookie");
     } else {
       toast.error("Please Enter OTP", {
         className: "toast-message",
