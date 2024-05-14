@@ -16,6 +16,9 @@ import UpdatePassword from "./components/sellers/UpdatePassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./routes/PrivateRoute";
+import DefaultPage from "./pages/dashboard/DefaultPage";
+
+import ProductList from "./components/sellers/products/ProductList";
 
 function App() {
   return (
@@ -31,6 +34,11 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route path="/" element={<MainLayout />}></Route>
             <Route path="/update-password" element={<UpdatePassword />}></Route>
+            {/* <Route path="/dashboard/default" element={<DefaultPage />}></Route> */}
+            <Route
+              path="/products/product-list"
+              element={<ProductList />}
+            ></Route>
           </Route>
           <Route path="/seller-login" element={<SellerLogin />}></Route>
           <Route path="/forgot-password" element={<ForgotPassword />}></Route>

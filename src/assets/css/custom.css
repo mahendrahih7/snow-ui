@@ -582,6 +582,7 @@ p {
   box-shadow: none;
   color: #000;
   font-size: 14px;
+
 }
 .search_holder::placeholder {
   color: #c8c8c8;
@@ -1830,9 +1831,9 @@ p {
 }
 .ordr_tbl td:nth-child(5) .div2 {
   width: fit-content;
-  border: 1px solid var(--secondary-six-color);
+  /* border: 1px solid var(--secondary-six-color); */
   border-radius: 22px;
-  background-color: var(--primary-ten-color);
+  /* background-color: var(--primary-ten-color); */
   /* padding: 7px 20px; */
   display: flex;
   align-items: center;

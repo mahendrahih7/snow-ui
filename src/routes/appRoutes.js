@@ -17,6 +17,8 @@ import ButtonPage from "../pages/component/ButtonPage";
 // import InstallationPage from "../pages/installation/InstallationPage";
 import DocumentationPage from "../pages/documentation/DocumentationPage";
 import SellerLogin from "../components/sellers/SellerLogin";
+// import OrderHistory from "../components/orders/OrderHistory";
+import ProductList from "../components/sellers/products/ProductList";
 
 const appRoutes = [
   // {
@@ -74,6 +76,24 @@ const appRoutes = [
       },
     ],
   },
+  // {
+  //   path: "/orders",
+  //   element: <ComponentPageLayout />,
+  //   state: "order",
+  //   sidebarProps: {
+  //     displayText: "Orders",
+  //   },
+  //   child: [
+  //     {
+  //       path: "/orders/order-history",
+  //       element: <OrderHistory />,
+  //       state: "orders.order-history",
+  //       sidebarProps: {
+  //         displayText: "Order History",
+  //       },
+  //     },
+  //   ],
+  // },
   {
     path: "/component",
     element: <ComponentPageLayout />,
@@ -101,21 +121,40 @@ const appRoutes = [
       },
     ],
   },
+  // {
+  //   path: "/analytics",
+  //   element: "",
+  //   state: "analytics",
+  //   sidebarProps: {
+  //     displayText: "Analytics",
+  //     icon: "nav_icon4.png",
+  //   },
+  //   child: [
+  //     {
+  //       path: "/analytics/action",
+  //       element: "",
+  //       state: "analytics.action",
+  //       sidebarProps: {
+  //         displayText: "Action",
+  //       },
+  //     },
+  //   ],
+  // },
   {
-    path: "/analytics",
+    path: "/products",
     element: "",
-    state: "analytics",
+    state: "products",
     sidebarProps: {
-      displayText: "Analytics",
+      displayText: "Products",
       icon: "nav_icon4.png",
     },
     child: [
       {
-        path: "/analytics/action",
-        element: "",
-        state: "analytics.action",
+        path: "/products/product-list",
+        element: <ProductList />,
+        state: "products.product-list",
         sidebarProps: {
-          displayText: "Action",
+          displayText: "Product List",
         },
       },
     ],

@@ -5,6 +5,8 @@ import loginSlice from "./features/loginSlice";
 import sellerLoginSlice from "./features/sellers/sellerLoginSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
+import sellerProductSlice from "./features/sellers/sellerProductSlice";
+
 
 
 // const persistConfig = {
@@ -26,7 +28,8 @@ export const store = configureStore({
     appState: appStateSlice,
     regUser: regSlice,
     loginUser: loginSlice,
-    loginSeller: sellerLoginSlice
+    loginSeller: sellerLoginSlice,
+    sellerProducts: sellerProductSlice
   },
   // reducer: persistedReducer,
   // middleware: (getDefaultMiddleware) =>
