@@ -45,7 +45,7 @@ const sellerProductSlice = createSlice({
   })
       .addCase(allProducts.rejected, (state, action) => {
         // console.log(action.payload, 'rejected'),
-        state.loading = false
+        // state.loading = false
         state.error = action.payload
   })
   },

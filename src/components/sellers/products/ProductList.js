@@ -20,6 +20,7 @@ import {
 } from "../../../redux/features/sellers/sellerLoginSlice";
 import { allProducts } from "../../../redux/features/sellers/sellerProductSlice";
 import axios from "axios";
+import NavBar from "../../common/Nav/NavBar";
 
 const ProductList = () => {
   const navigate = useNavigate();
@@ -29,6 +30,18 @@ const ProductList = () => {
 
   const { loading, products } = useSelector((state) => state.sellerProducts);
   console.log(products, "productsList");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = products.slice(firstIndex, lastIndex);
+  console.log(records, "records");
+
+  const npage = Math.ceil(products.length / recordsPerPage);
+  console.log(npage, "npage");
+  const numbers = [...Array(npage + 1).keys()].slice(1);
+  console.log(numbers, "numbers");
 
   const handleLogout = () => {
     // e.preventDefault();
@@ -65,6 +78,25 @@ const ProductList = () => {
     dispatch(allProducts());
   }, []);
 
+  const prePage = () => {
+    if (currentPage !== 1) {
+      setCurrentPage(currentPage - 1);
+    }
+    window.scrollTo(0, 0);
+  };
+
+  const changeCPage = (id) => {
+    setCurrentPage(id);
+    window.scrollTo(0, 0);
+  };
+
+  const nextPage = () => {
+    if (currentPage !== npage) {
+      setCurrentPage(currentPage + 1);
+    }
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       <main>
@@ -89,90 +121,7 @@ const ProductList = () => {
             </div>
           </div>
           <div className="right_parent_element">
-            <div
-              className={toggle ? "outr_parent_nav active" : "outr_parent_nav"}
-            >
-              <div className="lft_p_nav">
-                <div className="sidebar">
-                  <img
-                    src={require("../../../assets/images/Sidebar.png")}
-                    alt="sidebar"
-                  />
-                </div>
-                <div className="star">
-                  <FontAwesomeIcon icon={faStar} size="2xl" />
-                </div>
-                <nav aria-label="breadcrumb">
-                  <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                      <a href="javascript:void(0);">Dashboards</a>
-                    </li>
-                    <li className="breadcrumb-item active" aria-current="page">
-                      Default
-                    </li>
-                  </ol>
-                </nav>
-              </div>
-              <div className="rgt_p_nav">
-                <div className="search_bar">
-                  <form action="">
-                    <input
-                      type="search"
-                      placeholder="Search order"
-                      className="search_holder"
-                    />
-                    <input type="button" className="search-btn" />
-                    <div className="icon">
-                      <img
-                        src={require("../../../assets/images/Text.png")}
-                        alt="text"
-                      />
-                    </div>
-                  </form>
-                </div>
-                <div className="all_r_btn">
-                  <div className="user_icon">
-                    <div className="user">
-                      <FontAwesomeIcon
-                        icon={faUser}
-                        onClick={() => setToggleClick(!toggleClick)}
-                      />
-                      {toggleClick && (
-                        <div className="user_login">
-                          <Link to="/signup">Login</Link>
-                          <a href="javascript:void(0)">Registration</a>
-                          <a href="/update-password">Update Password</a>
-                          <Link onClick={handleLogout}>Logout</Link>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="dark_light">
-                    <div className="sun">
-                      <img
-                        src={require("../../../assets/images/sun.png")}
-                        alt="sun"
-                      />
-                    </div>
-                  </div>
-                  <div className="counter">
-                    <img
-                      src={require("../../../assets/images/counter_btn.png")}
-                      alt="counter"
-                    />
-                  </div>
-                  <div
-                    className="notification"
-                    onClick={() => setToggle(!toggle)}
-                  >
-                    <img
-                      src={require("../../../assets/images/bell.png")}
-                      alt="bell"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <NavBar />
             {/* <Topbar/> */}
 
             <div className="outr-right-content">
@@ -225,11 +174,12 @@ const ProductList = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {products &&
-                          products.length > 0 &&
-                          products.map((product) => {
+                        {records &&
+                          records.length > 0 &&
+                          records.map((product) => {
+                            console.log(product, "product");
                             return (
-                              <tr>
+                              <tr key={product?.product?._id}>
                                 <td>
                                   <div className="div1">
                                     <div className="o_div_img">
@@ -238,7 +188,7 @@ const ProductList = () => {
                                       />
                                     </div>
                                     <div className="o_div_txt">
-                                      <h4>{product?.product._id}</h4>
+                                      {/* <h4>{product?.product._id}</h4> */}
                                       <h5>{product?.product.name}</h5>
                                     </div>
                                   </div>
@@ -297,75 +247,34 @@ const ProductList = () => {
                               </tr>
                             );
                           })}
-
-                        {/* <tr>
-                          <td>
-                            <div className="div1">
-                              <div className="o_div_img">
-                                <img
-                                  src={require("../../assets/images/ordr_img2.png")}
-                                />
-                              </div>
-                              <div className="o_div_txt">
-                                <h5>#907654</h5>
-                                <p>Crispy Calamari</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="div2">
-                              <h5>Mar 17,2023</h5>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="div2">
-                              <h5>T2</h5>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="div2">
-                              <h5>₹640.0</h5>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="div2">
-                              <span>
-                                <h6>PAID</h6>
-                              </span>
-                            </div>
-                          </td>
-                          <td>
-                            <span className="colon">
-                              <FontAwesomeIcon
-                                icon={faEllipsisVertical}
-                                size="2xl"
-                              />
-                            </span>
-                          </td>
-                          <td>
-                            <span>
-                              <FontAwesomeIcon
-                                icon={faTrash}
-                                size="2xl"
-                                style={{ color: "#da0b20" }}
-                              />
-                            </span>
-                          </td>
-                        </tr> */}
                       </tbody>
                     </table>
                   </div>
                 </div>
                 {/* pagination */}
                 <div className="pagination">
-                  <a href="javascript:void(0);">«</a>
-                  <a href="javascript:void(0);">01</a>
-                  <a href="javascript:void(0);" className="active">
+                  <a href="javascript:void(0);" onClick={prePage}>
+                    «
+                  </a>
+                  {numbers.map((n, i) => (
+                    <a
+                      href="javascript:void(0);"
+                      key={i}
+                      onClick={() => changeCPage(n)}
+                      className={`${currentPage === n ? "active" : ""}`}
+                    >
+                      {n}
+                    </a>
+                  ))}
+
+                  {/* <a href="javascript:void(0);" className="active">
                     02
                   </a>
                   <a href="javascript:void(0);">03</a>
-                  <a href="javascript:void(0);">04</a>
-                  <a href="javascript:void(0);">»</a>
+                  <a href="javascript:void(0);">04</a> */}
+                  <a href="javascript:void(0);" onClick={nextPage}>
+                    »
+                  </a>
                 </div>
               </div>
             </div>

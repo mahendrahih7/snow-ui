@@ -1896,8 +1896,10 @@ tbody tr td {
   font-size: 18px;
 }
 .pagination a.active {
-  color: white;
-  color: var(--secondary-six-color);
+  /* color: white; */
+  color: rgb(255, 115, 0);
+  /* color: var(--secondary-six-color); */
+  /* color: blue; */
 }
 .pagination a:hover:not(.active) {
   background-color: var(--primary-ten-color);

@@ -19,6 +19,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import DefaultPage from "./pages/dashboard/DefaultPage";
 
 import ProductList from "./components/sellers/products/ProductList";
+import AddProduct from "./components/sellers/products/AddProduct";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             path="/reset-password/:token"
             element={<ResetPassword />}
           ></Route>
+          <Route path="/add-product" element={<AddProduct />}></Route>
         </Routes>
       </BrowserRouter>
       <ToastContainer />
