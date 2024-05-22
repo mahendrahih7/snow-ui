@@ -103,7 +103,9 @@ export const sellerLoginWithOtp = createAsyncThunk("loginWithOtp", async(Credent
 export const sellerUpdatePassword = createAsyncThunk("sellerUpdatePassword", async(passwordDetail, {rejectWithValue}) =>{
   try {
     // const config = {withCredentials: true}
-    const updatePass = await axios.put(Seller_update_password, passwordDetail, { withCredentials: true })
+    const updatePass = await axios.put(Seller_update_password, passwordDetail, {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+      })
     console.log(updatePass.data.message, 'updatePass')
     toast.success(updatePass.data.message, {
         className: "toast-message",

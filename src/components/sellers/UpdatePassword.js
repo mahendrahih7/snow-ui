@@ -59,6 +59,7 @@ const UpdatePassword = () => {
     if (validateForm()) {
       dispatch(sellerUpdatePassword(passwordDetail))
         .then(() => {
+          localStorage.removeItem("token");
           navigate("/seller-login");
         })
         .catch((error) => {
