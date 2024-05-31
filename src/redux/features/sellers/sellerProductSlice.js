@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Seller_products} from "../../../constants/Api/Api";
-import swal from "sweetalert";
-import { Bounce, toast } from "react-toastify";
+// import swal from "sweetalert";
+// import { Bounce, toast } from "react-toastify";
 
 
 
@@ -11,6 +11,7 @@ const initialState = {
   products: [],
   error: null
 };
+
 
 
 export const allProducts = createAsyncThunk("allProducts", async() => {

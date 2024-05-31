@@ -16,7 +16,6 @@ import UpdatePassword from "./components/sellers/UpdatePassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./routes/PrivateRoute";
-import DefaultPage from "./pages/dashboard/DefaultPage";
 
 import ProductList from "./components/sellers/products/ProductList";
 import AddProduct from "./components/sellers/products/AddProduct";

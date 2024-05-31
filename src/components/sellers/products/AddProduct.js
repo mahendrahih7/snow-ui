@@ -14,10 +14,14 @@ const AddProduct = () => {
   const [potencyArr, setPotencyArr] = useState([]);
   const [potencyChild, setPotencyChild] = useState([]);
   const [productTags, setProductTags] = useState([]);
+  const [potencyDivIndex, setPotencyDivIndex] = useState([]);
 
-  console.log(rows, "rows");
-  console.log(potencyDiv, "potencyDiv");
-  console.log(productTags, "productTags");
+  console.log(potencyDivIndex, "potencyDivIndex");
+  console.log(potencyArr, "potencyArr");
+
+  // console.log(rows, "rows");
+  // console.log(potencyDiv, "potencyDiv");
+  // console.log(productTags, "productTags");
 
   function createTr(table_id) {
     console.log("called");
@@ -42,57 +46,21 @@ const AddProduct = () => {
   const addRowProductTags = () => {
     setRows([...rows, { key: "", value: "" }]);
     console.log(rows, "rows");
-
-    // const obj = {};
-    // obj.key = myRefKey.current.value;
-    // obj.val = myRefVal.current.value;
-    // console.log(obj, "objRes");
-    // const keyArr = Object.keys(obj);
-    // const valArr = Object.values(obj);
-    // console.log(keyArr, valArr, "999");
-    // setProductTags([...productTags, obj]);
   };
 
-  const showPotencyDiv = () => {
+  const showPotencyDiv = (index) => {
     console.log("clickedDiv");
     setPotencyDiv([...potencyDiv, {}]);
+    setPotencyDivIndex([...potencyDivIndex, index]);
   };
 
   const handleChange = (event, index) => {
-    // console.log(index, "index");
-    // const arr = [...rows];
-    // console.log(arr, "arr");
-    // // arr[index][myRefKey.current.value] = myRefVal.current.value;
-    // console.log(myRefKey.current.value, "kkk");
-    // console.log(myRefVal.current.value, "vvv");
-    // let key1 = myRefKey.current.value;
-    // let val1 = myRefVal.current.value;
-    // arr[index][myRefKey.current.value] = event.target.value;
-    // arr[index] = { [key1]: val1 };
-    // arr[index][key1] = val1;
-    // arr.push(arr[index]);
-    // arr[index][key1] = val1;
-    // console.log(arr, "arr123456");
-    // setProductTags([...arr, { ...arr[index] }]);
-    // productTags.push({ ...arr[index] });
     const arr = [...rows];
     arr[index][event.target.name] = event.target.value;
     setProductTags([...arr]);
   };
 
   const handleSubmit = (e) => {
-    // e.preventDefault();
-    // console.log(rows, "rows");
-    // const res = productTags.map((v, i) => {
-    //   let key = v.key;
-    //   let value = v.val;
-
-    //   const object = {
-    //     [key]: value,
-    //   };
-    //   return object;
-    // });
-    // console.log(res, "result");
     console.log(productTags, "productTags");
   };
 
@@ -100,8 +68,11 @@ const AddProduct = () => {
     setPotencyArr([...potencyArr, {}]);
   };
 
-  const addPotencyChild = () => {
-    setPotencyChild([...potencyChild, {}]);
+  const addPotencyChild = (index) => {
+    console.log(index, "indexChild");
+    if (index === 1) {
+      setPotencyChild([...potencyChild, {}]);
+    }
   };
 
   return (
@@ -597,13 +568,13 @@ const AddProduct = () => {
                               />
                               <span
                                 className="add_btn"
-                                // onClick={() => addPotency()}
+                                onClick={() => addPotency()}
                                 // onClick="create_tr('table_body29')"
                               >
                                 <FontAwesomeIcon icon={faPlus} size="2xl" />
                               </span>
                             </div>
-                            {/* {potencyArr.map((potency, i) => {
+                            {potencyArr.map((potency, i) => {
                               return (
                                 <div className="p_c_lft" key={i}>
                                   <input
@@ -624,15 +595,15 @@ const AddProduct = () => {
                                   </span>
                                 </div>
                               );
-                            })} */}
+                            })}
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {potencyDiv.map((div, i) => {
+                    {potencyDiv.map((div, index) => {
                       return (
-                        <div className="main_p_inform" key={i}>
+                        <div className="main_p_inform" key={index}>
                           <div className="p_inform">
                             <div className="p_total p_hdng" id="table_body">
                               <div className="p_c_lft">
@@ -643,7 +614,7 @@ const AddProduct = () => {
                                 />
                                 <span
                                   className="add_btn"
-                                  onClick={() => showPotencyDiv()}
+                                  onClick={() => showPotencyDiv(index)}
                                 >
                                   <div className="click_me" />
                                   <FontAwesomeIcon icon={faPlus} />
@@ -669,36 +640,38 @@ const AddProduct = () => {
                                   />
                                   <span
                                     className="add_btn"
-                                    // onClick={() => addPotencyChild()}
+                                    onClick={() => addPotencyChild(index)}
                                   >
                                     <FontAwesomeIcon icon={faPlus} size="2xl" />
                                   </span>
                                 </div>
-                                {/* {potencyChild.map((potency, i) => {
-                                  return (
-                                    <div className="p_c_lft" key={i}>
-                                      <input
-                                        type="text"
-                                        className="addMain"
-                                        placeholder="Total THC (mg)"
-                                      />
-                                      <input
-                                        type="text"
-                                        className="addPrefer"
-                                        placeholder="0.00mg"
-                                      />
-                                      <span
-                                        className="add_btn"
-                                        onClick={() => addPotencyChild()}
-                                      >
-                                        <FontAwesomeIcon
-                                          icon={faPlus}
-                                          size="2xl"
+                                {/* ..................................................................................... */}
+                                {index === 1 &&
+                                  potencyChild.map((potency, i) => {
+                                    return (
+                                      <div className="p_c_lft" key={i}>
+                                        <input
+                                          type="text"
+                                          className="addMain"
+                                          placeholder="Total THC (mg)"
                                         />
-                                      </span>
-                                    </div>
-                                  );
-                                })} */}
+                                        <input
+                                          type="text"
+                                          className="addPrefer"
+                                          placeholder="0.00mg"
+                                        />
+                                        <span
+                                          className="add_btn"
+                                          onClick={() => addPotencyChild(index)}
+                                        >
+                                          <FontAwesomeIcon
+                                            icon={faPlus}
+                                            size="2xl"
+                                          />
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
                               </div>
                             </div>
                           </div>

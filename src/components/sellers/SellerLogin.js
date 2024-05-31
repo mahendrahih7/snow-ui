@@ -69,11 +69,6 @@ const SellerLogin = () => {
     if (validateFormLogin()) {
       console.log(login, "login-seller");
       dispatch(loginSeller(login));
-      //   dispatch(loginUser(login));
-      // setLogin({
-      //   email: "",
-      //   password: "",
-      // });
     }
   };
 

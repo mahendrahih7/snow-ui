@@ -1,4 +1,4 @@
-const BASE_URL = "https://inventory-i0sm.onrender.com";
+const BASE_URL = "http://15.206.169.180";
 
 export const Reg_url = `${BASE_URL}/api/users`;
 export const Login_url = `${BASE_URL}/api/users/login`;
