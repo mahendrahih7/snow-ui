@@ -39,6 +39,10 @@ function App() {
               path="/products/product-list"
               element={<ProductList />}
             ></Route>
+            <Route
+              path="/products/add-product"
+              element={<AddProduct />}
+            ></Route>
           </Route>
           <Route path="/seller-login" element={<SellerLogin />}></Route>
           <Route path="/forgot-password" element={<ForgotPassword />}></Route>
@@ -46,7 +50,7 @@ function App() {
             path="/reset-password/:token"
             element={<ResetPassword />}
           ></Route>
-          <Route path="/add-product" element={<AddProduct />}></Route>
+          {/* <Route path="/add-product" element={<AddProduct />}></Route> */}
         </Routes>
       </BrowserRouter>
       <ToastContainer />

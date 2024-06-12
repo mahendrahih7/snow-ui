@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Seller_products} from "../../../constants/Api/Api";
+import { Seller_product_category, Seller_products, all_brand} from "../../../constants/Api/Api";
 // import swal from "sweetalert";
 // import { Bounce, toast } from "react-toastify";
 
@@ -9,11 +9,15 @@ import { Seller_products} from "../../../constants/Api/Api";
 const initialState = {
   loading: false,
   products: [],
-  error: null
+  error: null,
+  category: [],
+  subCategory: [],
+  childCategory: [],
+  brand: []
 };
 
 
-
+//GET ALL PRODUCT
 export const allProducts = createAsyncThunk("allProducts", async() => {
     try {
       //console.log(userData, "userData")
@@ -29,6 +33,48 @@ export const allProducts = createAsyncThunk("allProducts", async() => {
   }
 );
 
+//FOR PRODUCT CATEGORY & SUB CATEGORY
+export const productCategory = createAsyncThunk("productCategory", async(catName) => {
+  console.log(catName, 'catName')
+  try {
+    const categoryList = await axios.get(Seller_product_category, {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+    })
+    console.log(categoryList, 'categoryList')
+    return {catArr: categoryList.data, name: catName}
+
+  } catch(error) {
+    console.log(error, 'error')
+  }
+})
+
+//FOR PRODUCT CHILD CATEGORY
+export const productChildCat = createAsyncThunk("childCategory", async(nameOfCat, {dispatch}) =>{
+  try{
+    console.log(nameOfCat, 'nameOfCat')
+    dispatch(productCategory(nameOfCat.catName))
+    return nameOfCat.subCatName
+  }catch(error){
+    console.log(error, 'error')
+  }
+})
+
+// FOR BRAND
+export const allBrand = createAsyncThunk("allBrand", async() =>{
+  try{
+    const brands = await axios.get(all_brand, {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+    })
+    console.log(brands, 'brands')
+    return brands.data
+
+  }catch(error){
+    console.log(error, 'error')
+
+  }
+})
+
+
 const sellerProductSlice = createSlice({
   name: "sellerProducts",
   initialState,
@@ -39,14 +85,57 @@ const sellerProductSlice = createSlice({
         state.loading = true
   })
       .addCase(allProducts.fulfilled, (state, action) => {
-        // console.log('fullfilled'),
-        // console.log(action.payload, 'fullFilled'),
           state.loading = false
           state.products = action.payload
   })
       .addCase(allProducts.rejected, (state, action) => {
-        // console.log(action.payload, 'rejected'),
-        // state.loading = false
+       state.loading = false
+        state.error = action.payload
+  })
+
+  //CATEGORY & SUB CATEGORY
+  .addCase(productCategory.pending, (state) =>{
+    state.loading = true
+  })
+  .addCase(productCategory.fulfilled, (state, action) =>{
+    console.log(action.payload, 'lkl')
+    state.loading = false
+    state.category = action.payload?.catArr
+    const singleCat = action.payload.catArr.filter((c) => c.name === action.payload.name)
+    console.log(singleCat, 'singleCat')
+    state.subCategory = singleCat[0]?.subCategory
+  })
+  .addCase(productCategory.rejected, (state) =>{
+    state.loading = false
+     state.error = action.payload
+  })
+
+  //CHILD CATEGORY
+    .addCase(productChildCat.pending, (state) =>{
+        state.loading = true
+  })
+      .addCase(productChildCat.fulfilled, (state, action) => {
+          state.loading = false
+          console.log(action.payload, '888')
+          const singleSubCat = state.subCategory.filter((subCat) => subCat.subCategoryName === action.payload)
+          state.childCategory = singleSubCat[0].childCategory
+  })
+      .addCase(productChildCat.rejected, (state) => {
+       state.loading = false
+        state.error = action.payload
+  })
+
+  //ALL BRANDS
+      .addCase(allBrand.pending, (state) =>{
+        state.loading = true
+  })
+      .addCase(allBrand.fulfilled, (state, action) => {
+          state.loading = false
+          console.log(action.payload, '777')
+          state.brand = action.payload
+  })
+      .addCase(allBrand.rejected, (state) => {
+       state.loading = false
         state.error = action.payload
   })
   },

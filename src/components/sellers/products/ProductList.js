@@ -228,7 +228,7 @@ const ProductList = () => {
                                 <td>
                                   <div className="div2">
                                     <h5>
-                                      {product?.product?.manufacturingDate.slice(
+                                      {product?.product?.manufacturingDate?.slice(
                                         0,
                                         10
                                       )}

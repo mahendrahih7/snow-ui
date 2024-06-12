@@ -3522,16 +3522,48 @@ tbody tr td {
   display: flex;
   border-bottom: 1px solid var(--secondary-eight-color);
 }
+/* mahendra(10.06.24) */
+.p_c_lft_dup {
+  display: flex;
+    border-bottom: 1px solid var(--secondary-eight-color);
+}
+/* mahendra(10.06.24) */
+.p_c_lft_dup input {
+  border: none;
+    padding: 10px 30px 10px 20px;
+    background-color: transparent;
+    width: 20%;
+    /* color: var(--secondary-seventeen-color); */
+    color: var(--secondary-color);
+    font-size: 16px;
+}
 /* shreyasi(21.2.24) */
 .p_c_lft input {
   border: none;
-  padding: 10px 30px 10px 20px;
+  padding: 10px 30px 10px 100px;
   background-color: transparent;
   width: 20%;
   /* color: var(--secondary-seventeen-color); */
   color: var(--secondary-color);
   font-size: 16px;
 }
+/* mahendra(10.06.24) */
+.p_c_lft label {
+  font-size: 18px;
+  padding: 10px 30px 10px 20px;
+  width: 20%;
+}
+/* mahendra(10.06.24) */
+.p_c_lft select {
+  border: none;
+  padding: 10px 30px 10px 100px;
+  background-color: transparent;
+  width: 30%;
+  /* color: var(--secondary-seventeen-color); */
+  color: var(--secondary-color);
+  font-size: 16px;
+}
+
 .p_c_lft:hover {
   background-color: var(--primary-two-color);
 }
@@ -3668,11 +3700,12 @@ button.delete_btn.tab_lst_add {
 .title_add_outr {
   margin: 1.5rem 0;
 }
+
 /* #pro_header>div {
   float: left;
 } */
 .outr_all_header {
-  display: flex;
+  /* display: flex; */
   align-items: self-end;
   margin: 2rem 0 1.5rem;
 }
@@ -3688,7 +3721,9 @@ button.delete_btn.tab_lst_add {
 
 .all_title {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  /* flex-wrap: wrap; */
+  margin-bottom: 20px;
 }
 
 .outr_all_header .all_title span {
@@ -3728,6 +3763,8 @@ button.delete_btn.tab_lst_add {
   height: 4rem;
   border-radius: 4px;
   padding: 5px 10px;
+  width: 250px;
+  font-size: 18px;
 }
 button.add__btn {
   border: 0;
@@ -3742,6 +3779,7 @@ button.add__btn {
   height: 4rem;
   border-radius: 4px;
   padding: 5px 10px;
+  font-size: 18px;
 }
 .disabled {
   pointer-events: none;
@@ -4801,3 +4839,27 @@ iframe {
   text-align: center;
   margin-top: 20px;
 }
+.all_title span{
+  font-size: 18px;
+}
+.all_title input{
+  width: 250px;
+}
+#price_tab .tab_lst_add{
+  background-color: #000;
+}
+button.add__btn{
+  color: #000;
+  font-size: 18px;
+}
+.input-field-outr{
+  /* display: flex; */
+  gap: 10px;
+  align-items: center;
+}
+.all_otr{
+  margin-bottom: 10px;
+}
+/* .input-field-outr input{
+  margin-right: 10px;
+} */

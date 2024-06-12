@@ -9,3 +9,5 @@ export const Seller_forgot_password = `${BASE_URL}/api/sellers/forgotPassword`;
 export const Seller_reset_password = `${BASE_URL}/api/sellers/resetPassword`;
 export const Seller_logout = `${BASE_URL}/api/sellers/logout`;
 export const Seller_products = `${BASE_URL}/api/products`;
+export const Seller_product_category = `${BASE_URL}/api/category`;
+export const all_brand = `${BASE_URL}/api/brands`;

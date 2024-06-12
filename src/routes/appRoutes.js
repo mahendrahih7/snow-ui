@@ -19,6 +19,7 @@ import DocumentationPage from "../pages/documentation/DocumentationPage";
 import SellerLogin from "../components/sellers/SellerLogin";
 // import OrderHistory from "../components/orders/OrderHistory";
 import ProductList from "../components/sellers/products/ProductList";
+import AddProduct from "../components/sellers/products/AddProduct";
 
 const appRoutes = [
   // {
@@ -155,6 +156,14 @@ const appRoutes = [
         state: "products.product-list",
         sidebarProps: {
           displayText: "Product List",
+        },
+      },
+      {
+        path: "/products/add-product",
+        element: <AddProduct />,
+        state: "products.add-product",
+        sidebarProps: {
+          displayText: "Add Product",
         },
       },
     ],
