@@ -11,3 +11,4 @@ export const Seller_logout = `${BASE_URL}/api/sellers/logout`;
 export const Seller_products = `${BASE_URL}/api/products`;
 export const Seller_product_category = `${BASE_URL}/api/category`;
 export const all_brand = `${BASE_URL}/api/brands`;
+export const productInfo = `${BASE_URL}/api/products`;

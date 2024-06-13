@@ -1,11 +1,15 @@
 import {
   faBagShopping,
   faDollarSign,
+  faEye,
   faImage,
+  faLayerGroup,
   faMinus,
+  faPenToSquare,
   faPlus,
   faSackDollar,
   faStar,
+  faTrash,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,8 +20,10 @@ import NavBar from "../../common/Nav/NavBar";
 import { useDispatch, useSelector } from "react-redux";
 import {
   allBrand,
+  priceVarInfo,
   productCategory,
   productChildCat,
+  productInformation,
 } from "../../../redux/features/sellers/sellerProductSlice";
 import Price from "./Price";
 import axios from "axios";
@@ -42,9 +48,16 @@ const AddProduct = () => {
     sku: "",
     brand: "",
     description: "",
-    shipping_charge: "",
-    free_shipping: "",
+    shipping_charge: 0,
+    free_shipping: false,
   });
+  const [dropDownData, setDropDownData] = useState({
+    categoryName: "",
+    subCategoryName: "",
+    childCategoryName: "",
+    brandName: "",
+  });
+
   const [main, setMain] = useState([
     { potency: [{ key: "", value: "" }], val: "" },
   ]);
@@ -59,9 +72,12 @@ const AddProduct = () => {
   const [arr, setArr] = useState([]);
   console.log(arr, "arr");
 
-  const { category, subCategory, childCategory, brand } = useSelector(
-    (state) => state.sellerProducts
-  );
+  /////////   GET REDUX STATE   //////////////////
+  const { loading, category, subCategory, childCategory, brand, productId } =
+    useSelector((state) => state.sellerProducts);
+  // if (!loading) {
+  //   console.log(productId, "productId");
+  // }
 
   function createTr(table_id) {
     console.log("called");
@@ -144,6 +160,10 @@ const AddProduct = () => {
         if (category.length > 0) {
           category.map((cat) => {
             if (cat.name === e.target.value) {
+              setDropDownData({
+                ...dropDownData,
+                categoryName: e.target.value,
+              });
               setProductInfo({ ...productInfo, category: cat._id });
             }
           });
@@ -155,6 +175,10 @@ const AddProduct = () => {
           subCategory.map((subCat_item) => {
             console.log(e.target.value, "subCatValue");
             if (subCat_item.subCategoryName === e.target.value) {
+              setDropDownData({
+                ...dropDownData,
+                subCategoryName: e.target.value,
+              });
               setProductInfo({
                 ...productInfo,
                 sub_category: subCat_item._id,
@@ -170,6 +194,10 @@ const AddProduct = () => {
         if (childCategory.length > 0) {
           childCategory.map((childCat_item) => {
             if (childCat_item.childCategoryName === e.target.value) {
+              setDropDownData({
+                ...dropDownData,
+                childCategoryName: e.target.value,
+              });
               setProductInfo({
                 ...productInfo,
                 child_category: childCat_item._id,
@@ -181,6 +209,10 @@ const AddProduct = () => {
         if (brand.length > 0) {
           brand.map((item) => {
             if (item.name === e.target.value) {
+              setDropDownData({
+                ...dropDownData,
+                brandName: e.target.value,
+              });
               setProductInfo({ ...productInfo, brand: item._id });
             }
           });
@@ -189,19 +221,14 @@ const AddProduct = () => {
     }
   };
 
-  const submitHandler = () => {
+  const submitProductInfo = () => {
     console.log(productInfo, "productInfo");
     const productData = {
       info: productInfo,
-      others: main,
+      others: JSON.stringify(main),
     };
     console.log(productData, "productData");
-    axios
-      .post(`http://15.206.169.180/api/products`, productData, {
-        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-      })
-      .then((res) => console.log(res.data))
-      .catch((error) => console.log(error.response.data));
+    dispatch(productInformation(productData));
   };
 
   const createTitle = () => {
@@ -232,10 +259,23 @@ const AddProduct = () => {
       alert("already exist");
     } else {
       setInputFields([...inputFields, { [titleName]: "" }]);
+
+      const addNew = arr.map((obj) => {
+        const x = { ...obj };
+        x[titleName] = "";
+        return x;
+      });
+      console.log(addNew, "222");
+      setArr(addNew);
     }
   };
 
   const addField = () => {
+    // for (let obj of inputFields) {
+    //   for (let key in obj) {
+    //     obj[key] = "";
+    //   }
+    // }
     const combinedData = inputFields.reduce(
       (acc, obj) => ({ ...acc, ...obj }),
       {}
@@ -244,6 +284,12 @@ const AddProduct = () => {
     setArr([...arr, combinedData]);
   };
 
+  // useEffect(() => {
+  //   // if (getTitle()) {
+  //   //   addField();
+  //   // }
+  // }, [title]);
+
   const chngeFirstIndexData = (e, index) => {
     inputFields[index][e.target.name] = e.target.value;
   };
@@ -251,6 +297,21 @@ const AddProduct = () => {
   const changeOtherIndexData = (e, index) => {
     console.log(e.target.name, "nametarget");
     arr[index][e.target.name] = e.target.value;
+  };
+
+  const submitPriceVarient = () => {
+    const ArrayOfdata = [
+      inputFields.reduce((acc, obj) => ({ ...acc, ...obj }), {}),
+    ].concat(arr);
+    console.log(ArrayOfdata, "ArrayOfdata");
+    const allPriceVar = JSON.stringify(ArrayOfdata);
+    const priceVariant = {
+      variants: allPriceVar,
+    };
+    console.log(priceVariant, "priceVariant");
+    console.log(productId, "productId");
+
+    dispatch(priceVarInfo({ priceVariant, productId }));
   };
 
   // const deleteTitle = (x) => {
@@ -291,30 +352,30 @@ const AddProduct = () => {
                 <div className="tb_top pdtc">
                   <div className="tb_lft product_i">
                     <button
-                      className="tabs_c"
-                      // onClick="open_tabs(event,'product_info')"
+                      className={`tabs_c ${
+                        tabs === "product_info" ? "active" : ""
+                      }`}
                       onClick={() => setTabs("product_info")}
                     >
                       <span>
-                        {/* <i className="fa-solid fa-bag-shopping" /> */}
                         <FontAwesomeIcon icon={faBagShopping} />
                       </span>
                       Product Info
                     </button>
                     <button
-                      className="tabs_c"
-                      // onClick="open_tabs(event,'prices')"
+                      className={`tabs_c ${tabs === "prices" ? "active" : ""}`}
                       onClick={() => setTabs("prices")}
                     >
                       <span>
-                        {/* <i className="fa-solid fa-sack-dollar" /> */}
-                        <FontAwesomeIcon icon={faSackDollar} />
+                        {/* <FontAwesomeIcon icon={faSackDollar} /> */}
+                        <FontAwesomeIcon icon={faLayerGroup} />
                       </span>{" "}
-                      Prices
+                      Variation
                     </button>
                     <button
-                      className="tabs_c"
-                      // onClick="open_tabs(event,'inventory')"
+                      className={`tabs_c ${
+                        tabs === "inventory" ? "active" : ""
+                      }`}
                       onClick={() => setTabs("inventory")}
                     >
                       <span>
@@ -323,8 +384,7 @@ const AddProduct = () => {
                       Inventory
                     </button>
                     <button
-                      className="tabs_c"
-                      // onClick="open_tabs(event,'batches')"
+                      className={`tabs_c ${tabs === "batches" ? "active" : ""}`}
                       onClick={() => setTabs("batches")}
                     >
                       <span>
@@ -334,12 +394,10 @@ const AddProduct = () => {
                       Batches
                     </button>
                     <button
-                      className="tabs_c"
-                      // onClick="open_tabs(event,'images')"
+                      className={`tabs_c ${tabs === "images" ? "active" : ""}`}
                       onClick={() => setTabs("images")}
                     >
                       <span>
-                        {/* <i className="fa-solid fa-image" /> */}
                         <FontAwesomeIcon icon={faImage} />
                       </span>{" "}
                       Images
@@ -359,7 +417,7 @@ const AddProduct = () => {
                         <button
                           href="javascript:void(0);"
                           className="edit"
-                          onClick={submitHandler}
+                          onClick={submitProductInfo}
                         >
                           Save
                         </button>
@@ -375,6 +433,7 @@ const AddProduct = () => {
                             <input
                               id="productName"
                               name="product_name"
+                              value={productInfo.product_name}
                               type="text"
                               placeholder="10Bandz"
                               onChange={(e) => changeProductInfo(e)}
@@ -400,14 +459,15 @@ const AddProduct = () => {
                             <select
                               name="category"
                               id="category"
+                              value={dropDownData.categoryName}
                               onChange={(e) => changeProductInfo(e)}
                             >
                               <option value="">Select Category</option>
                               {category.length > 0 &&
                                 category.map((cat, i) => {
                                   return (
-                                    <option value={cat.name} key={i}>
-                                      {cat.name}
+                                    <option value={cat?.name} key={i}>
+                                      {cat?.name}
                                     </option>
                                   );
                                 })}
@@ -420,6 +480,7 @@ const AddProduct = () => {
                             <select
                               name="sub_category"
                               id="sub_category"
+                              value={dropDownData.subCategoryName}
                               onChange={(e) => changeProductInfo(e)}
                             >
                               <option value="">Select sub category</option>
@@ -444,6 +505,7 @@ const AddProduct = () => {
                             <select
                               name="child_category"
                               id="child_category"
+                              value={dropDownData.childCategoryName}
                               onChange={(e) => changeProductInfo(e)}
                             >
                               <option value="">Select child category</option>
@@ -482,6 +544,7 @@ const AddProduct = () => {
                             <select
                               name="brand"
                               id="brand"
+                              value={dropDownData.brandName}
                               onChange={(e) => changeProductInfo(e)}
                             >
                               <option value="">Select brand</option>
@@ -864,16 +927,17 @@ const AddProduct = () => {
                           </button> */}
                           <button
                             className="edit"
-                            onClick={() =>
-                              console.log(
-                                [
-                                  inputFields.reduce(
-                                    (acc, obj) => ({ ...acc, ...obj }),
-                                    {}
-                                  ),
-                                ].concat(arr),
-                                "arraySave"
-                              )
+                            onClick={
+                              () => submitPriceVarient()
+                              // console.log(
+                              //   [
+                              //     inputFields.reduce(
+                              //       (acc, obj) => ({ ...acc, ...obj }),
+                              //       {}
+                              //     ),
+                              //   ].concat(arr),
+                              //   "arraySave"
+                              // )
                             }
                           >
                             Save
@@ -1244,7 +1308,14 @@ const AddProduct = () => {
 
                 {/* /// IMAGES */}
                 {tabs === "images" && (
-                  <div id="images" className="tb_c" style={{ display: "none" }}>
+                  <div
+                    id="images"
+                    className="tb_c"
+                    style={{
+                      // display: "none",
+                      marginTop: "20px",
+                    }}
+                  >
                     <div className="img_info">
                       <div className="img_contains">
                         <div className="img_part">
@@ -1255,15 +1326,19 @@ const AddProduct = () => {
                               name="img1"
                               defaultValue="img1"
                             />
-                            <img src="images/add_mnu_dish.png" alt="image1" />
+
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image1"
+                            />
                           </div>
                           <div className="img_text">
                             <p>Food Image</p>
                           </div>
                           <div className="img_icons">
-                            <i className="fa-solid fa-eye" />
-                            <i className="fa-solid fa-pen-to-square" />
-                            <i className="fa-solid fa-trash" />
+                            <FontAwesomeIcon icon={faEye} size="2xl" />
+                            <FontAwesomeIcon icon={faPenToSquare} size="2xl" />
+                            <FontAwesomeIcon icon={faTrash} size="2xl" />
                           </div>
                         </div>
                         <div className="img_part">
@@ -1274,14 +1349,21 @@ const AddProduct = () => {
                               name="img1"
                               defaultValue="img1"
                             />
-                            <img src="images/add_mnu_dish.png" alt="image1" />
+                            {/* <img src="images/add_mnu_dish.png" alt="image2" /> */}
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image2"
+                            />
                           </div>
                           <div className="img_text">
                             <p>Food Image</p>
                             <div className="img_icons">
-                              <i className="fa-solid fa-eye" />
-                              <i className="fa-solid fa-pen-to-square" />
-                              <i className="fa-solid fa-trash" />
+                              <FontAwesomeIcon icon={faEye} size="2xl" />
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                size="2xl"
+                              />
+                              <FontAwesomeIcon icon={faTrash} size="2xl" />
                             </div>
                           </div>
                         </div>
@@ -1293,17 +1375,24 @@ const AddProduct = () => {
                               name="img1"
                               defaultValue="img1"
                             />
-                            <img src="images/add_mnu_dish.png" alt="image1" />
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image3"
+                            />
                           </div>
                           <div className="img_text">
                             <p>Food Image</p>
                             <div className="img_icons">
-                              <i className="fa-solid fa-eye" />
-                              <i className="fa-solid fa-pen-to-square" />
-                              <i className="fa-solid fa-trash" />
+                              <FontAwesomeIcon icon={faEye} size="2xl" />
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                size="2xl"
+                              />
+                              <FontAwesomeIcon icon={faTrash} size="2xl" />
                             </div>
                           </div>
                         </div>
+
                         <div className="img_part">
                           <div className="img_part_img">
                             <input
@@ -1312,14 +1401,20 @@ const AddProduct = () => {
                               name="img1"
                               defaultValue="img1"
                             />
-                            <img src="images/add_mnu_dish.png" alt="image1" />
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image4"
+                            />
                           </div>
                           <div className="img_text">
                             <p>Food Image</p>
                             <div className="img_icons">
-                              <i className="fa-solid fa-eye" />
-                              <i className="fa-solid fa-pen-to-square" />
-                              <i className="fa-solid fa-trash" />
+                              <FontAwesomeIcon icon={faEye} size="2xl" />
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                size="2xl"
+                              />
+                              <FontAwesomeIcon icon={faTrash} size="2xl" />
                             </div>
                           </div>
                         </div>

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Seller_product_category, Seller_products, all_brand} from "../../../constants/Api/Api";
+import { Seller_product_category, Seller_products, all_brand, productInfo} from "../../../constants/Api/Api";
 // import swal from "sweetalert";
 // import { Bounce, toast } from "react-toastify";
 
@@ -13,7 +13,8 @@ const initialState = {
   category: [],
   subCategory: [],
   childCategory: [],
-  brand: []
+  brand: [],
+  productId: ''
 };
 
 
@@ -71,6 +72,43 @@ export const allBrand = createAsyncThunk("allBrand", async() =>{
   }catch(error){
     console.log(error, 'error')
 
+  }
+})
+
+//FOR SUBMIT PRODUCT INFO PAGE
+export const productInformation = createAsyncThunk("productInformation", async(productData) =>{
+  try{
+    const resOfProductInfo = await axios.post(productInfo, productData, {
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        params: {
+          process: "productInfo",
+        },
+    })
+    console.log(resOfProductInfo.data, 'resOfProductInfo')
+    return resOfProductInfo.data
+
+  }catch(error){
+    console.log(error)
+
+  }
+})
+
+//FOR SUBMIT PRICE VARIANT PAGE
+export const priceVarInfo = createAsyncThunk("priceVarInfo", async(priceInfo) =>{
+  console.log(priceInfo, 'priceInfo')
+  try{
+    // const varients = priceInfo.allPriceVar
+    const resOfPriceVar = await axios.post(productInfo, priceInfo.priceVariant, {
+        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        params: {
+          process: "variants",
+          productId: priceInfo.productId
+        },
+    })
+    console.log(resOfPriceVar.data, 'resOfPriceVar')
+
+  }catch(error){
+    console.log(error)
   }
 })
 
@@ -138,6 +176,20 @@ const sellerProductSlice = createSlice({
        state.loading = false
         state.error = action.payload
   })
+
+  //PRODUCT INFO PAGE
+       .addCase(productInformation.pending, (state) =>{
+        state.loading = true
+  })
+      .addCase(productInformation.fulfilled, (state, action) => {
+          state.loading = false
+          state.productId = action.payload.Product
+  })
+      .addCase(productInformation.rejected, (state) => {
+       state.loading = false
+        state.error = action.payload
+  })
+
   },
 });
 
