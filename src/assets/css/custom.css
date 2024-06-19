@@ -582,7 +582,6 @@ p {
   box-shadow: none;
   color: #000;
   font-size: 14px;
-
 }
 .search_holder::placeholder {
   color: #c8c8c8;
@@ -2547,7 +2546,7 @@ tbody tr td {
 .modal {
   display: none;
   position: fixed;
-  z-index: 1;
+  /* z-index: 1; */
   padding-top: 100px;
   padding-bottom: 100px;
   left: 0;
@@ -2571,7 +2570,7 @@ tbody tr td {
 }
 
 /* The Close Button */
-.close {
+/* .close {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
@@ -2583,7 +2582,7 @@ tbody tr td {
   color: #000;
   text-decoration: none;
   cursor: pointer;
-}
+} */
 .m_modal {
   /* border-bottom: 1px solid #0001; */
   padding-bottom: 15px;
@@ -3525,17 +3524,17 @@ tbody tr td {
 /* mahendra(10.06.24) */
 .p_c_lft_dup {
   display: flex;
-    border-bottom: 1px solid var(--secondary-eight-color);
+  border-bottom: 1px solid var(--secondary-eight-color);
 }
 /* mahendra(10.06.24) */
 .p_c_lft_dup input {
   border: none;
-    padding: 10px 30px 10px 20px;
-    background-color: transparent;
-    width: 20%;
-    /* color: var(--secondary-seventeen-color); */
-    color: var(--secondary-color);
-    font-size: 16px;
+  padding: 10px 30px 10px 20px;
+  background-color: transparent;
+  width: 20%;
+  /* color: var(--secondary-seventeen-color); */
+  color: var(--secondary-color);
+  font-size: 16px;
 }
 /* shreyasi(21.2.24) */
 .p_c_lft input {
@@ -3845,9 +3844,9 @@ button.add__btn {
 }
 .img_contains {
   /* border-right: 1px solid var(--secondary-seven-color); */
-  display: flex;
+  /* display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: wrap; */
 }
 .img_upload p,
 .img_upload form input,
@@ -4839,27 +4838,140 @@ iframe {
   text-align: center;
   margin-top: 20px;
 }
-.all_title span{
+.all_title span {
   font-size: 18px;
 }
-.all_title input{
+.all_title input {
   width: 250px;
 }
-#price_tab .tab_lst_add{
+#price_tab .tab_lst_add {
   background-color: #000;
 }
-button.add__btn{
+button.add__btn {
   color: #000;
   font-size: 18px;
 }
-.input-field-outr{
+.input-field-outr {
   /* display: flex; */
   gap: 10px;
   align-items: center;
 }
-.all_otr{
+.all_otr {
   margin-bottom: 10px;
 }
 /* .input-field-outr input{
   margin-right: 10px;
 } */
+/* shreyasi(14.6.24) */
+.snow_imgs {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.snow_imgs .img_part {
+  margin-top: 0;
+}
+.snow_imgs_dtls .ordre_lft h6 {
+  margin: 30px 0 20px;
+}
+.upld_img {
+  margin: 20px 0 10px;
+}
+.upld_img_text .img_text a {
+  padding-left: 0;
+  padding-top: 0;
+  text-decoration: underline;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 17px;
+  color: #000;
+}
+.modal-backdrop.show {
+  opacity: 0 !important;
+}
+.prdct_mdl .modal-content {
+  width: 100% !important;
+}
+.prdct_mdl .modal-title {
+  font-size: 24px;
+}
+.prdct_mdl .modal-body {
+  font-size: 18px;
+}
+.modalBtn {
+    font-size: 15px;
+    font-weight: 500;
+    padding: 9px 15px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+    width: max-content;
+}
+
+/* For Switch Button */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 27px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: -5px;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked+.slider {
+  background-color: #2196F3;
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+.form-switch {
+  padding-left: 10.5em !important;
+}
+.p_c_lft{
+  align-items: center;
+}

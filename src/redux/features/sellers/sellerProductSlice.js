@@ -98,8 +98,10 @@ export const priceVarInfo = createAsyncThunk("priceVarInfo", async(priceInfo) =>
   console.log(priceInfo, 'priceInfo')
   try{
     // const varients = priceInfo.allPriceVar
-    const resOfPriceVar = await axios.post(productInfo, priceInfo.priceVariant, {
-        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+    const resOfPriceVar = await axios.post(productInfo, priceInfo.formData, {
+        headers: { Authorization: "Bearer " + localStorage.getItem("token"),
+          "Content-Type":"multipart/form-data"
+         },
         params: {
           process: "variants",
           productId: priceInfo.productId

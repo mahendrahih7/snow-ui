@@ -1,21 +1,16 @@
 import {
   faBagShopping,
-  faDollarSign,
+  faCloudArrowUp,
   faEye,
   faImage,
   faLayerGroup,
-  faMinus,
   faPenToSquare,
   faPlus,
-  faSackDollar,
-  faStar,
   faTrash,
-  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../common/Sidebar";
-import { Link } from "react-router-dom";
 import NavBar from "../../common/Nav/NavBar";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,32 +20,31 @@ import {
   productChildCat,
   productInformation,
 } from "../../../redux/features/sellers/sellerProductSlice";
-import Price from "./Price";
-import axios from "axios";
-import { toast } from "react-toastify";
+
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+
+import "react-dropzone-uploader/dist/styles.css";
 
 const AddProduct = () => {
-  // const tableRef = useRef(null);
-  // const myRefKey = useRef();
-  // const myRefVal = useRef();
-  // const keyRef = useRef();
-  // const valRef = useRef();
   const dispatch = useDispatch();
-  const [rows, setRows] = useState([]);
-  const [productTags, setProductTags] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [value, setValue] = useState("");
+  const [modalHeading, setModalHeading] = useState("");
+
   const [tabs, setTabs] = useState("product_info");
   const [productInfo, setProductInfo] = useState({
-    product_name: "",
-    status: "",
+    name: "",
+    status: false,
     category: "",
-    sub_category: "",
-    child_category: "",
-    sku: "",
+    subCategory: "",
+    childCategory: "",
     brand: "",
     description: "",
-    shipping_charge: 0,
-    free_shipping: false,
+    shippingCharge: 0,
+    freeShipping: false,
   });
+
+  // For showing name in dropdown
   const [dropDownData, setDropDownData] = useState({
     categoryName: "",
     subCategoryName: "",
@@ -65,53 +59,40 @@ const AddProduct = () => {
   const [showCreateTitle, setShowCreateTitle] = useState(false);
   const [createTitleName, setCreateTitleName] = useState("");
 
-  const [title, setTitle] = useState(["Color", "Weight", "Price"]);
+  const [title, setTitle] = useState([
+    "Price",
+    "Color",
+    "Weight",
+    "Sku",
+    "Product Image",
+    "Banner Image",
+  ]);
 
-  const [inputFields, setInputFields] = useState([{ Price: "" }]);
-  console.log(inputFields, "inputFields");
+  const [inputFields, setInputFields] = useState([
+    { Price: "" },
+    { "Product Image": [] },
+    { "Banner Image": [] },
+  ]);
+
   const [arr, setArr] = useState([]);
-  console.log(arr, "arr");
+  const [fileForProductInput, setFileForProductInput] = useState([]);
+  const [fileForBannerInput, setFileForBannerInput] = useState([]);
+  const [fileForProduct, setFileForProduct] = useState([]);
+  const [fileForBanner, setFileForBanner] = useState([]);
+  const [productPictures, setProductPictures] = useState([]);
+  const [bannerPictures, setBannerPictures] = useState([]);
+  const [indexOfArr, setIndexOfArr] = useState();
 
   /////////   GET REDUX STATE   //////////////////
   const { loading, category, subCategory, childCategory, brand, productId } =
     useSelector((state) => state.sellerProducts);
-  // if (!loading) {
-  //   console.log(productId, "productId");
-  // }
 
-  function createTr(table_id) {
-    console.log("called");
-    let table_body = document.getElementById(table_id);
-    const firstTr = table_body.firstElementChild.cloneNode(true);
-
-    table_body.appendChild(firstTr);
-
-    // cleanFirstTr(table_body.firstElementChild);
-  }
-
-  function cleanFirstTr(firstTr) {
-    const children = Array.from(firstTr.children);
-
-    children.forEach((child, index) => {
-      if (index !== children.length - 1) {
-        child.firstElementChild.value = "";
-      }
-    });
-  }
-
-  const addRowProductTags = () => {
-    setRows([...rows, { key: "", value: "" }]);
-    console.log(rows, "rows");
-  };
-
-  const handleChange = (event, index) => {
-    const arr = [...rows];
-    arr[index][event.target.name] = event.target.value;
-    setProductTags([...arr]);
-  };
-
-  const handleSubmit = (e) => {
-    console.log(productTags, "productTags");
+  const toggle = (heading, val) => {
+    // console.log(heading, "heading");
+    setModal(!modal);
+    setModalHeading(heading);
+    setValue(val);
+    // setObj(object);
   };
 
   useEffect(() => {
@@ -135,7 +116,6 @@ const AddProduct = () => {
   };
 
   const changeHandler = (e, mainInd, childInd) => {
-    console.log(mainInd, childInd, "Index");
     setMain((prevData) => {
       const tableInfo = [...prevData];
       tableInfo[mainInd]["potency"][childInd][e.target.name] = e.target.value;
@@ -152,7 +132,6 @@ const AddProduct = () => {
   };
 
   const changeProductInfo = (e) => {
-    console.log(e.target.name, "999");
     if (e.target.type === "text") {
       setProductInfo({ ...productInfo, [e.target.name]: e.target.value });
     } else {
@@ -170,10 +149,9 @@ const AddProduct = () => {
           setCatName(e.target.value);
           dispatch(productCategory(e.target.value));
         }
-      } else if (e.target.name === "sub_category") {
+      } else if (e.target.name === "subCategory") {
         if (subCategory?.length > 0) {
           subCategory.map((subCat_item) => {
-            console.log(e.target.value, "subCatValue");
             if (subCat_item.subCategoryName === e.target.value) {
               setDropDownData({
                 ...dropDownData,
@@ -181,16 +159,16 @@ const AddProduct = () => {
               });
               setProductInfo({
                 ...productInfo,
-                sub_category: subCat_item._id,
+                subCategory: subCat_item._id,
               });
             }
           });
-          console.log(catName, e.target.value, "catDataAll");
+
           dispatch(
             productChildCat({ catName: catName, subCatName: e.target.value })
           );
         }
-      } else if (e.target.name === "child_category") {
+      } else if (e.target.name === "childCategory") {
         if (childCategory.length > 0) {
           childCategory.map((childCat_item) => {
             if (childCat_item.childCategoryName === e.target.value) {
@@ -200,7 +178,7 @@ const AddProduct = () => {
               });
               setProductInfo({
                 ...productInfo,
-                child_category: childCat_item._id,
+                childCategory: childCat_item._id,
               });
             }
           });
@@ -221,109 +199,279 @@ const AddProduct = () => {
     }
   };
 
-  const submitProductInfo = () => {
-    console.log(productInfo, "productInfo");
+  const submitProductInfo = (e) => {
+    e.preventDefault();
     const productData = {
       info: productInfo,
       others: JSON.stringify(main),
     };
-    console.log(productData, "productData");
-    dispatch(productInformation(productData));
+
+    dispatch(productInformation(productData)).then((response) => {
+      if (response) {
+        setTabs("prices");
+      }
+    });
   };
 
   const createTitle = () => {
     setShowCreateTitle(true);
   };
 
-  const addTitle = () => {
+  const addTitle = (e) => {
+    e.preventDefault();
+
     setShowCreateTitle(false);
     if (title.includes(createTitleName)) {
       alert("already exist");
     } else {
-      setTitle([...title, createTitleName]);
+      const newArray = [...title];
+      const insertIndex = newArray.length - 2;
+      newArray.splice(insertIndex, 0, createTitleName);
+
+      setTitle(newArray);
     }
     setCreateTitleName("");
   };
 
   const getTitle = (titleName) => {
-    console.log(titleName, "titleName");
-    console.log(inputFields, "inputFields55");
-
     const result = inputFields
       .map((obj, index) => {
         return Object.keys(obj);
       })
       .flat();
-    // console.log(result, "result");
+
     if (result.includes(titleName)) {
       alert("already exist");
     } else {
-      setInputFields([...inputFields, { [titleName]: "" }]);
+      const newModArr = [...inputFields];
+      const inInd = newModArr.length - 2;
+      newModArr.splice(inInd, 0, { [titleName]: "" });
+      setInputFields(newModArr);
 
+      /////////////////////////New Try//////////////////
       const addNew = arr.map((obj) => {
-        const x = { ...obj };
-        x[titleName] = "";
-        return x;
+        const entries = Object.entries(obj);
+        const getInd = entries.length - 2;
+        const x = {
+          [titleName]: "",
+        };
+        // entries.splice(getInd, 0, x);
+        entries.splice(getInd, 0, Object.entries(x).flat());
+
+        const newObject = Object.fromEntries(entries);
+        return newObject;
       });
-      console.log(addNew, "222");
+
       setArr(addNew);
     }
   };
-
-  const addField = () => {
-    // for (let obj of inputFields) {
-    //   for (let key in obj) {
-    //     obj[key] = "";
-    //   }
-    // }
-    const combinedData = inputFields.reduce(
-      (acc, obj) => ({ ...acc, ...obj }),
-      {}
-    );
-    console.log(combinedData, "combinedData");
-    setArr([...arr, combinedData]);
-  };
-
-  // useEffect(() => {
-  //   // if (getTitle()) {
-  //   //   addField();
-  //   // }
-  // }, [title]);
 
   const chngeFirstIndexData = (e, index) => {
     inputFields[index][e.target.name] = e.target.value;
   };
 
   const changeOtherIndexData = (e, index) => {
-    console.log(e.target.name, "nametarget");
     arr[index][e.target.name] = e.target.value;
   };
 
-  const submitPriceVarient = () => {
+  const handleImageChange = (e, modalHeading) => {
+    if (value === "inputFields") {
+      if (modalHeading === "Product Image") {
+        const filesForProduct = Array.from(e.target.files);
+        setFileForProductInput(filesForProduct);
+        const newImages = filesForProduct.map((file) =>
+          URL.createObjectURL(file)
+        );
+        setProductPictures((prevImages) => [...prevImages, ...newImages]);
+      } else if (modalHeading === "Banner Image") {
+        const filesForBanner = Array.from(e.target.files);
+        setFileForBannerInput(filesForBanner);
+        const newImages = filesForBanner.map((file) =>
+          URL.createObjectURL(file)
+        );
+        setBannerPictures((prevImages) => [...prevImages, ...newImages]);
+      }
+    }
+
+    if (value === "arr") {
+      if (modalHeading === "Product Image") {
+        const filesForProduct = Array.from(e.target.files);
+        setFileForProduct(filesForProduct);
+        const newImages = filesForProduct.map((file) =>
+          URL.createObjectURL(file)
+        );
+        setProductPictures((prevImages) => [...prevImages, ...newImages]);
+      } else if (modalHeading === "Banner Image") {
+        const filesForBanner = Array.from(e.target.files);
+        setFileForBanner(filesForBanner);
+        const newImages = filesForBanner.map((file) =>
+          URL.createObjectURL(file)
+        );
+        setBannerPictures((prevImages) => [...prevImages, ...newImages]);
+      }
+    }
+  };
+
+  const saveImages = (targetObj, targetKey) => {
+    setInputFields((prevField) => {
+      const updatedField = [...prevField];
+      const indexForProductImage = updatedField.findIndex((obj) =>
+        obj.hasOwnProperty("Product Image")
+      );
+      const indexForBannerImage = updatedField.findIndex((obj) =>
+        obj.hasOwnProperty("Banner Image")
+      );
+      updatedField[indexForProductImage]["Product Image"] = fileForProductInput;
+      updatedField[indexForBannerImage]["Banner Image"] = fileForBannerInput;
+      return updatedField;
+    });
+
+    const otherFields = arr.map((field, index) => {
+      if (index === indexOfArr && modalHeading === "Product Image") {
+        return {
+          ...field,
+          "Product Image": fileForProduct,
+          // "Banner Image": fileForBanner,
+        };
+      }
+      if (index === indexOfArr && modalHeading === "Banner Image") {
+        return {
+          ...field,
+          // "Product Image": fileForProduct,
+          "Banner Image": fileForBanner,
+        };
+      }
+      return field;
+    });
+    setArr(otherFields);
+
+    toggle();
+    setProductPictures([]);
+    setBannerPictures([]);
+    setFileForProduct([]);
+    setFileForBanner([]);
+  };
+
+  const addField = () => {
+    const combinedData = inputFields.reduce(
+      (acc, obj) => ({ ...acc, ...obj }),
+      {}
+    );
+
+    setArr([...arr, combinedData]);
+  };
+
+  const submitPriceVariant = (e) => {
+    e.preventDefault();
     const ArrayOfdata = [
       inputFields.reduce((acc, obj) => ({ ...acc, ...obj }), {}),
     ].concat(arr);
     console.log(ArrayOfdata, "ArrayOfdata");
-    const allPriceVar = JSON.stringify(ArrayOfdata);
-    const priceVariant = {
-      variants: allPriceVar,
-    };
-    console.log(priceVariant, "priceVariant");
-    console.log(productId, "productId");
 
-    dispatch(priceVarInfo({ priceVariant, productId }));
+    ArrayOfdata.forEach((dataObj) => {
+      // let formData = new FormData();
+      // // Loop through each key in the object
+      // for (let key in dataObj) {
+      //   if (dataObj.hasOwnProperty(key)) {
+      //     // Check if the value is a file
+      //     if (dataObj[key] instanceof File) {
+      //       // Append the file to the FormData object
+      //       formData.append(key, dataObj[key], dataObj[key].name);
+      //     } else {
+      //       // Append other types of data (e.g., text)
+      //       formData.append(key, dataObj[key]);
+      //     }
+      //   }
+      // }
+      const formData = dataObj;
+      dispatch(priceVarInfo({ formData, productId }));
+      // dispatch(
+      //   priceVarInfo({ formData, productId: "6671804fd2b7492e346c16b4" })
+      // );
+    });
   };
-
-  // const deleteTitle = (x) => {
-  //   const newTitle = title.filter((tl) => tl !== x);
-  //   console.log(newTitle, "newTitle");
-  //   setTitle(newTitle);
-  // };
 
   return (
     <>
       <main>
         <section className="total_parent_element">
+          <>
+            <Modal
+              className="prdct_mdl"
+              isOpen={modal}
+              toggle={toggle}
+              centered
+              fade
+              size="lg"
+              backdrop
+            >
+              <ModalHeader toggle={toggle}>
+                {`${
+                  modalHeading === "Product Image"
+                    ? " Upload Product Images (Max 3)"
+                    : "Upload Banner Images (Max 4)"
+                }`}
+              </ModalHeader>
+              <ModalBody>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  {modalHeading === "Product Image" &&
+                    productPictures.map((image, index) => {
+                      return (
+                        <img
+                          key={index}
+                          src={image}
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            objectFit: "cover",
+                            margin: "10px",
+                          }}
+                          alt=""
+                        />
+                      );
+                    })}
+                  {modalHeading === "Banner Image" &&
+                    bannerPictures.map((image, index) => {
+                      return (
+                        <img
+                          key={index}
+                          src={image}
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            objectFit: "cover",
+                            margin: "10px",
+                          }}
+                          alt=""
+                        />
+                      );
+                    })}
+                </div>
+
+                <input
+                  type="file"
+                  name="Product Image"
+                  accept="image/*"
+                  onChange={(e) => handleImageChange(e, modalHeading)}
+                  multiple
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  className="modalBtn"
+                  // onClick={saveImages(obj, modalHeading)}
+                  onClick={saveImages}
+                >
+                  Save
+                </Button>{" "}
+                <Button color="secondary" className="modalBtn" onClick={toggle}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
+          </>
+
           <div className="left_parent_element">
             <div className="total_upper_left">
               <div className="logo_area" />
@@ -336,7 +484,6 @@ const AddProduct = () => {
                 </div>
               </div>
               <div className="nav_btm_logo">
-                {/* <img src="./images/nav_btm_logo.png" alt="btm-logo" /> */}
                 <img
                   src={require("../../../assets/images/nav_btm_logo.png")}
                   alt="btm-logo"
@@ -345,7 +492,7 @@ const AddProduct = () => {
             </div>
           </div>
           <div className="right_parent_element">
-            {/* ........................................................................... */}
+            {/* ......................TABS........................ */}
             <NavBar />
             <div className="outr-right-content prdct_info">
               <div className="inner_tbl_bkng">
@@ -364,7 +511,7 @@ const AddProduct = () => {
                     </button>
                     <button
                       className={`tabs_c ${tabs === "prices" ? "active" : ""}`}
-                      onClick={() => setTabs("prices")}
+                      // onClick={() => setTabs("prices")}
                     >
                       <span>
                         {/* <FontAwesomeIcon icon={faSackDollar} /> */}
@@ -409,374 +556,308 @@ const AddProduct = () => {
 
                 {tabs === "product_info" && (
                   <div id="product_info" className="tb_c">
-                    <div className="p_info">
-                      <div className="e-edit">
-                        {/* <a href="javascript:void(0);" className="edit">
-                          Edit
-                        </a> */}
-                        <button
-                          href="javascript:void(0);"
-                          className="edit"
-                          onClick={submitProductInfo}
-                        >
-                          Save
-                        </button>
-                      </div>
-                    </div>
-                    <div className="total_p_rows">
-                      {/*  */}
-                      <div className="p_rows">
-                        <div className="p_total" id="table_body1"></div>
-                        <div className="p_total" id="table_body2">
-                          <div className="p_c_lft">
-                            <label htmlFor="productName">Product Name</label>
-                            <input
-                              id="productName"
-                              name="product_name"
-                              value={productInfo.product_name}
-                              type="text"
-                              placeholder="10Bandz"
-                              onChange={(e) => changeProductInfo(e)}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="p_total" id="table_body4">
-                          <div className="p_c_lft">
-                            <label htmlFor="status">Status</label>
-                            <input
-                              id="status"
-                              name="status"
-                              type="text"
-                              placeholder="active"
-                              onChange={(e) => changeProductInfo(e)}
-                            />
-                          </div>
-                        </div>
-                        <div className="p_total" id="table_body5">
-                          <div className="p_c_lft">
-                            <label>Category</label>
-                            <select
-                              name="category"
-                              id="category"
-                              value={dropDownData.categoryName}
-                              onChange={(e) => changeProductInfo(e)}
-                            >
-                              <option value="">Select Category</option>
-                              {category.length > 0 &&
-                                category.map((cat, i) => {
-                                  return (
-                                    <option value={cat?.name} key={i}>
-                                      {cat?.name}
-                                    </option>
-                                  );
-                                })}
-                            </select>
-                          </div>
-                        </div>
-                        <div className="p_total" id="table_body6">
-                          <div className="p_c_lft">
-                            <label>Sub Category</label>
-                            <select
-                              name="sub_category"
-                              id="sub_category"
-                              value={dropDownData.subCategoryName}
-                              onChange={(e) => changeProductInfo(e)}
-                            >
-                              <option value="">Select sub category</option>
-                              {subCategory?.length > 0 &&
-                                subCategory.map((subCatItem) => {
-                                  console.log(subCatItem, "subCatItem");
-                                  return (
-                                    <option
-                                      value={subCatItem.subCategoryName}
-                                      key={subCatItem._id}
-                                    >
-                                      {subCatItem.subCategoryName}
-                                    </option>
-                                  );
-                                })}
-                            </select>
-                          </div>
-                        </div>
-                        <div className="p_total" id="table_body7">
-                          <div className="p_c_lft">
-                            <label>Child Category</label>
-                            <select
-                              name="child_category"
-                              id="child_category"
-                              value={dropDownData.childCategoryName}
-                              onChange={(e) => changeProductInfo(e)}
-                            >
-                              <option value="">Select child category</option>
-
-                              {childCategory?.length > 0 &&
-                                childCategory.map((childCatItem) => {
-                                  return (
-                                    <option
-                                      key={childCatItem._id}
-                                      value={childCatItem.childCategoryName}
-                                    >
-                                      {childCatItem.childCategoryName}
-                                    </option>
-                                  );
-                                })}
-                            </select>
-                          </div>
-                        </div>
-
-                        <div className="p_total" id="table_body17">
-                          <div className="p_c_lft">
-                            <label htmlFor="sku">SKU</label>
-                            <input
-                              id="sku"
-                              name="sku"
-                              type="text"
-                              placeholder="H231PRO1"
-                              onChange={(e) => changeProductInfo(e)}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="p_total" id="table_body21">
-                          <div className="p_c_lft">
-                            <label>Brand</label>
-                            <select
-                              name="brand"
-                              id="brand"
-                              value={dropDownData.brandName}
-                              onChange={(e) => changeProductInfo(e)}
-                            >
-                              <option value="">Select brand</option>
-                              {brand.length > 0 &&
-                                brand.map((brandItem) => {
-                                  return (
-                                    <option
-                                      value={brandItem.name}
-                                      key={brandItem._id}
-                                    >
-                                      {brandItem.name}
-                                    </option>
-                                  );
-                                })}
-                            </select>
-                          </div>
-                        </div>
-
-                        <div className="p_total" id="table_body25">
-                          <div className="p_c_lft">
-                            <label htmlFor="description">Description</label>
-                            <input
-                              id="description"
-                              name="description"
-                              type="text"
-                              placeholder="Introducing 10 Bandz"
-                              onChange={(e) => changeProductInfo(e)}
-                            />
-                          </div>
-                        </div>
-                        <div className="p_total" id="table_body26">
-                          <div className="p_c_lft">
-                            <label htmlFor="shippingCharge">
-                              Shipping Charge
-                            </label>
-                            <input
-                              id="shippingCharge"
-                              name="shipping_charge"
-                              type="text"
-                              placeholder="$10"
-                              onChange={(e) => changeProductInfo(e)}
-                            />
-                          </div>
-                        </div>
-                        <div className="p_total" id="table_body26">
-                          <div className="p_c_lft">
-                            {/* <input type="text" placeholder="Free Shipping" /> */}
-                            <label htmlFor="freeShipping">Free Shipping</label>
-                            <input
-                              id="freeShipping"
-                              name="free_shipping"
-                              type="text"
-                              placeholder="true"
-                              onChange={(e) => changeProductInfo(e)}
-                            />
-                          </div>
+                    <form onSubmit={submitProductInfo}>
+                      <div className="p_info">
+                        <div className="e-edit">
+                          <button
+                            type="submit"
+                            href="javascript:void(0);"
+                            className="edit"
+                            // onClick={submitProductInfo}
+                          >
+                            Save
+                          </button>
                         </div>
                       </div>
-                      {/* potency */}
+                      <div className="total_p_rows">
+                        {/*  */}
+                        <div className="p_rows">
+                          <div className="p_total" id="table_body1"></div>
+                          <div className="p_total" id="table_body2">
+                            <div className="p_c_lft">
+                              <label htmlFor="productName">Product Name</label>
+                              <input
+                                required
+                                id="productName"
+                                name="name"
+                                value={productInfo.name}
+                                type="text"
+                                placeholder="10Bandz"
+                                onChange={(e) => changeProductInfo(e)}
+                              />
+                            </div>
+                          </div>
 
-                      <div className="main_p_inform" id="tbDiv001">
-                        {main.map((v, ind) => {
-                          return (
-                            <div className="p_inform" key={ind}>
-                              <div className="p_total p_hdng" id="table_body">
-                                <div className="p_c_lft">
+                          <div className="p_total" id="table_body4">
+                            <div className="p_c_lft">
+                              <label htmlFor="status">Status</label>
+                              <div className="form-check form-switch">
+                                {/* <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  role="switch"
+                                  id="flexSwitchCheckChecked"
+                                  onChange={() =>
+                                    setProductInfo({
+                                      ...productInfo,
+                                      status: !productInfo.status,
+                                    })
+                                  }
+                                  checked={productInfo.status}
+                                /> */}
+                                <label class="switch">
                                   <input
-                                    type="text"
-                                    placeholder="Potency"
-                                    className="table_body01"
-                                    onChange={(e) => headingChange(e, ind)}
+                                    type="checkbox"
+                                    onChange={() =>
+                                      setProductInfo({
+                                        ...productInfo,
+                                        status: !productInfo.status,
+                                      })
+                                    }
                                   />
-                                  <span
-                                    className="add_btn"
-                                    onClick={() => addPotency("main")}
-                                  >
-                                    <div className="click_me" />
-                                    <FontAwesomeIcon icon={faPlus} />
-                                  </span>
-                                </div>
-                              </div>
-
-                              <div className="p_rows">
-                                <div
-                                  className="p_total"
-                                  id="table_body29"
-                                  // ref={tableRef}
-                                >
-                                  {v.potency.map((c, ci) => {
-                                    return (
-                                      <div className="p_c_lft_dup" key={ci}>
-                                        <input
-                                          // ref={keyRef}
-                                          name="key"
-                                          type="text"
-                                          className="addMain"
-                                          placeholder="Total THC (mg)"
-                                          onChange={(e) =>
-                                            changeHandler(e, ind, ci)
-                                          }
-                                        />
-                                        <input
-                                          // ref={valRef}
-                                          name="value"
-                                          type="text"
-                                          className="addPrefer"
-                                          placeholder="0.00mg"
-                                          onChange={(e) =>
-                                            changeHandler(e, ind, ci)
-                                          }
-                                        />
-                                        <span
-                                          className="add_btn"
-                                          onClick={() => addPotency(ind)}
-                                          // onClick="create_tr('table_body29')"
-                                        >
-                                          <FontAwesomeIcon
-                                            icon={faPlus}
-                                            size="2xl"
-                                          />
-                                        </span>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
+                                  <span class="slider round"></span>
+                                </label>
                               </div>
                             </div>
-                          );
-                        })}
-                      </div>
-
-                      {/* <div className="p_rows">
-                        <div className="p_total" id="table_body42">
-                          <div className="p_c_lft">
-                            <input
-                              type="text"
-                              ref={myRefKey}
-                              className="addMain"
-                              placeholder="Product Tags"
-                              // onChange={changeInput}
-                            />
-                            <input
-                              type="text"
-                              ref={myRefVal}
-                              className="addPrefer"
-                              placeholder="Flower Box,Connected Cannabis Co."
-                              // onChange={changeInput}
-                            />
-                            <span
-                              className="add_btn"
-                              onClick={addRowProductTags}
-                            >
-                              <FontAwesomeIcon icon={faPlus} size="2xl" />
-                            </span>
                           </div>
-                          {rows.map((row, i) => {
-                            console.log(row, "row");
-                            console.log(i, "index");
+                          <div className="p_total" id="table_body5">
+                            <div className="p_c_lft">
+                              <label>Category</label>
+                              <select
+                                required
+                                name="category"
+                                id="category"
+                                value={dropDownData.categoryName}
+                                onChange={(e) => changeProductInfo(e)}
+                              >
+                                <option value="">Select Category</option>
+                                {category.length > 0 &&
+                                  category.map((cat, i) => {
+                                    return (
+                                      <option value={cat?.name} key={i}>
+                                        {cat?.name}
+                                      </option>
+                                    );
+                                  })}
+                              </select>
+                            </div>
+                          </div>
+                          <div className="p_total" id="table_body6">
+                            <div className="p_c_lft">
+                              <label>Sub Category</label>
+                              <select
+                                name="subCategory"
+                                id="subCategory"
+                                value={dropDownData.subCategoryName}
+                                onChange={(e) => changeProductInfo(e)}
+                              >
+                                <option value="">Select sub category</option>
+                                {subCategory?.length > 0 &&
+                                  subCategory.map((subCatItem) => {
+                                    return (
+                                      <option
+                                        value={subCatItem.subCategoryName}
+                                        key={subCatItem._id}
+                                      >
+                                        {subCatItem.subCategoryName}
+                                      </option>
+                                    );
+                                  })}
+                              </select>
+                            </div>
+                          </div>
+                          <div className="p_total" id="table_body7">
+                            <div className="p_c_lft">
+                              <label>Child Category</label>
+                              <select
+                                name="childCategory"
+                                id="childCategory"
+                                value={dropDownData.childCategoryName}
+                                onChange={(e) => changeProductInfo(e)}
+                              >
+                                <option value="">Select child category</option>
+
+                                {childCategory?.length > 0 &&
+                                  childCategory.map((childCatItem) => {
+                                    return (
+                                      <option
+                                        key={childCatItem._id}
+                                        value={childCatItem.childCategoryName}
+                                      >
+                                        {childCatItem.childCategoryName}
+                                      </option>
+                                    );
+                                  })}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div className="p_total" id="table_body21">
+                            <div className="p_c_lft">
+                              <label>Brand</label>
+                              <select
+                                name="brand"
+                                id="brand"
+                                value={dropDownData.brandName}
+                                onChange={(e) => changeProductInfo(e)}
+                              >
+                                <option value="">Select brand</option>
+                                {brand.length > 0 &&
+                                  brand.map((brandItem) => {
+                                    return (
+                                      <option
+                                        value={brandItem.name}
+                                        key={brandItem._id}
+                                      >
+                                        {brandItem.name}
+                                      </option>
+                                    );
+                                  })}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div className="p_total" id="table_body25">
+                            <div className="p_c_lft">
+                              <label htmlFor="description">Description</label>
+                              <input
+                                required
+                                id="description"
+                                name="description"
+                                type="text"
+                                placeholder="Introducing 10 Bandz"
+                                onChange={(e) => changeProductInfo(e)}
+                              />
+                            </div>
+                          </div>
+                          <div className="p_total" id="table_body26">
+                            <div className="p_c_lft">
+                              <label htmlFor="shippingCharge">
+                                Shipping Charge
+                              </label>
+                              <input
+                                required
+                                id="shippingCharge"
+                                name="shippingCharge"
+                                type="text"
+                                placeholder="10"
+                                onChange={(e) => changeProductInfo(e)}
+                              />
+                            </div>
+                          </div>
+                          <div className="p_total" id="table_body26">
+                            <div className="p_c_lft">
+                              <label htmlFor="freeShipping">
+                                Free Shipping
+                              </label>
+
+                              <div className="form-check form-switch">
+                                {/* <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  role="switch"
+                                  id="flexSwitchCheckChecked"
+                                  onChange={() =>
+                                    setProductInfo({
+                                      ...productInfo,
+                                      freeShipping: !productInfo.freeShipping,
+                                    })
+                                  }
+                                  checked={productInfo.freeShipping}
+                                /> */}
+                                <label class="switch">
+                                  <input
+                                    type="checkbox"
+                                    onChange={() =>
+                                      setProductInfo({
+                                        ...productInfo,
+                                        freeShipping: !productInfo.freeShipping,
+                                      })
+                                    }
+                                  />
+                                  <span class="slider round"></span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* potency */}
+
+                        <div className="main_p_inform" id="tbDiv001">
+                          {main.map((v, ind) => {
                             return (
-                              <div className="p_c_lft" key={i}>
-                                <input
-                                  type="text"
-                                  name="key"
-                                  ref={myRefKey}
-                                  className="addMain"
-                                  placeholder="Product Tags"
-                                  onChange={(e) => changeInput(e, i)}
-                                />
-                                <input
-                                  type="text"
-                                  name="value"
-                                  ref={myRefVal}
-                                  className="addPrefer"
-                                  placeholder="Flower Box,Connected Cannabis Co."
-                                  onChange={(e) => changeInput(e, i)}
-                                />
-                                <span
-                                  className="add_btn"
-                                  onClick={addRowProductTags}
-                                >
-                                  <FontAwesomeIcon icon={faPlus} size="2xl" />
-                                </span>
+                              <div className="p_inform" key={ind}>
+                                <div className="p_total p_hdng" id="table_body">
+                                  <div className="p_c_lft">
+                                    <input
+                                      required
+                                      type="text"
+                                      placeholder="Potency"
+                                      className="table_body01"
+                                      onChange={(e) => headingChange(e, ind)}
+                                    />
+                                    <span
+                                      className="add_btn"
+                                      onClick={() => addPotency("main")}
+                                    >
+                                      <div className="click_me" />
+                                      <FontAwesomeIcon icon={faPlus} />
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className="p_rows">
+                                  <div
+                                    className="p_total"
+                                    id="table_body29"
+                                    // ref={tableRef}
+                                  >
+                                    {v.potency.map((c, ci) => {
+                                      return (
+                                        <div className="p_c_lft_dup" key={ci}>
+                                          <input
+                                            // ref={keyRef}
+                                            required
+                                            name="key"
+                                            type="text"
+                                            className="addMain"
+                                            placeholder="Total THC (mg)"
+                                            onChange={(e) =>
+                                              changeHandler(e, ind, ci)
+                                            }
+                                          />
+                                          <input
+                                            required
+                                            // ref={valRef}
+                                            name="value"
+                                            type="text"
+                                            className="addPrefer"
+                                            placeholder="0.00mg"
+                                            onChange={(e) =>
+                                              changeHandler(e, ind, ci)
+                                            }
+                                          />
+                                          <span
+                                            className="add_btn"
+                                            onClick={() => addPotency(ind)}
+                                            // onClick="create_tr('table_body29')"
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faPlus}
+                                              size="2xl"
+                                            />
+                                          </span>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
                               </div>
                             );
                           })}
                         </div>
-                      </div> */}
-
-                      {/* <div className="p_rows">
-                      <div className="p_total" id="table_body43">
-                        <div className="p_c_lft">
-                          <input
-                            type="text"
-                            className="addMain"
-                            placeholder="Apply cart discount for tax calculation"
-                          />
-                          <input
-                            type="text"
-                            className="addPrefer"
-                            placeholder="Yes"
-                          />
-                          <span
-                            className="add_btn"
-                            onClick="create_tr('table_body43')"
-                          >
-                            <FontAwesomeIcon icon={faPlus} size="2xl" />
-                          </span>
-                        </div>
                       </div>
-
-                      <div className="p_total" id="table_body44">
-                        <div className="p_c_lft">
-                          <input
-                            type="text"
-                            className="addMain"
-                            placeholder="Item ineligible for discount"
-                          />
-                          <input
-                            type="text"
-                            className="addPrefer"
-                            placeholder="No"
-                          />
-                          <span
-                            className="add_btn"
-                            onClick="create_tr('table_body44')"
-                          >
-                            <i className="fa-solid fa-plus" />
-                          </span>
-                        </div>
-                      </div>
-                    </div> */}
-                    </div>
+                    </form>
                   </div>
                 )}
 
@@ -809,9 +890,6 @@ const AddProduct = () => {
                                 </span> */}
                               </>
                             ))}
-
-                          {/* <li className="litext">Weight</li>
-                          <li className="litext currentItem">Price</li> */}
                         </ul>
                         <button
                           type=""
@@ -821,16 +899,6 @@ const AddProduct = () => {
                           <FontAwesomeIcon icon={faPlus} />
                         </button>
                       </div>
-                      {/* <div className="title_add_outr hidden">
-                        <input
-                          type="text"
-                          defaultValue=""
-                          className="input-field hidden"
-                        />
-                        <button type="button" className="add__btn">
-                          Add
-                        </button>
-                      </div> */}
 
                       <div
                         className={`${
@@ -839,110 +907,176 @@ const AddProduct = () => {
                             : "title_add_outr hidden"
                         }`}
                       >
-                        <input
-                          type="text"
-                          defaultValue=""
-                          value={createTitleName}
-                          className="input-field"
-                          onChange={(e) => setCreateTitleName(e.target.value)}
-                        />
-                        <button
-                          type="button"
-                          className="add__btn"
-                          onClick={addTitle}
-                        >
-                          ADD
-                        </button>
+                        <form onSubmit={addTitle}>
+                          <input
+                            required
+                            type="text"
+                            // defaultValue=""
+                            value={createTitleName}
+                            className="input-field"
+                            onChange={(e) => {
+                              const inputVal = e.target.value;
+                              const capitalizedVal =
+                                inputVal.charAt(0).toUpperCase() +
+                                inputVal.slice(1).toLocaleLowerCase();
+                              setCreateTitleName(capitalizedVal);
+                            }}
+                          />
+                          <button
+                            // type="button"
+                            type="submit"
+                            className="add__btn"
+                            // onClick={addTitle}
+                          >
+                            ADD
+                          </button>
+                        </form>
                       </div>
                       <div id="pro_header">
-                        <div className="outr_all_header">
-                          <div className="all_otr">
-                            <div className="all_title">
-                              {/* {arr.length > 0 ? arr.map} */}
-                              {inputFields.map((input, i) => (
-                                <div className="input-field-outr" key={i}>
-                                  <span>{Object.keys(input)[0]}</span>
-                                  <input
-                                    name={Object.keys(input)[0]}
-                                    type="text"
-                                    defaultValue=""
-                                    onChange={(e) => chngeFirstIndexData(e, i)}
-                                  />
-                                </div>
-                              ))}
-                              <button
-                                type="button"
-                                className="add_row tab_lst_add"
-                                onClick={addField}
-                              >
-                                <FontAwesomeIcon icon={faPlus} />
-                              </button>
+                        <form onSubmit={submitPriceVariant}>
+                          {/* <form > */}
+                          <div className="outr_all_header">
+                            <div className="all_otr">
+                              <div className="all_title">
+                                {/* {arr.length > 0 ? arr.map} */}
+                                {inputFields.map((input, i) => {
+                                  return (
+                                    <div className="input-field-outr" key={i}>
+                                      <span>{Object.keys(input)[0]}</span>
+                                      {Object.keys(input)[0] ===
+                                        "Product Image" ||
+                                      Object.keys(input)[0] ===
+                                        "Banner Image" ? (
+                                        <button
+                                          type="button"
+                                          className="edit"
+                                          onClick={() => {
+                                            toggle(
+                                              Object.keys(input)[0],
+                                              "inputFields"
+                                            );
+                                          }}
+                                        >
+                                          Upload{" "}
+                                          <FontAwesomeIcon
+                                            icon={faCloudArrowUp}
+                                            // size="xl"
+                                          />{" "}
+                                          {Object.keys(input)[0] ===
+                                          "Product Image"
+                                            ? fileForProductInput.length > 0
+                                              ? fileForProductInput.length
+                                              : 0
+                                            : fileForBannerInput.length > 0
+                                            ? fileForBannerInput.length
+                                            : 0}
+                                        </button>
+                                      ) : (
+                                        <input
+                                          required
+                                          name={Object.keys(input)[0]}
+                                          type="text"
+                                          defaultValue=""
+                                          onChange={(e) =>
+                                            chngeFirstIndexData(e, i)
+                                          }
+                                        />
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                                <button
+                                  type="button"
+                                  className="add_row tab_lst_add"
+                                  onClick={addField}
+                                >
+                                  <FontAwesomeIcon icon={faPlus} />
+                                </button>
+                              </div>
+
+                              {arr &&
+                                arr.map((obj, objIndex) => {
+                                  const arrFromObj = Object.keys(obj);
+
+                                  return (
+                                    <div className="all_title">
+                                      {arrFromObj.map((key, keyIndex) => {
+                                        return (
+                                          <div
+                                            className="input-field-outr"
+                                            key={objIndex}
+                                          >
+                                            {key === "Product Image" ||
+                                            key === "Banner Image" ? (
+                                              <button
+                                                type="button"
+                                                href="javascript:void(0);"
+                                                className="edit"
+                                                onClick={() => {
+                                                  toggle(key, "arr");
+                                                  setIndexOfArr(objIndex);
+                                                  // showImageNum(obj, key);
+                                                }}
+                                              >
+                                                Upload{" "}
+                                                <FontAwesomeIcon
+                                                  icon={faCloudArrowUp}
+                                                  // size="xl"
+                                                />{" "}
+                                                {key === "Product Image" &&
+                                                  obj["Product Image"].length}
+                                                {key === "Banner Image" &&
+                                                  obj["Banner Image"].length}
+                                              </button>
+                                            ) : (
+                                              <input
+                                                required
+                                                type="text"
+                                                name={key}
+                                                defaultValue={obj[key]}
+                                                key={keyIndex}
+                                                onChange={(e) =>
+                                                  changeOtherIndexData(
+                                                    e,
+                                                    objIndex
+                                                  )
+                                                }
+                                              />
+                                            )}
+                                          </div>
+                                        );
+                                      })}
+
+                                      <button
+                                        type="button"
+                                        className="add_row tab_lst_add"
+                                        onClick={addField}
+                                      >
+                                        <FontAwesomeIcon icon={faPlus} />
+                                      </button>
+                                    </div>
+                                  );
+                                })}
                             </div>
 
-                            {arr &&
-                              arr.map((obj, objIndex) => {
-                                const arrFromObj = Object.keys(obj);
-                                // console.log(arrFromObj, "arrFromObj");
-
-                                return (
-                                  <div className="all_title">
-                                    {arrFromObj.map((key, keyIndex) => {
-                                      console.log(obj[key], "name");
-                                      return (
-                                        <div
-                                          className="input-field-outr"
-                                          key={objIndex}
-                                        >
-                                          <input
-                                            type="text"
-                                            name={key}
-                                            defaultValue={obj[key]}
-                                            key={keyIndex}
-                                            onChange={(e) =>
-                                              changeOtherIndexData(e, objIndex)
-                                            }
-                                          />
-                                        </div>
-                                      );
-                                    })}
-
-                                    <button
-                                      type="button"
-                                      className="add_row tab_lst_add"
-                                      onClick={addField}
-                                    >
-                                      <FontAwesomeIcon icon={faPlus} />
-                                    </button>
-                                  </div>
-                                );
-                              })}
-                          </div>
-                          <br />
-                          {/* <button
+                            <br />
+                            {/* <button
                             type="button"
                             className="delete_btn hidden tab_lst_add"
                             onClick="removeItem(this)"
                           >
                             <FontAwesomeIcon icon={faMinus} />
                           </button> */}
-                          <button
-                            className="edit"
-                            onClick={
-                              () => submitPriceVarient()
-                              // console.log(
-                              //   [
-                              //     inputFields.reduce(
-                              //       (acc, obj) => ({ ...acc, ...obj }),
-                              //       {}
-                              //     ),
-                              //   ].concat(arr),
-                              //   "arraySave"
-                              // )
-                            }
-                          >
-                            Save
-                          </button>
-                        </div>
+                            <button
+                              type="submit"
+                              // type="button"
+                              className="edit"
+                              // onClick={submitPriceVariant}
+                            >
+                              Save
+                            </button>
+                          </div>
+                        </form>
                       </div>
                     </div>
                   </div>
@@ -1345,11 +1479,10 @@ const AddProduct = () => {
                           <div className="img_part_img">
                             <input
                               type="checkbox"
-                              id="img1"
-                              name="img1"
-                              defaultValue="img1"
+                              id="img2"
+                              name="img2"
+                              defaultValue="img2"
                             />
-                            {/* <img src="images/add_mnu_dish.png" alt="image2" /> */}
                             <img
                               src={require("../../../assets/images/add_mnu_dish.png")}
                               alt="image2"
@@ -1371,8 +1504,8 @@ const AddProduct = () => {
                           <div className="img_part_img">
                             <input
                               type="checkbox"
-                              id="img1"
-                              name="img1"
+                              id="img3"
+                              name="img3"
                               defaultValue="img1"
                             />
                             <img
@@ -1397,9 +1530,9 @@ const AddProduct = () => {
                           <div className="img_part_img">
                             <input
                               type="checkbox"
-                              id="img1"
-                              name="img1"
-                              defaultValue="img1"
+                              id="img4"
+                              name="img4"
+                              defaultValue="img4"
                             />
                             <img
                               src={require("../../../assets/images/add_mnu_dish.png")}
@@ -1425,7 +1558,7 @@ const AddProduct = () => {
                         </p>
                         <form action="">
                           <input type="file" id="myFile" name="filename" />
-                          <input type="submit" />
+                          {/* <input type="submit" /> */}
                         </form>
                       </div>
                     </div>
