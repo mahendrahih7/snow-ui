@@ -19,6 +19,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 
 import ProductList from "./components/sellers/products/ProductList";
 import AddProduct from "./components/sellers/products/AddProduct";
+import ProductDetail from "./components/sellers/products/ProductDetail";
 
 function App() {
   return (
@@ -42,6 +43,10 @@ function App() {
             <Route
               path="/products/add-product"
               element={<AddProduct />}
+            ></Route>
+            <Route
+              path="/products/product-detail"
+              element={<ProductDetail />}
             ></Route>
           </Route>
           <Route path="/seller-login" element={<SellerLogin />}></Route>
