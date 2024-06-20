@@ -26,7 +26,7 @@ export const allProducts = createAsyncThunk("allProducts", async() => {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
       });
       console.log(products.data, 'products')
-      return products.data;
+      return products.data.products;
     } catch (error) {
       console.log(error, 'error')
       return rejectWithValue(error);

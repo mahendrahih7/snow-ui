@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEllipsisVertical,
+  faEye,
   faMagnifyingGlass,
   faStar,
   faTrash,
@@ -32,10 +33,10 @@ const ProductList = () => {
   console.log(products, "productsList");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 10;
+  const recordsPerPage = 5;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const records = products.slice(firstIndex, lastIndex);
+  const records = products?.slice(firstIndex, lastIndex);
   console.log(records, "records");
 
   const npage = Math.ceil(products.length / recordsPerPage);
@@ -151,7 +152,6 @@ const ProductList = () => {
                       <thead>
                         <tr>
                           <th>Product Name</th>
-                          {/* <th>Description</th> */}
                           <th>Brand</th>
                           <th>Category</th>
                           <th>
@@ -159,17 +159,10 @@ const ProductList = () => {
                             <br />
                             Category
                           </th>
-                          <th>MRP</th>
-                          <th>Tax</th>
                           <th>
                             Shipping <br />
                             Charge
                           </th>
-                          <th>
-                            Manufacturing <br /> Date
-                          </th>
-                          {/* <th>Status</th> */}
-                          {/* <th>Info</th> */}
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -177,72 +170,71 @@ const ProductList = () => {
                         {records &&
                           records.length > 0 &&
                           records.map((product) => {
-                            console.log(product, "product");
+                            console.log(product, "99");
                             return (
-                              <tr key={product?.product?._id}>
+                              <tr key={product?._id}>
                                 <td>
                                   <div className="div1">
-                                    <div className="o_div_img">
-                                      <img
-                                        src={product?.product?.productPicture}
-                                      />
-                                    </div>
                                     <div className="o_div_txt">
-                                      {/* <h4>{product?.product._id}</h4> */}
-                                      <h5>{product?.product.name}</h5>
+                                      <h5>{product?.productInfo?.name}</h5>
                                     </div>
                                   </div>
                                 </td>
                                 <td>
                                   <div className="div2">
-                                    <h5>{product?.product?.brand?.name}</h5>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div className="div2">
-                                    <h5>{product?.product?.category?.name}</h5>
+                                    <h5>{product?.productInfo?.brand?.name}</h5>
                                   </div>
                                 </td>
                                 <td>
                                   <div className="div2">
                                     <h5>
-                                      {product?.product?.subCategory?.name}
+                                      {product?.productInfo?.category?.name}
                                     </h5>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div className="div2">
-                                    <h5>{product?.product?.MRP}</h5>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div className="div2">
-                                    <h5>{product?.product?.tax}</h5>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div className="div2">
-                                    <h5>{product?.product?.shippingCharge}</h5>
                                   </div>
                                 </td>
                                 <td>
                                   <div className="div2">
                                     <h5>
-                                      {product?.product?.manufacturingDate?.slice(
-                                        0,
-                                        10
-                                      )}
+                                      {product?.productInfo?.subCategory?.name}
                                     </h5>
                                   </div>
                                 </td>
+
                                 <td>
-                                  <span>
-                                    <FontAwesomeIcon
-                                      icon={faTrash}
-                                      size="2xl"
-                                      style={{ color: "#da0b20" }}
-                                    />
-                                  </span>
+                                  <div className="div2">
+                                    <h5>
+                                      {
+                                        product?.productInfo?.shippingDetails
+                                          ?.shippingCharge
+                                      }
+                                    </h5>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <div className="div2">
+                                    <span>
+                                      <FontAwesomeIcon
+                                        style={{ cursor: "pointer" }}
+                                        icon={faEye}
+                                        size="2xl"
+                                        onClick={() =>
+                                          navigate("/products/product-detail")
+                                        }
+                                      />
+                                    </span>
+                                    <span style={{ marginLeft: "20px" }} />
+                                    <span>
+                                      <FontAwesomeIcon
+                                        style={{
+                                          color: "#da0b20",
+                                          cursor: "pointer",
+                                        }}
+                                        icon={faTrash}
+                                        size="2xl"
+                                      />
+                                    </span>
+                                  </div>
                                 </td>
                               </tr>
                             );
