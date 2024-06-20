@@ -24,6 +24,7 @@ import {
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 import "react-dropzone-uploader/dist/styles.css";
+import { Bounce, toast } from "react-toastify";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
@@ -82,6 +83,7 @@ const AddProduct = () => {
   const [productPictures, setProductPictures] = useState([]);
   const [bannerPictures, setBannerPictures] = useState([]);
   const [indexOfArr, setIndexOfArr] = useState();
+  const [error, setError] = useState("");
 
   /////////   GET REDUX STATE   //////////////////
   const { loading, category, subCategory, childCategory, brand, productId } =
@@ -98,6 +100,20 @@ const AddProduct = () => {
   useEffect(() => {
     dispatch(productCategory());
     dispatch(allBrand());
+  }, []);
+
+  //Alert for refreshing Add product page
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = ""; // This is required for Chrome to show the warning
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
   }, []);
 
   const addPotency = (passData) => {
@@ -206,11 +222,12 @@ const AddProduct = () => {
       others: JSON.stringify(main),
     };
 
-    dispatch(productInformation(productData)).then((response) => {
-      if (response) {
-        setTabs("prices");
-      }
-    });
+    dispatch(productInformation(productData));
+    // .then((response) => {
+    //   if (response) {
+    //     setTabs("prices");
+    //   }
+    // });
   };
 
   const createTitle = () => {
@@ -271,6 +288,7 @@ const AddProduct = () => {
   };
 
   const changeOtherIndexData = (e, index) => {
+    // console.log(index, "iiii");
     arr[index][e.target.name] = e.target.value;
   };
 
@@ -312,7 +330,7 @@ const AddProduct = () => {
     }
   };
 
-  const saveImages = (targetObj, targetKey) => {
+  const saveImages = () => {
     setInputFields((prevField) => {
       const updatedField = [...prevField];
       const indexForProductImage = updatedField.findIndex((obj) =>
@@ -321,30 +339,87 @@ const AddProduct = () => {
       const indexForBannerImage = updatedField.findIndex((obj) =>
         obj.hasOwnProperty("Banner Image")
       );
-      updatedField[indexForProductImage]["Product Image"] = fileForProductInput;
-      updatedField[indexForBannerImage]["Banner Image"] = fileForBannerInput;
-      return updatedField;
+      if (modalHeading === "Product Image") {
+        if (fileForProductInput.length > 3) {
+          alert("Product image not more than 3");
+        } else {
+          updatedField[indexForProductImage]["Product Image"] =
+            fileForProductInput;
+          return updatedField;
+        }
+        return updatedField;
+      }
+
+      if (modalHeading === "Banner Image") {
+        if (fileForBannerInput.length > 4) {
+          alert("Banner image not more than 4");
+        } else {
+          updatedField[indexForBannerImage]["Banner Image"] =
+            fileForBannerInput;
+          return updatedField;
+        }
+        return updatedField;
+      }
+
+      ////////////Alternate////////////////////////////////////////
+      // updatedField[indexForProductImage]["Product Image"] = fileForProductInput;
+      // updatedField[indexForBannerImage]["Banner Image"] = fileForBannerInput;
+      // return updatedField;
     });
 
     const otherFields = arr.map((field, index) => {
       if (index === indexOfArr && modalHeading === "Product Image") {
-        return {
-          ...field,
-          "Product Image": fileForProduct,
-          // "Banner Image": fileForBanner,
-        };
+        if (fileForProduct.length > 3) {
+          alert("Product image not more than 3");
+        } else {
+          return {
+            ...field,
+            "Product Image": fileForProduct,
+            // "Banner Image": fileForBanner,
+          };
+        }
       }
       if (index === indexOfArr && modalHeading === "Banner Image") {
-        return {
-          ...field,
-          // "Product Image": fileForProduct,
-          "Banner Image": fileForBanner,
-        };
+        if (fileForBanner.length > 4) {
+          alert("Banner image not more than 4");
+        } else {
+          return {
+            ...field,
+            // "Product Image": fileForProduct,
+            "Banner Image": fileForBanner,
+          };
+        }
       }
       return field;
     });
+
+    // const otherFields = arr.map((field, index) => {
+    //   if (index === indexOfArr && modalHeading === "Product Image") {
+    //     return {
+    //       ...field,
+    //       "Product Image": fileForProduct,
+    //       // "Banner Image": fileForBanner,
+    //     };
+    //   }
+    //   if (index === indexOfArr && modalHeading === "Banner Image") {
+    //     return {
+    //       ...field,
+    //       // "Product Image": fileForProduct,
+    //       "Banner Image": fileForBanner,
+    //     };
+    //   }
+    //   return field;
+    // });
     setArr(otherFields);
 
+    toggle();
+    setProductPictures([]);
+    setBannerPictures([]);
+    setFileForProduct([]);
+    setFileForBanner([]);
+  };
+
+  const modalCancel = () => {
     toggle();
     setProductPictures([]);
     setBannerPictures([]);
@@ -357,8 +432,15 @@ const AddProduct = () => {
       (acc, obj) => ({ ...acc, ...obj }),
       {}
     );
-
     setArr([...arr, combinedData]);
+
+    // if (arr.length === 0) {
+    //   setArr([...arr, combinedData]);
+    // }
+
+    // if (arr.length > 0) {
+    //   setArr([...arr, arr[arr.length - 1]]);
+    // }
   };
 
   const submitPriceVariant = (e) => {
@@ -463,9 +545,13 @@ const AddProduct = () => {
                   // onClick={saveImages(obj, modalHeading)}
                   onClick={saveImages}
                 >
-                  Save
+                  Add
                 </Button>{" "}
-                <Button color="secondary" className="modalBtn" onClick={toggle}>
+                <Button
+                  color="secondary"
+                  className="modalBtn"
+                  onClick={modalCancel}
+                >
                   Cancel
                 </Button>
               </ModalFooter>
@@ -511,7 +597,7 @@ const AddProduct = () => {
                     </button>
                     <button
                       className={`tabs_c ${tabs === "prices" ? "active" : ""}`}
-                      // onClick={() => setTabs("prices")}
+                      onClick={() => setTabs("prices")}
                     >
                       <span>
                         {/* <FontAwesomeIcon icon={faSackDollar} /> */}
@@ -873,10 +959,9 @@ const AddProduct = () => {
                         <ul id="list" className="listitem">
                           {title &&
                             title.map((t, i) => (
-                              <>
+                              <div key={i}>
                                 <li
                                   className="litext"
-                                  key={i}
                                   value={t}
                                   onClick={() => getTitle(t)}
                                 >
@@ -888,7 +973,7 @@ const AddProduct = () => {
                                     onClick={() => deleteTitle(t)}
                                   />
                                 </span> */}
-                              </>
+                              </div>
                             ))}
                         </ul>
                         <button
@@ -939,52 +1024,51 @@ const AddProduct = () => {
                             <div className="all_otr">
                               <div className="all_title">
                                 {/* {arr.length > 0 ? arr.map} */}
-                                {inputFields.map((input, i) => {
-                                  return (
-                                    <div className="input-field-outr" key={i}>
-                                      <span>{Object.keys(input)[0]}</span>
-                                      {Object.keys(input)[0] ===
-                                        "Product Image" ||
-                                      Object.keys(input)[0] ===
-                                        "Banner Image" ? (
-                                        <button
-                                          type="button"
-                                          className="edit"
-                                          onClick={() => {
-                                            toggle(
-                                              Object.keys(input)[0],
-                                              "inputFields"
-                                            );
-                                          }}
-                                        >
-                                          Upload{" "}
-                                          <FontAwesomeIcon
-                                            icon={faCloudArrowUp}
-                                            // size="xl"
-                                          />{" "}
-                                          {Object.keys(input)[0] ===
-                                          "Product Image"
-                                            ? fileForProductInput.length > 0
-                                              ? fileForProductInput.length
-                                              : 0
-                                            : fileForBannerInput.length > 0
-                                            ? fileForBannerInput.length
-                                            : 0}
-                                        </button>
-                                      ) : (
-                                        <input
-                                          required
-                                          name={Object.keys(input)[0]}
-                                          type="text"
-                                          defaultValue=""
-                                          onChange={(e) =>
-                                            chngeFirstIndexData(e, i)
-                                          }
-                                        />
-                                      )}
-                                    </div>
-                                  );
-                                })}
+                                {inputFields &&
+                                  inputFields.map((input, i) => {
+                                    return (
+                                      <div className="input-field-outr" key={i}>
+                                        <span>{Object.keys(input)[0]}</span>
+                                        {Object.keys(input)[0] ===
+                                          "Product Image" ||
+                                        Object.keys(input)[0] ===
+                                          "Banner Image" ? (
+                                          <button
+                                            type="button"
+                                            className="edit"
+                                            onClick={() => {
+                                              toggle(
+                                                Object.keys(input)[0],
+                                                "inputFields"
+                                              );
+                                            }}
+                                          >
+                                            Upload{" "}
+                                            <FontAwesomeIcon
+                                              icon={faCloudArrowUp}
+                                              // size="xl"
+                                            />{" "}
+                                            {Object.keys(input)[0] ===
+                                              "Product Image" &&
+                                              input["Product Image"].length}
+                                            {Object.keys(input)[0] ===
+                                              "Banner Image" &&
+                                              input["Banner Image"].length}
+                                          </button>
+                                        ) : (
+                                          <input
+                                            required
+                                            name={Object.keys(input)[0]}
+                                            type="text"
+                                            defaultValue=""
+                                            onChange={(e) =>
+                                              chngeFirstIndexData(e, i)
+                                            }
+                                          />
+                                        )}
+                                      </div>
+                                    );
+                                  })}
                                 <button
                                   type="button"
                                   className="add_row tab_lst_add"
