@@ -8,8 +8,9 @@ import { Seller_product_category, Seller_products, all_brand, productInfo} from 
 
 const initialState = {
   loading: false,
-  products: [],
   error: null,
+  products: [],
+  productDetail: {},
   category: [],
   subCategory: [],
   childCategory: [],
@@ -114,6 +115,25 @@ export const priceVarInfo = createAsyncThunk("priceVarInfo", async(priceInfo) =>
   }
 })
 
+// GET SINGLE PRODUCT DETAIL
+export const singleProductDetail = createAsyncThunk("singleProductDetail", async(productId, {dispatch}) =>{
+  try {
+    const resProductDetail = await axios.get(`${Seller_products}/${productId}`, {
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+    })
+    console.log(resProductDetail.data.data, 'resProductDetail')
+    dispatch(productCategory(resProductDetail.data.data.productInfo.category.name))
+    setTimeout(() => {
+      dispatch(productChildCat({catName : resProductDetail.data.data?.productInfo?.category?.name, subCatName: resProductDetail.data.data?.productInfo?.subCategory?.name  }))
+    }, 400);
+    return resProductDetail.data.data
+
+  }catch(error){
+    console.log(error)
+  }
+})
+
+
 
 const sellerProductSlice = createSlice({
   name: "sellerProducts",
@@ -141,7 +161,7 @@ const sellerProductSlice = createSlice({
     console.log(action.payload, 'lkl')
     state.loading = false
     state.category = action.payload?.catArr
-    const singleCat = action.payload.catArr.filter((c) => c.name === action.payload.name)
+    const singleCat = action.payload.catArr.filter((c) => c.name === action.payload?.name)
     console.log(singleCat, 'singleCat')
     state.subCategory = singleCat[0]?.subCategory
   })
@@ -156,9 +176,9 @@ const sellerProductSlice = createSlice({
   })
       .addCase(productChildCat.fulfilled, (state, action) => {
           state.loading = false
-          console.log(action.payload, '888')
-          const singleSubCat = state.subCategory.filter((subCat) => subCat.subCategoryName === action.payload)
-          state.childCategory = singleSubCat[0].childCategory
+          // console.log(action.payload, '888')
+          const singleSubCat = state.subCategory?.filter((subCat) => subCat?.subCategoryName === action?.payload)
+          state.childCategory = singleSubCat[0]?.childCategory
   })
       .addCase(productChildCat.rejected, (state) => {
        state.loading = false
@@ -191,6 +211,20 @@ const sellerProductSlice = createSlice({
        state.loading = false
         state.error = action.payload
   })
+
+  // FOR SINGLE PRODUCT DETAIL
+      .addCase(singleProductDetail.pending, (state) =>{
+        state.loading = true
+  })
+      .addCase(singleProductDetail.fulfilled, (state, action) => {
+          state.loading = false
+          state.productDetail = action.payload
+  })
+      .addCase(singleProductDetail.rejected, (state) => {
+       state.loading = false
+        state.error = action.payload
+  })
+
 
   },
 });

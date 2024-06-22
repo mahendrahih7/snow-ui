@@ -13,7 +13,7 @@ const initialState = {
   otpStatus: false,
   withOtp : false,
   resetPassword: false,
-  currentUser: null
+  currentUser: null,
   // isAuthenticated: false,
   // token: ""
 };

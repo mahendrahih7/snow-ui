@@ -219,7 +219,9 @@ const ProductList = () => {
                                         icon={faEye}
                                         size="2xl"
                                         onClick={() =>
-                                          navigate("/products/product-detail")
+                                          navigate(
+                                            `/products/product-detail/${product?._id}`
+                                          )
                                         }
                                       />
                                     </span>
