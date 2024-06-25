@@ -678,19 +678,6 @@ const AddProduct = () => {
                             <div className="p_c_lft">
                               <label htmlFor="status">Status</label>
                               <div className="form-check form-switch">
-                                {/* <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  role="switch"
-                                  id="flexSwitchCheckChecked"
-                                  onChange={() =>
-                                    setProductInfo({
-                                      ...productInfo,
-                                      status: !productInfo.status,
-                                    })
-                                  }
-                                  checked={productInfo.status}
-                                /> */}
                                 <label class="switch">
                                   <input
                                     type="checkbox"

@@ -17,9 +17,12 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   allBrand,
+  childCatUpdatePage,
+  prodCatUpdatePage,
   productCategory,
   productChildCat,
   singleProductDetail,
+  updateInfo,
 } from "../../../redux/features/sellers/sellerProductSlice";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { Seller_products } from "../../../constants/Api/Api";
@@ -27,11 +30,16 @@ import { Seller_products } from "../../../constants/Api/Api";
 const ProductDetail = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  // console.log(id, "param");
-  const [tabs, setTabs] = useState("product_info");
-  const [modal, setModal] = useState(false);
-  const [value, setValue] = useState("");
-  const [modalHeading, setModalHeading] = useState("");
+
+  const [main, setMain] = useState([
+    { potency: [{ key: "", value: "" }], val: "" },
+  ]);
+  const [inputFields, setInputFields] = useState([
+    { Price: "" },
+    { "Product Image": [] },
+    { "Banner Image": [] },
+  ]);
+  const [arr, setArr] = useState([]);
   const [title, setTitle] = useState([
     "Price",
     "Color",
@@ -40,31 +48,17 @@ const ProductDetail = () => {
     "Product Image",
     "Banner Image",
   ]);
-  const [inputFields, setInputFields] = useState([
-    { Price: "" },
-    { "Product Image": [] },
-    { "Banner Image": [] },
-  ]);
-  const [arr, setArr] = useState([]);
-  const [showCreateTitle, setShowCreateTitle] = useState(false);
+  const [tabs, setTabs] = useState("product_info");
+  const [modal, setModal] = useState(false);
+  const [value, setValue] = useState("");
+  const [modalHeading, setModalHeading] = useState("");
   const [createTitleName, setCreateTitleName] = useState("");
+  const [showCreateTitle, setShowCreateTitle] = useState(false);
   const [catName, setCatName] = useState("");
-  const [main, setMain] = useState([
-    { potency: [{ key: "", value: "" }], val: "" },
-  ]);
+  const [subCatName, setSubCatName] = useState("");
+
   const [isEdit, setIsEdit] = useState(false);
-  console.log(isEdit, "isEdit");
-  const [productInfo, setProductInfo] = useState({
-    name: "",
-    status: false,
-    category: "",
-    subCategory: "",
-    childCategory: "",
-    brand: "",
-    description: "",
-    shippingCharge: 0,
-    freeShipping: false,
-  });
+
   // For showing name in dropdown
   const [dropDownData, setDropDownData] = useState({
     categoryName: "",
@@ -79,12 +73,11 @@ const ProductDetail = () => {
   const [fileForBanner, setFileForBanner] = useState([]);
   const [productPictures, setProductPictures] = useState([]);
   const [bannerPictures, setBannerPictures] = useState([]);
-  const [inputViewProdPic, setInputViewProdPic] = useState([]);
-  const [inputViewBannrPic, setInputViewBannrPic] = useState([]);
+
   //store index of array -> Arr
   const [indexOfArr, setIndexOfArr] = useState();
-  console.log(indexOfArr, "indexOfArr");
 
+  //USE UseSelector
   const {
     loading,
     productDetail,
@@ -93,10 +86,14 @@ const ProductDetail = () => {
     childCategory,
     brand,
   } = useSelector((state) => state.sellerProducts);
-
   console.log(productDetail, "productDetail");
-  console.log(category, "category");
 
+  //State for Product Info
+  const [productInfo, setProductInfo] = useState({});
+
+  console.log(productInfo, "productInfo");
+
+  //FOR dispatch action
   useEffect(() => {
     dispatch(singleProductDetail(id));
     dispatch(productCategory());
@@ -110,11 +107,11 @@ const ProductDetail = () => {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       })
       .then((res) => {
-        console.log(res.data.data.otherDescription, "otherDescription");
         setMain(res.data.data.otherDescription);
+        console.log(res.data.data.productInfo, "infodetails");
+        setProductInfo(res.data.data.productInfo);
 
         //For InputField
-        console.log(res.data.data.variants, "variants");
         const variant = res.data.data.variants[0].variant;
         const arrForInputFields = [];
         for (let key in variant) {
@@ -126,14 +123,10 @@ const ProductDetail = () => {
         arrForInputFields.push({
           "Banner Image": res.data.data.variants[0]["bannerPictures"],
         });
-        // console.log(arrForInputFields, "arrForInputFields");
         setInputFields(arrForInputFields);
-        setInputViewProdPic(res.data.data.variants[0]["productPictures"]);
-        setInputViewBannrPic(res.data.data.variants[0]["bannerPictures"]);
 
         //For ARR
         const newVariants = res.data.data.variants.slice(1);
-        console.log(newVariants, "newVariants");
         const newArray = newVariants.map((v) => {
           return {
             ...v.variant,
@@ -141,7 +134,7 @@ const ProductDetail = () => {
             "Banner Image": [...v["bannerPictures"]],
           };
         });
-        // console.log(newArray, "newArray");
+
         setArr(newArray);
       })
       .catch((error) => {
@@ -150,22 +143,22 @@ const ProductDetail = () => {
   }, []);
 
   const toggle = (heading, val, arrInd) => {
-    // console.log(heading, "heading");
     setModal(!modal);
     setModalHeading(heading);
     setValue(val);
     // setObj(object);
     if (val === "inputFields") {
       if (heading === "Product Image") {
-        setProductPictures(inputViewProdPic);
+        setProductPictures(inputFields[arrInd]["Product Image"]);
+        // setProductPictures(inputViewProdPic);
       } else if (heading === "Banner Image") {
-        setBannerPictures(inputViewBannrPic);
+        setBannerPictures(inputFields[arrInd]["Banner Image"]);
+        // setBannerPictures(inputViewBannrPic);
       }
     }
 
     if (val === "arr") {
       if (heading === "Product Image") {
-        console.log(arr, arrInd, "......");
         setProductPictures(arr[arrInd]["Product Image"]);
       } else if (heading === "Banner Image") {
         setBannerPictures(arr[arrInd]["Banner Image"]);
@@ -191,68 +184,110 @@ const ProductDetail = () => {
   const changeProductInfo = (e) => {
     if (e.target.type === "text") {
       setProductInfo({ ...productInfo, [e.target.name]: e.target.value });
+      if (e.target.name === "shippingCharge") {
+        setProductInfo({
+          ...productInfo,
+          shippingDetails: {
+            ...productInfo.shippingDetails,
+            shippingCharge: e.target.value,
+          },
+        });
+      }
+    } else if (e.target.type === "checkbox") {
+      if (e.target.name === "status") {
+        setProductInfo({ ...productInfo, status: !productInfo?.status });
+      }
+      if (e.target.name === "freeShipping") {
+        setProductInfo({
+          ...productInfo,
+          shippingDetails: {
+            ...productInfo.shippingDetails,
+            freeShipping: !productInfo?.shippingDetails?.freeShipping,
+          },
+        });
+      }
     } else {
       if (e.target.name === "category") {
-        if (category.length > 0) {
-          category.map((cat) => {
-            if (cat.name === e.target.value) {
-              setDropDownData({
-                ...dropDownData,
-                categoryName: e.target.value,
-              });
-              setProductInfo({ ...productInfo, category: cat._id });
-            }
-          });
-          setCatName(e.target.value);
-          dispatch(productCategory(e.target.value));
-        }
-      } else if (e.target.name === "subCategory") {
-        if (subCategory?.length > 0) {
-          subCategory.map((subCat_item) => {
-            if (subCat_item.subCategoryName === e.target.value) {
-              setDropDownData({
-                ...dropDownData,
-                subCategoryName: e.target.value,
-              });
-              setProductInfo({
-                ...productInfo,
-                subCategory: subCat_item._id,
-              });
-            }
-          });
+        console.log(e.target.value, "valueTarget");
+        setCatName(e.target.value);
+        const catSingleObj = category.find(
+          (catObj) => catObj.name === e.target.value
+        );
+        setProductInfo({
+          ...productInfo,
+          category: { _id: catSingleObj?._id },
+          subCategory: { name: "" },
+          childCategory: { name: "" },
+        });
+        dispatch(prodCatUpdatePage(e.target.value));
+      }
 
-          dispatch(
-            productChildCat({ catName: catName, subCatName: e.target.value })
+      if (e.target.name === "subCategory") {
+        setSubCatName(e.target.value);
+        console.log(catName, "catName");
+
+        if (!catName) {
+          const catSingleObj = category.find(
+            (catObj) => catObj.name === productInfo?.category?.name
           );
-        }
-      } else if (e.target.name === "childCategory") {
-        if (childCategory.length > 0) {
-          childCategory.map((childCat_item) => {
-            if (childCat_item.childCategoryName === e.target.value) {
-              setDropDownData({
-                ...dropDownData,
-                childCategoryName: e.target.value,
-              });
-              setProductInfo({
-                ...productInfo,
-                childCategory: childCat_item._id,
-              });
-            }
+          const subCatSingleObj = catSingleObj?.subCategory?.find(
+            (subCatObj) => subCatObj.subCategoryName === e.target.value
+          );
+          setProductInfo({
+            ...productInfo,
+            subCategory: { _id: subCatSingleObj?._id },
+            childCategory: { _id: "" },
+          });
+        } else {
+          const catSingleObj = category.find(
+            (catObj) => catObj.name === catName
+          );
+          const subCatSingleObj = catSingleObj?.subCategory?.find(
+            (subCatObj) => subCatObj.subCategoryName === e.target.value
+          );
+          setProductInfo({
+            ...productInfo,
+            subCategory: { _id: subCatSingleObj?._id },
+            childCategory: { _id: "" },
           });
         }
-      } else if (e.target.name === "brand") {
-        if (brand.length > 0) {
-          brand.map((item) => {
-            if (item.name === e.target.value) {
-              setDropDownData({
-                ...dropDownData,
-                brandName: e.target.value,
-              });
-              setProductInfo({ ...productInfo, brand: item._id });
-            }
+
+        dispatch(childCatUpdatePage(e.target.value));
+      }
+
+      if (e.target.name === "childCategory") {
+        if (!subCatName) {
+          const subCatSingleObj = subCategory?.find(
+            (subCatObj) =>
+              subCatObj.subCategoryName === productInfo?.subCategory?.name
+          );
+          const childCatSingleObj = subCatSingleObj?.childCategory?.find(
+            (childCatObj) => childCatObj.childCategoryName === e.target.value
+          );
+          setProductInfo({
+            ...productInfo,
+            childCategory: { _id: childCatSingleObj?._id },
+          });
+        } else {
+          const subCatSingleObj = subCategory?.find(
+            (subCatObj) => subCatObj.subCategoryName === subCatName
+          );
+          const childCatSingleObj = subCatSingleObj?.childCategory?.find(
+            (childCatObj) => childCatObj.childCategoryName === e.target.value
+          );
+          setProductInfo({
+            ...productInfo,
+            childCategory: { _id: childCatSingleObj?._id },
           });
         }
       }
+    }
+
+    if (e.target.name === "brand") {
+      const brandSingleObj = brand?.find(
+        (brandObj) => brandObj.name === e.target.value
+      );
+      setProductInfo({ ...productInfo, brand: { _id: brandSingleObj?._id } });
     }
   };
 
@@ -321,7 +356,37 @@ const ProductDetail = () => {
 
   const modalCancel = () => {};
 
-  const submitProductInfo = () => {};
+  const submitProductInfo = (e) => {
+    e.preventDefault();
+    const productInfoUpdate = {
+      name: productInfo.name,
+      status: productInfo.status,
+      category: productInfo.category._id,
+      subCategory: !productInfo?.subCategory?._id
+        ? ""
+        : productInfo.subCategory._id,
+      childCategory: !productInfo?.childCategory?._id
+        ? ""
+        : productInfo?.childCategory?._id,
+      brand: productInfo?.brand?._id,
+      description: productInfo.description,
+      shippingCharge: productInfo.shippingDetails.shippingCharge,
+      freeShipping: productInfo.shippingDetails.freeShipping,
+    };
+
+    console.log(productInfoUpdate, "productInfoUpdate");
+
+    dispatch(updateInfo({ productInfoUpdate, id }));
+
+    // console.log(productInfo, "productInfo");
+
+    // const productData = {
+    //   info: productInfo,
+    //   // others: JSON.stringify(main),
+    // };
+
+    // console.log(productData.info, "productInfoDetail");
+  };
 
   const submitPriceVariant = (e) => {
     e.preventDefault();
@@ -394,30 +459,36 @@ const ProductDetail = () => {
                     })}
                 </div>
 
-                <input
-                  type="file"
-                  name="Product Image"
-                  accept="image/*"
-                  onChange={(e) => handleImageChange(e, modalHeading)}
-                  multiple
-                />
+                {isEdit && (
+                  <input
+                    type="file"
+                    name="Product Image"
+                    accept="image/*"
+                    onChange={(e) => handleImageChange(e, modalHeading)}
+                    multiple
+                  />
+                )}
               </ModalBody>
               <ModalFooter>
-                <Button
-                  color="primary"
-                  className="modalBtn"
-                  // onClick={saveImages(obj, modalHeading)}
-                  onClick={saveImages}
-                >
-                  Add
-                </Button>{" "}
-                <Button
-                  color="secondary"
-                  className="modalBtn"
-                  onClick={modalCancel}
-                >
-                  Cancel
-                </Button>
+                {isEdit && (
+                  <Button
+                    color="primary"
+                    className="modalBtn"
+                    // onClick={saveImages(obj, modalHeading)}
+                    onClick={saveImages}
+                  >
+                    Add
+                  </Button>
+                )}{" "}
+                {isEdit && (
+                  <Button
+                    color="secondary"
+                    className="modalBtn"
+                    onClick={modalCancel}
+                  >
+                    Cancel
+                  </Button>
+                )}
               </ModalFooter>
             </Modal>
           </>
@@ -506,305 +577,321 @@ const ProductDetail = () => {
 
                 {tabs === "product_info" && (
                   <div id="product_info" className="tb_c">
-                    <div className="p_info">
-                      <div className="e-edit">
-                        <button
-                          type="button"
-                          className="edit"
-                          onClick={() => setIsEdit(true)}
-                        >
-                          {isEdit ? "Save" : "Edit"}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="total_p_rows">
-                      {/*  */}
-                      <div className="p_rows">
-                        <div className="p_total" id="table_body1"></div>
-                        <div className="p_total" id="table_body2">
-                          <div className="p_c_lft">
-                            <label htmlFor="productName">Product Name</label>
-                            <input
-                              disabled={!isEdit}
-                              required
-                              id="productName"
-                              name="name"
-                              value={productDetail?.productInfo?.name}
-                              type="text"
-                              placeholder="10Bandz"
-                              onChange={(e) => changeProductInfo(e)}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="p_total" id="table_body4">
-                          <div className="p_c_lft">
-                            <label htmlFor="status">Status</label>
-                            <div className="form-check form-switch">
-                              <label className="switch">
-                                <input
-                                  disabled={!isEdit}
-                                  type="checkbox"
-                                  checked={productDetail?.productInfo?.status}
-                                />
-                                <span className="slider round"></span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="p_total" id="table_body5">
-                          <div className="p_c_lft">
-                            <label>Category</label>
-                            <select
-                              disabled={!isEdit}
-                              required
-                              name="category"
-                              id="category"
-                              value={productDetail?.productInfo?.category?.name}
-                              onChange={(e) => changeProductInfo(e)}
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        if (!isEdit) {
+                          submitProductInfo(e);
+                        }
+                      }}
+                    >
+                      <div className="p_info">
+                        <div className="e-edit">
+                          {isEdit ? (
+                            <button
+                              type="submit"
+                              className="edit"
+                              onClick={() => setIsEdit(false)}
                             >
-                              <option value="">Select Category</option>
-                              {category &&
-                                category.map((cat, i) => {
-                                  return (
-                                    <option value={cat.name} key={i}>
-                                      {cat.name}
-                                    </option>
-                                  );
-                                })}
-                            </select>
-                          </div>
-                        </div>
-                        <div className="p_total" id="table_body6">
-                          <div className="p_c_lft">
-                            <label>Sub Category</label>
-                            <select
-                              disabled={!isEdit}
-                              required
-                              name="subCategory"
-                              id="subCategory"
-                              value={
-                                productDetail?.productInfo?.subCategory?.name
-                              }
-                              onChange={(e) => changeProductInfo(e)}
+                              Save
+                            </button>
+                          ) : (
+                            <button
+                              type="submit"
+                              className="edit"
+                              onClick={() => setIsEdit(true)}
                             >
-                              <option value="">Select sub category</option>
-
-                              {subCategory &&
-                                subCategory.map((subCat, i) => {
-                                  return (
-                                    <option
-                                      value={subCat.subCategoryName}
-                                      key={i}
-                                    >
-                                      {subCat.subCategoryName}
-                                    </option>
-                                  );
-                                })}
-                            </select>
-                          </div>
-                        </div>
-                        <div className="p_total" id="table_body7">
-                          <div className="p_c_lft">
-                            <label>Child Category</label>
-                            <select
-                              disabled={!isEdit}
-                              name="childCategory"
-                              id="childCategory"
-                              value={
-                                productDetail?.productInfo?.childCategory?.name
-                              }
-                              onChange={(e) => changeProductInfo(e)}
-                            >
-                              <option value="">Select child category</option>
-                              {childCategory?.length > 0 &&
-                                childCategory.map((childCatItem) => {
-                                  return (
-                                    <option
-                                      key={childCatItem._id}
-                                      value={childCatItem.childCategoryName}
-                                    >
-                                      {childCatItem.childCategoryName}
-                                    </option>
-                                  );
-                                })}
-                            </select>
-                          </div>
-                        </div>
-
-                        <div className="p_total" id="table_body21">
-                          <div className="p_c_lft">
-                            <label>Brand</label>
-                            <select
-                              disabled={!isEdit}
-                              name="brand"
-                              id="brand"
-                              value={productDetail?.productInfo?.brand?.name}
-                              onChange={(e) => changeProductInfo(e)}
-                            >
-                              <option value="">Select brand</option>
-                              {brand &&
-                                brand.map((b, i) => {
-                                  return (
-                                    <option value={b.name} key={i}>
-                                      {b.name}
-                                    </option>
-                                  );
-                                })}
-                            </select>
-                          </div>
-                        </div>
-
-                        <div className="p_total" id="table_body25">
-                          <div className="p_c_lft">
-                            <label htmlFor="description">Description</label>
-                            <input
-                              required
-                              disabled={!isEdit}
-                              id="description"
-                              name="description"
-                              type="text"
-                              value={productDetail?.productInfo?.description}
-                              placeholder="Introducing 10 Bandz"
-                              onChange={(e) => changeProductInfo(e)}
-                            />
-                          </div>
-                        </div>
-                        <div className="p_total" id="table_body26">
-                          <div className="p_c_lft">
-                            <label htmlFor="shippingCharge">
-                              Shipping Charge
-                            </label>
-                            <input
-                              required
-                              disabled={!isEdit}
-                              id="shippingCharge"
-                              name="shippingCharge"
-                              value={
-                                productDetail?.productInfo?.shippingDetails
-                                  ?.shippingCharge
-                              }
-                              type="text"
-                              placeholder="10"
-                              onChange={(e) => changeProductInfo(e)}
-                            />
-                          </div>
-                        </div>
-                        <div className="p_total" id="table_body26">
-                          <div className="p_c_lft">
-                            <label htmlFor="freeShipping">Free Shipping</label>
-
-                            <div className="form-check form-switch">
-                              <label class="switch">
-                                <input
-                                  type="checkbox"
-                                  disabled={!isEdit}
-                                  onChange={() =>
-                                    setProductInfo({
-                                      ...productInfo,
-                                      freeShipping: !productInfo.freeShipping,
-                                    })
-                                  }
-                                  checked={
-                                    productDetail?.productInfo?.shippingDetails
-                                      ?.freeShipping
-                                  }
-                                />
-                                <span className="slider round"></span>
-                              </label>
-                            </div>
-                          </div>
+                              Edit
+                            </button>
+                          )}
                         </div>
                       </div>
-                      {/* potency */}
+                      <div className="total_p_rows">
+                        {/*  */}
+                        <div className="p_rows">
+                          <div className="p_total" id="table_body1"></div>
+                          <div className="p_total" id="table_body2">
+                            <div className="p_c_lft">
+                              <label htmlFor="name">Product Name</label>
+                              <input
+                                disabled={!isEdit}
+                                required
+                                id="name"
+                                name="name"
+                                value={productInfo?.name}
+                                type="text"
+                                placeholder="10Bandz"
+                                onChange={(e) => changeProductInfo(e)}
+                              />
+                            </div>
+                          </div>
 
-                      <div className="main_p_inform" id="tbDiv001">
-                        {main?.map((v, ind) => {
-                          return (
-                            <div className="p_inform" key={ind}>
-                              <div className="p_total p_hdng" id="table_body">
-                                <div className="p_c_lft">
+                          <div className="p_total" id="table_body4">
+                            <div className="p_c_lft">
+                              <label htmlFor="status">Status</label>
+                              <div className="form-check form-switch">
+                                <label className="switch">
                                   <input
                                     disabled={!isEdit}
-                                    required
-                                    type="text"
-                                    placeholder="Potency"
-                                    value={v.val}
-                                    className="table_body01"
-                                    onChange={(e) => headingChange(e, ind)}
+                                    name="status"
+                                    type="checkbox"
+                                    checked={productInfo?.status}
+                                    onChange={(e) => changeProductInfo(e)}
                                   />
-                                  <span
-                                    className="add_btn"
-                                    onClick={() => {
-                                      if (isEdit === true) {
-                                        addPotency("main");
-                                      }
-                                    }}
-                                  >
-                                    <div className="click_me" />
-                                    <FontAwesomeIcon icon={faPlus} size="xl" />
-                                  </span>
-                                </div>
-                              </div>
-
-                              <div className="p_rows">
-                                <div
-                                  className="p_total"
-                                  id="table_body29"
-                                  // ref={tableRef}
-                                >
-                                  {v.potency.map((c, ci) => {
-                                    return (
-                                      <div className="p_c_lft_dup" key={ci}>
-                                        <input
-                                          // ref={keyRef}
-                                          required
-                                          disabled={!isEdit}
-                                          name="key"
-                                          type="text"
-                                          className="addMain"
-                                          placeholder="Total THC (mg)"
-                                          value={c.key}
-                                          onChange={(e) =>
-                                            changeHandler(e, ind, ci)
-                                          }
-                                        />
-                                        <input
-                                          required
-                                          disabled={!isEdit}
-                                          // ref={valRef}
-                                          name="value"
-                                          type="text"
-                                          className="addPrefer"
-                                          value={c.value}
-                                          placeholder="0.00mg"
-                                          onChange={(e) =>
-                                            changeHandler(e, ind, ci)
-                                          }
-                                        />
-                                        <span
-                                          className="add_btn"
-                                          onClick={() => {
-                                            if (isEdit === true) {
-                                              addPotency(ind);
-                                            }
-                                          }}
-                                        >
-                                          <FontAwesomeIcon
-                                            icon={faPlus}
-                                            size="2xl"
-                                          />
-                                        </span>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
+                                  <span className="slider round"></span>
+                                </label>
                               </div>
                             </div>
-                          );
-                        })}
+                          </div>
+                          <div className="p_total" id="table_body5">
+                            <div className="p_c_lft">
+                              <label>Category</label>
+                              <select
+                                disabled={!isEdit}
+                                required
+                                name="category"
+                                id="category"
+                                value={productInfo?.category?.name}
+                                onChange={(e) => changeProductInfo(e)}
+                              >
+                                <option value="">Select Category</option>
+                                {category &&
+                                  category.map((cat, i) => {
+                                    return (
+                                      <option value={cat.name} key={i}>
+                                        {cat.name}
+                                      </option>
+                                    );
+                                  })}
+                              </select>
+                            </div>
+                          </div>
+                          <div className="p_total" id="table_body6">
+                            <div className="p_c_lft">
+                              <label>Sub Category</label>
+                              <select
+                                disabled={!isEdit}
+                                name="subCategory"
+                                id="subCategory"
+                                value={productInfo?.subCategory?.name}
+                                onChange={(e) => changeProductInfo(e)}
+                              >
+                                <option value="">Select sub category</option>
+
+                                {subCategory &&
+                                  subCategory.map((subCat, i) => {
+                                    return (
+                                      <option
+                                        value={subCat.subCategoryName}
+                                        key={i}
+                                      >
+                                        {subCat.subCategoryName}
+                                      </option>
+                                    );
+                                  })}
+                              </select>
+                            </div>
+                          </div>
+                          <div className="p_total" id="table_body7">
+                            <div className="p_c_lft">
+                              <label>Child Category</label>
+                              <select
+                                disabled={!isEdit}
+                                name="childCategory"
+                                id="childCategory"
+                                value={productInfo?.childCategory?.name}
+                                onChange={(e) => changeProductInfo(e)}
+                              >
+                                <option value="">Select child category</option>
+                                {childCategory?.length > 0 &&
+                                  childCategory.map((childCatItem) => {
+                                    return (
+                                      <option
+                                        key={childCatItem._id}
+                                        value={childCatItem.childCategoryName}
+                                      >
+                                        {childCatItem.childCategoryName}
+                                      </option>
+                                    );
+                                  })}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div className="p_total" id="table_body21">
+                            <div className="p_c_lft">
+                              <label>Brand</label>
+                              <select
+                                required
+                                disabled={!isEdit}
+                                name="brand"
+                                id="brand"
+                                value={productInfo?.brand?.name}
+                                onChange={(e) => changeProductInfo(e)}
+                              >
+                                <option value="">Select brand</option>
+                                {brand &&
+                                  brand.map((b, i) => {
+                                    return (
+                                      <option value={b.name} key={i}>
+                                        {b.name}
+                                      </option>
+                                    );
+                                  })}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div className="p_total" id="table_body25">
+                            <div className="p_c_lft">
+                              <label htmlFor="description">Description</label>
+                              <input
+                                required
+                                disabled={!isEdit}
+                                id="description"
+                                name="description"
+                                type="text"
+                                value={productInfo?.description}
+                                placeholder="Introducing 10 Bandz"
+                                onChange={(e) => changeProductInfo(e)}
+                              />
+                            </div>
+                          </div>
+                          <div className="p_total" id="table_body26">
+                            <div className="p_c_lft">
+                              <label htmlFor="shippingCharge">
+                                Shipping Charge
+                              </label>
+                              <input
+                                required
+                                disabled={!isEdit}
+                                id="shippingCharge"
+                                name="shippingCharge"
+                                value={
+                                  productInfo?.shippingDetails?.shippingCharge
+                                }
+                                type="text"
+                                placeholder="10"
+                                onChange={(e) => changeProductInfo(e)}
+                              />
+                            </div>
+                          </div>
+                          <div className="p_total" id="table_body26">
+                            <div className="p_c_lft">
+                              <label htmlFor="freeShipping">
+                                Free Shipping
+                              </label>
+
+                              <div className="form-check form-switch">
+                                <label class="switch">
+                                  <input
+                                    disabled={!isEdit}
+                                    name="freeShipping"
+                                    type="checkbox"
+                                    onChange={(e) => changeProductInfo(e)}
+                                    checked={
+                                      productInfo?.shippingDetails?.freeShipping
+                                    }
+                                  />
+                                  <span className="slider round"></span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* potency */}
+
+                        <div className="main_p_inform" id="tbDiv001">
+                          {main?.map((v, ind) => {
+                            return (
+                              <div className="p_inform" key={ind}>
+                                <div className="p_total p_hdng" id="table_body">
+                                  <div className="p_c_lft">
+                                    <input
+                                      disabled={!isEdit}
+                                      required
+                                      type="text"
+                                      placeholder="Potency"
+                                      value={v.val}
+                                      className="table_body01"
+                                      onChange={(e) => headingChange(e, ind)}
+                                    />
+                                    <span
+                                      className="add_btn"
+                                      onClick={() => {
+                                        if (isEdit === true) {
+                                          addPotency("main");
+                                        }
+                                      }}
+                                    >
+                                      <div className="click_me" />
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        size="xl"
+                                      />
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className="p_rows">
+                                  <div
+                                    className="p_total"
+                                    id="table_body29"
+                                    // ref={tableRef}
+                                  >
+                                    {v.potency.map((c, ci) => {
+                                      return (
+                                        <div className="p_c_lft_dup" key={ci}>
+                                          <input
+                                            // ref={keyRef}
+                                            required
+                                            disabled={!isEdit}
+                                            name="key"
+                                            type="text"
+                                            className="addMain"
+                                            placeholder="Total THC (mg)"
+                                            value={c.key}
+                                            onChange={(e) =>
+                                              changeHandler(e, ind, ci)
+                                            }
+                                          />
+                                          <input
+                                            required
+                                            disabled={!isEdit}
+                                            // ref={valRef}
+                                            name="value"
+                                            type="text"
+                                            className="addPrefer"
+                                            value={c.value}
+                                            placeholder="0.00mg"
+                                            onChange={(e) =>
+                                              changeHandler(e, ind, ci)
+                                            }
+                                          />
+                                          <span
+                                            className="add_btn"
+                                            onClick={() => {
+                                              if (isEdit === true) {
+                                                addPotency(ind);
+                                              }
+                                            }}
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faPlus}
+                                              size="2xl"
+                                            />
+                                          </span>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
+                    </form>
                   </div>
                 )}
 
@@ -824,7 +911,11 @@ const ProductDetail = () => {
                                 <li
                                   className="litext"
                                   value={t}
-                                  onClick={() => getTitle(t)}
+                                  onClick={() => {
+                                    if (isEdit === true) {
+                                      getTitle(t);
+                                    }
+                                  }}
                                 >
                                   {t}
                                 </li>
@@ -840,7 +931,11 @@ const ProductDetail = () => {
                         <button
                           type=""
                           className="add_title tab_lst_add"
-                          onClick={createTitle}
+                          onClick={() => {
+                            if (isEdit === true) {
+                              createTitle();
+                            }
+                          }}
                         >
                           <FontAwesomeIcon icon={faPlus} />
                         </button>
@@ -900,15 +995,18 @@ const ProductDetail = () => {
                                             onClick={() => {
                                               toggle(
                                                 Object.keys(input)[0],
-                                                "inputFields"
+                                                "inputFields",
+                                                i
                                               );
                                             }}
                                           >
                                             {isEdit ? "Upload" : "View"}{" "}
-                                            <FontAwesomeIcon
-                                              icon={faCloudArrowUp}
-                                              // size="xl"
-                                            />{" "}
+                                            {isEdit && (
+                                              <FontAwesomeIcon
+                                                icon={faCloudArrowUp}
+                                                // size="xl"
+                                              />
+                                            )}{" "}
                                             {Object.keys(input)[0] ===
                                               "Product Image" &&
                                               input["Product Image"].length}
@@ -969,10 +1067,12 @@ const ProductDetail = () => {
                                                 }}
                                               >
                                                 {isEdit ? "Upload" : "View"}{" "}
-                                                <FontAwesomeIcon
-                                                  icon={faCloudArrowUp}
-                                                  // size="xl"
-                                                />{" "}
+                                                {isEdit && (
+                                                  <FontAwesomeIcon
+                                                    icon={faCloudArrowUp}
+                                                    // size="xl"
+                                                  />
+                                                )}{" "}
                                                 {key === "Product Image" &&
                                                   obj["Product Image"].length}
                                                 {key === "Banner Image" &&

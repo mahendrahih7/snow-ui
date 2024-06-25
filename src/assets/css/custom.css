@@ -3711,6 +3711,7 @@ button.delete_btn.tab_lst_add {
 
 .input-field-outr {
   margin-right: 15px;
+  
 }
 
 .input-field-outr span {
@@ -4974,4 +4975,7 @@ input:checked+.slider:before {
 }
 .p_c_lft{
   align-items: center;
+}
+.edit{
+  width: 115px;
 }

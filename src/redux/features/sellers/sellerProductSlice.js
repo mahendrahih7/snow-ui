@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Seller_product_category, Seller_products, all_brand, productInfo} from "../../../constants/Api/Api";
+import { Seller_product_category, Seller_products, all_brand, productInfo, seller_prodInfo_update} from "../../../constants/Api/Api";
 // import swal from "sweetalert";
 // import { Bounce, toast } from "react-toastify";
 
@@ -49,6 +49,20 @@ export const productCategory = createAsyncThunk("productCategory", async(catName
     console.log(error, 'error')
   }
 })
+
+  //CATEGORY & SUB CATEGORY FOR UPDATE PAGE
+  export const prodCatUpdatePage = createAsyncThunk('prodCatUpdatePage', async(cat_name) =>{
+    try{
+       const catListUpdatePage = await axios.get(Seller_product_category, {
+      headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+    })
+    console.log(catListUpdatePage, 'catListUpdatePage')
+    return {catArrInUpdatePage: catListUpdatePage.data, catNameInUpdatePage: cat_name}
+
+    }catch(error){
+      console.log(error, 'error')
+    }
+  })
 
 //FOR PRODUCT CHILD CATEGORY
 export const productChildCat = createAsyncThunk("childCategory", async(nameOfCat, {dispatch}) =>{
@@ -133,11 +147,38 @@ export const singleProductDetail = createAsyncThunk("singleProductDetail", async
   }
 })
 
+// UPDATE INFO OF A SINGLE PRODUCT
+export const updateInfo = createAsyncThunk("updateInfo", async(info) =>{
+  console.log(info, '557')
+  try {
+    const resUpdateInfo = await axios.put(`${seller_prodInfo_update}/${info.id}`, info.productInfoUpdate, {
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      params: {
+        process : "productInfo"
+      }
+    })
+    console.log(resUpdateInfo, 'resUpdateInfo')
+
+  }catch(error) {
+    console.log(error)
+  }
+})
+
 
 
 const sellerProductSlice = createSlice({
   name: "sellerProducts",
   initialState,
+
+  reducers: {
+
+    //CHILD CATEGORY FOR UPDATE PAGE
+    childCatUpdatePage: (state, action) =>{
+      const objOfSubCat = state.subCategory.find((subCatElem) => subCatElem.subCategoryName === action.payload )
+      state.childCategory = objOfSubCat?.childCategory
+    }
+
+  },
  
   extraReducers: (builder) => {
     builder
@@ -161,11 +202,28 @@ const sellerProductSlice = createSlice({
     console.log(action.payload, 'lkl')
     state.loading = false
     state.category = action.payload?.catArr
-    const singleCat = action.payload.catArr.filter((c) => c.name === action.payload?.name)
-    console.log(singleCat, 'singleCat')
-    state.subCategory = singleCat[0]?.subCategory
+    const singleCat = action.payload.catArr.find((c) => c.name === action.payload?.name)
+    // console.log(singleCat, 'singleCat')
+    state.subCategory = singleCat?.subCategory
   })
   .addCase(productCategory.rejected, (state) =>{
+    state.loading = false
+     state.error = action.payload
+  })
+
+  //CATEGORY & SUB CATEGORY FOR UPDATE PAGE
+   .addCase(prodCatUpdatePage.pending, (state) =>{
+    state.loading = true
+  })
+  .addCase(prodCatUpdatePage.fulfilled, (state, action) =>{
+    console.log(action.payload, 'lkl')
+    state.loading = false
+    state.category = action.payload?.catArrInUpdatePage
+    const singleCat = action.payload.catArrInUpdatePage.find((cat) => cat.name === action.payload?.catNameInUpdatePage)
+    state.subCategory = singleCat?.subCategory
+    state.childCategory = []
+  })
+  .addCase(prodCatUpdatePage.rejected, (state) =>{
     state.loading = false
      state.error = action.payload
   })
@@ -176,9 +234,8 @@ const sellerProductSlice = createSlice({
   })
       .addCase(productChildCat.fulfilled, (state, action) => {
           state.loading = false
-          // console.log(action.payload, '888')
-          const singleSubCat = state.subCategory?.filter((subCat) => subCat?.subCategoryName === action?.payload)
-          state.childCategory = singleSubCat[0]?.childCategory
+          const singleSubCat = state.subCategory?.find((subCat) => subCat?.subCategoryName === action?.payload)
+          state.childCategory = singleSubCat?.childCategory
   })
       .addCase(productChildCat.rejected, (state) => {
        state.loading = false
@@ -191,7 +248,6 @@ const sellerProductSlice = createSlice({
   })
       .addCase(allBrand.fulfilled, (state, action) => {
           state.loading = false
-          console.log(action.payload, '777')
           state.brand = action.payload
   })
       .addCase(allBrand.rejected, (state) => {
@@ -225,11 +281,23 @@ const sellerProductSlice = createSlice({
         state.error = action.payload
   })
 
+  // UPDATE INFO OF A SINGLE PRODUCT
+      .addCase(updateInfo.pending, (state) =>{
+        state.loading = true
+  })
+      .addCase(updateInfo.fulfilled, (state) => {
+          state.loading = false
+  })
+      .addCase(updateInfo.rejected, (state) => {
+       state.loading = false
+        state.error = action.payload
+  })
+
 
   },
 });
 
-
+export const {childCatUpdatePage} = sellerProductSlice.actions
 export default sellerProductSlice.reducer;
 
 
