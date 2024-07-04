@@ -3514,7 +3514,7 @@ tbody tr td {
   border-radius: 10px;
   border: 1px solid transparent;
   transition: all 0.3s;
-  width: max-content;
+  width: max-content !important;
   border-bottom: 1px solid var(--secondary-eight-color);
 }
 .p_c_lft {
@@ -4892,7 +4892,9 @@ button.add__btn {
   opacity: 0 !important;
 }
 .prdct_mdl .modal-content {
-  width: 100% !important;
+  /* width: 100% !important; */
+  width: 500% ;
+  height: 200% ;
 }
 .prdct_mdl .modal-title {
   font-size: 24px;
@@ -4978,4 +4980,77 @@ input:checked+.slider:before {
 }
 .edit{
   width: 115px;
+}
+
+/* ayon paul change / 26.06.2024 */
+
+.p_c_lft_dup.ext{
+  justify-content: space-between;
+  align-items: center;
+}
+.p_c_lft_dup.ext input:nth-of-type(2){
+  width: 65%;
+}
+.p_c_lft.ext{
+    justify-content: space-between;
+}
+.projImg{
+  position: relative;
+  transition: all 0.3s;
+}
+.times{
+  position: absolute;
+  top: 0!important;
+  right: 0!important;
+  color: gray!important;
+  background: transparent!important;
+}
+.projImg:hover .times{
+  color: #000!important;
+}
+
+/* ayon paul start / 02.07.2024 */
+
+.modal.show .modal-dialog.adp_new_modal{
+  max-width: 90%;
+  height: 80%;
+}
+.modal.show .modal-dialog.adp_new_modal .modal-content{
+  width: 100%;
+  height: 100%;
+}
+.modal.show .modal-dialog.adp_new_modal .modal-body{
+  display: flex;
+  flex-wrap: wrap;
+}
+.modal_body_flxone{
+  width: 50%;
+}
+.modal_body_flxtwo{
+  width: 50%;
+}
+.modal_body_flxone input{
+  display: block;
+  margin-top: 10px;
+  width: 50%;
+  padding: 10px 15px;
+}
+.modal_body_flxone input:focus{
+  border: 1px solid #000;
+}
+.disabled_btn {
+  background-color: #808080 !important;
+  color: #fff !important;
+  border: 2px solid #808080 !important;
+
+      font-size: 15px;
+      font-weight: 500;
+
+      padding: 9px 15px;
+      border-radius: 10px;
+
+      transition: all 0.3s;
+      width: max-content;
+      border-bottom: #808080 !important;
+
 }

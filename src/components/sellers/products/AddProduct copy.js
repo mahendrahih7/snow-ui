@@ -15,28 +15,20 @@ import NavBar from "../../common/Nav/NavBar";
 import { useDispatch, useSelector } from "react-redux";
 import {
   allBrand,
-  getImages,
   priceVarInfo,
   productCategory,
   productChildCat,
   productInformation,
-  saveDataWithImage,
 } from "../../../redux/features/sellers/sellerProductSlice";
 
-// import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 import "react-dropzone-uploader/dist/styles.css";
 import { Bounce, toast } from "react-toastify";
-// For React Crop
-import ReactCrop from "react-image-crop";
-// import ImageCrop from "./ImageCrop";
-import ImageModal from "./ImageModal";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  console.log(modalOpen, "modalOpen");
   const [value, setValue] = useState("");
   const [modalHeading, setModalHeading] = useState("");
 
@@ -72,22 +64,16 @@ const AddProduct = () => {
     "Price",
     "Color",
     "Weight",
-    // "Sku",
-    // "Product Image",
-    // "Banner Image",
+    "Sku",
+    "Product Image",
+    "Banner Image",
   ]);
 
   const [inputFields, setInputFields] = useState([
     { Price: "" },
-    { Save: "" },
-    { "Upload Image": "" },
+    { "Product Image": [] },
+    { "Banner Image": [] },
   ]);
-
-  const [modalData, setModalData] = useState({
-    imageName: "",
-    altName: "",
-    productImage: "",
-  });
 
   const [arr, setArr] = useState([]);
   const [fileForProductInput, setFileForProductInput] = useState([]);
@@ -98,51 +84,37 @@ const AddProduct = () => {
   const [bannerPictures, setBannerPictures] = useState([]);
   const [indexOfArr, setIndexOfArr] = useState();
   const [error, setError] = useState("");
-  const [productImage, setProductImage] = useState("");
-  const [crop, setCrop] = useState({
-    unit: "%", // Can be 'px' or '%'
-    x: 25,
-    y: 25,
-    width: 50,
-    height: 50,
-  });
-  // console.log(crop, "crop");
-  const [variantId, setVariantId] = useState();
-  const [showForInput, setShowForInput] = useState(false);
-  const [showForArr, setShowForArr] = useState(Array(arr.length).fill(false));
 
   /////////   GET REDUX STATE   //////////////////
-  const {
-    loading,
-    category,
-    subCategory,
-    childCategory,
-    brand,
-    productId,
-    // variantId,
-    productImages,
-    allVariant,
-  } = useSelector((state) => state.sellerProducts);
+  const { loading, category, subCategory, childCategory, brand, productId } =
+    useSelector((state) => state.sellerProducts);
+
+  const toggle = (heading, val) => {
+    // console.log(heading, "heading");
+    setModal(!modal);
+    setModalHeading(heading);
+    setValue(val);
+    // setObj(object);
+  };
 
   useEffect(() => {
     dispatch(productCategory());
     dispatch(allBrand());
-    // dispatch(getImages(variantId));
   }, []);
 
   //Alert for refreshing Add product page
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event) => {
-  //     event.preventDefault();
-  //     event.returnValue = ""; // This is required for Chrome to show the warning
-  //   };
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = ""; // This is required for Chrome to show the warning
+    };
 
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // }, []);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   const addPotency = (passData) => {
     if (passData === "main") {
@@ -263,7 +235,11 @@ const AddProduct = () => {
     if (title.includes(createTitleName)) {
       alert("already exist");
     } else {
-      setTitle([...title, createTitleName]);
+      const newArray = [...title];
+      const insertIndex = newArray.length - 2;
+      newArray.splice(insertIndex, 0, createTitleName);
+
+      setTitle(newArray);
     }
     setCreateTitleName("");
   };
@@ -310,72 +286,6 @@ const AddProduct = () => {
     arr[index][e.target.name] = e.target.value;
   };
 
-  const saveVariantData = (heading, val, objIndex) => {
-    setModalHeading(heading);
-    setValue(val);
-    console.log(val, "val005");
-    if (val === "inputFields") {
-      const obj = inputFields
-        .slice(0, inputFields.length - 2)
-        .reduce((acc, obj) => ({ ...acc, ...obj }), {});
-      console.log(obj, "obj");
-      dispatch(
-        priceVarInfo({ info: obj, productId: "66839dbf0fead0f56552fe34" })
-      ).then((res) => {
-        console.log(res, "res666");
-        if (res?.payload?.message === "New variant added.") {
-          setShowForInput(true);
-        }
-      });
-    }
-    if (val === "arr") {
-      console.log(objIndex, "objIndex");
-      const newObj = { ...arr[objIndex] };
-      delete newObj["Save"];
-      delete newObj["Upload Image"];
-      console.log(newObj, "arrDetail");
-      dispatch(
-        priceVarInfo({ info: newObj, productId: "66839dbf0fead0f56552fe34" })
-      );
-
-      const newShowForArr = [...showForArr];
-      newShowForArr[objIndex] = true;
-      console.log(newShowForArr, "newShowForArr");
-      setShowForArr(newShowForArr);
-    }
-  };
-
-  const uploadImageBtn = (heading, val, index) => {
-    if (val === "inputFields") {
-      const combined = inputFields.reduce(
-        (acc, obj) => ({ ...acc, ...obj }),
-        {}
-      );
-      console.log(combined, "combined");
-      const inputFieldObj = allVariant.find(
-        (x) => x.variant.Price === combined.Price
-      );
-      console.log(inputFieldObj, "inputFieldObj");
-      setVariantId(inputFieldObj._id);
-      dispatch(getImages(inputFieldObj._id));
-    } else if (val === "arr") {
-      const targetObj = allVariant.find(
-        (x) => x.variant.Price === arr[index].Price
-      );
-      console.log(targetObj, "targetObj");
-      setVariantId(targetObj._id);
-      dispatch(getImages(targetObj._id));
-    }
-
-    if (heading === "Upload Image") {
-      setTabs("images");
-    }
-  };
-
-  const toggle = () => {
-    setModal(!modal);
-  };
-
   const handleImageChange = (e, modalHeading) => {
     if (value === "inputFields") {
       if (modalHeading === "Product Image") {
@@ -413,21 +323,6 @@ const AddProduct = () => {
       }
     }
   };
-
-  // const modalInput = (e) => {
-  //   if (e.target.type === "text") {
-  //     setModalData({ ...modalData, [e.target.name]: e.target.value });
-  //   } else if (e.target.type === "file") {
-  //     setProductImage(e.target.files[0]);
-  //     setModalData({ ...modalData, productImage: e.target.files[0] });
-  //   }
-  // };
-
-  // const modalImage = (e) => {
-  //   console.log(e.target.files[0], "hhh");
-  //   setProductImage(e.target.files[0]);
-  //   setModalData({ ...modalData, productImage: e.target.files[0] });
-  // };
 
   const saveImages = () => {
     setInputFields((prevField) => {
@@ -518,24 +413,13 @@ const AddProduct = () => {
     setFileForBanner([]);
   };
 
-  // const saveModalData = () => {
-  //   let finalData = new FormData();
-  //   for (let key in modalData) {
-  //     finalData.append(key, modalData[key]);
-  //   }
-  //   console.log(modalData, "modalData");
-  //   console.log(finalData, "finalData");
-  //   dispatch(saveDataWithImage({ finalData, variantId }));
-  //   toggle();
-  // };
-
-  // const modalCancel = () => {
-  //   toggle();
-  //   setProductPictures([]);
-  //   setBannerPictures([]);
-  //   setFileForProduct([]);
-  //   setFileForBanner([]);
-  // };
+  const modalCancel = () => {
+    toggle();
+    setProductPictures([]);
+    setBannerPictures([]);
+    setFileForProduct([]);
+    setFileForBanner([]);
+  };
 
   const addField = () => {
     const combinedData = inputFields.reduce(
@@ -583,60 +467,89 @@ const AddProduct = () => {
     });
   };
 
-  const func1 = () => {
-    let clsname = "";
-    if (!showForInput) {
-      clsname = "edit";
-    } else {
-      clsname = "disabled_btn";
-    }
-    console.log(clsname, "clsname");
-    return clsname;
-  };
-
-  const func2 = () => {
-    let clsname = "";
-    if (!showForInput) {
-      clsname = "disabled_btn";
-    } else {
-      clsname = "edit";
-    }
-    console.log(clsname, "clsname");
-    return clsname;
-  };
-
-  const func3 = (objIndex) => {
-    let clsname = "";
-    if (!showForArr[objIndex]) {
-      clsname = "edit";
-    } else {
-      clsname = "disabled_btn";
-    }
-    console.log(clsname, "clsname");
-    return clsname;
-  };
-
-  const func4 = (objIndex) => {
-    let clsname = "";
-    if (!showForArr[objIndex]) {
-      clsname = "disabled_btn";
-    } else {
-      clsname = "edit";
-    }
-    console.log(clsname, "clsname");
-    return clsname;
-  };
-
   return (
     <>
       <main>
         <section className="total_parent_element">
           <>
-            <ImageModal
-              modal={modal}
-              setModal={setModal}
-              variantId={variantId}
-            />
+            <Modal
+              className="prdct_mdl"
+              isOpen={modal}
+              toggle={toggle}
+              centered
+              fade
+              size="lg"
+              backdrop
+            >
+              <ModalHeader toggle={toggle}>
+                {`${
+                  modalHeading === "Product Image"
+                    ? " Upload Product Images (Max 3)"
+                    : "Upload Banner Images (Max 4)"
+                }`}
+              </ModalHeader>
+              <ModalBody>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  {modalHeading === "Product Image" &&
+                    productPictures.map((image, index) => {
+                      return (
+                        <img
+                          key={index}
+                          src={image}
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            objectFit: "cover",
+                            margin: "10px",
+                          }}
+                          alt=""
+                        />
+                      );
+                    })}
+                  {modalHeading === "Banner Image" &&
+                    bannerPictures.map((image, index) => {
+                      return (
+                        <img
+                          key={index}
+                          src={image}
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            objectFit: "cover",
+                            margin: "10px",
+                          }}
+                          alt=""
+                        />
+                      );
+                    })}
+                </div>
+
+                <input
+                  type="file"
+                  name="Product Image"
+                  accept="image/*"
+                  onChange={(e) => handleImageChange(e, modalHeading)}
+                  multiple
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  className="modalBtn"
+                  // onClick={saveImages(obj, modalHeading)}
+                  onClick={saveImages}
+                >
+                  Add
+                </Button>{" "}
+                <Button
+                  color="secondary"
+                  className="modalBtn"
+                  onClick={modalCancel}
+                >
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
           </>
 
           <div className="left_parent_element">
@@ -1096,61 +1009,39 @@ const AddProduct = () => {
                                   inputFields.map((input, i) => {
                                     return (
                                       <div className="input-field-outr" key={i}>
-                                        {Object.keys(input)[0] !== "Save" &&
-                                          Object.keys(input)[0] !==
-                                            "Upload Image" && (
-                                            <span>{Object.keys(input)[0]}</span>
-                                          )}
-
-                                        {Object.keys(input)[0] === "Save" ||
+                                        <span>{Object.keys(input)[0]}</span>
+                                        {Object.keys(input)[0] ===
+                                          "Product Image" ||
                                         Object.keys(input)[0] ===
-                                          "Upload Image" ? (
+                                          "Banner Image" ? (
                                           <button
-                                            disabled={
-                                              Object.keys(input)[0] === "Save"
-                                                ? showForInput
-                                                : !showForInput
-                                            }
                                             type="button"
-                                            className={
-                                              Object.keys(input)[0] === "Save"
-                                                ? func1()
-                                                : func2()
-                                            }
-                                            // className="disabled_btn"
-                                            // className="edit"
+                                            className="edit"
                                             onClick={() => {
-                                              if (
-                                                Object.keys(input)[0] === "Save"
-                                              ) {
-                                                saveVariantData(
-                                                  Object.keys(input)[0],
-                                                  "inputFields"
-                                                );
-                                              }
-                                              if (
-                                                Object.keys(input)[0] ===
-                                                "Upload Image"
-                                              ) {
-                                                uploadImageBtn(
-                                                  Object.keys(input)[0],
-                                                  "inputFields"
-                                                );
-                                              }
+                                              toggle(
+                                                Object.keys(input)[0],
+                                                "inputFields"
+                                              );
                                             }}
                                           >
-                                            {Object.keys(input)[0] === "Save"
-                                              ? "Save"
-                                              : "Upload Image"}
+                                            Upload{" "}
+                                            <FontAwesomeIcon
+                                              icon={faCloudArrowUp}
+                                              // size="xl"
+                                            />{" "}
+                                            {Object.keys(input)[0] ===
+                                              "Product Image" &&
+                                              input["Product Image"].length}
+                                            {Object.keys(input)[0] ===
+                                              "Banner Image" &&
+                                              input["Banner Image"].length}
                                           </button>
                                         ) : (
                                           <input
                                             required
                                             name={Object.keys(input)[0]}
                                             type="text"
-                                            defaultValue={
-                                              input[Object.keys(input)[0]]
-                                            }
+                                            defaultValue=""
                                             onChange={(e) =>
                                               chngeFirstIndexData(e, i)
                                             }
@@ -1180,44 +1071,27 @@ const AddProduct = () => {
                                             className="input-field-outr"
                                             key={objIndex}
                                           >
-                                            {key === "Save" ||
-                                            key === "Upload Image" ? (
+                                            {key === "Product Image" ||
+                                            key === "Banner Image" ? (
                                               <button
-                                                disabled={
-                                                  key === "Save"
-                                                    ? showForArr[objIndex]
-                                                    : !showForArr[objIndex]
-                                                }
                                                 type="button"
                                                 href="javascript:void(0);"
-                                                className={
-                                                  key === "Save"
-                                                    ? func3(objIndex)
-                                                    : func4(objIndex)
-                                                }
-                                                // className="edit"
+                                                className="edit"
                                                 onClick={() => {
-                                                  if (key === "Save") {
-                                                    saveVariantData(
-                                                      key,
-                                                      "arr",
-                                                      objIndex
-                                                    );
-                                                    setIndexOfArr(objIndex);
-                                                  }
-                                                  if (key === "Upload Image") {
-                                                    uploadImageBtn(
-                                                      key,
-                                                      "arr",
-                                                      objIndex
-                                                    );
-                                                    setIndexOfArr(objIndex);
-                                                  }
+                                                  toggle(key, "arr");
+                                                  setIndexOfArr(objIndex);
+                                                  // showImageNum(obj, key);
                                                 }}
                                               >
-                                                {key === "Save"
-                                                  ? "Save"
-                                                  : "Upload Image"}
+                                                Upload{" "}
+                                                <FontAwesomeIcon
+                                                  icon={faCloudArrowUp}
+                                                  // size="xl"
+                                                />{" "}
+                                                {key === "Product Image" &&
+                                                  obj["Product Image"].length}
+                                                {key === "Banner Image" &&
+                                                  obj["Banner Image"].length}
                                               </button>
                                             ) : (
                                               <input
@@ -1251,10 +1125,21 @@ const AddProduct = () => {
                             </div>
 
                             <br />
-
-                            {/* <button type="submit" className="edit">
+                            {/* <button
+                            type="button"
+                            className="delete_btn hidden tab_lst_add"
+                            onClick="removeItem(this)"
+                          >
+                            <FontAwesomeIcon icon={faMinus} />
+                          </button> */}
+                            <button
+                              type="submit"
+                              // type="button"
+                              className="edit"
+                              // onClick={submitPriceVariant}
+                            >
                               Save
-                            </button> */}
+                            </button>
                           </div>
                         </form>
                       </div>
@@ -1632,50 +1517,113 @@ const AddProduct = () => {
                   >
                     <div className="img_info">
                       <div className="img_contains">
-                        {productPictures &&
-                          productImages?.length > 0 &&
-                          productImages?.map((pic, index) => {
-                            return (
-                              <div className="img_part" key={index}>
-                                <div className="img_part_img">
-                                  <input
-                                    type="checkbox"
-                                    id="img1"
-                                    name="img1"
-                                    defaultValue="img1"
-                                  />
+                        <div className="img_part">
+                          <div className="img_part_img">
+                            <input
+                              type="checkbox"
+                              id="img1"
+                              name="img1"
+                              defaultValue="img1"
+                            />
 
-                                  <img src={pic?.url} alt={pic?.altName} />
-                                </div>
-                                <div className="img_text">
-                                  <p>{pic?.name}</p>
-                                </div>
-                                <div className="img_icons">
-                                  <FontAwesomeIcon icon={faEye} size="2xl" />
-                                  <FontAwesomeIcon
-                                    icon={faPenToSquare}
-                                    size="2xl"
-                                  />
-                                  <FontAwesomeIcon icon={faTrash} size="2xl" />
-                                </div>
-                              </div>
-                            );
-                          })}
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image1"
+                            />
+                          </div>
+                          <div className="img_text">
+                            <p>Food Image</p>
+                          </div>
+                          <div className="img_icons">
+                            <FontAwesomeIcon icon={faEye} size="2xl" />
+                            <FontAwesomeIcon icon={faPenToSquare} size="2xl" />
+                            <FontAwesomeIcon icon={faTrash} size="2xl" />
+                          </div>
+                        </div>
+                        <div className="img_part">
+                          <div className="img_part_img">
+                            <input
+                              type="checkbox"
+                              id="img2"
+                              name="img2"
+                              defaultValue="img2"
+                            />
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image2"
+                            />
+                          </div>
+                          <div className="img_text">
+                            <p>Food Image</p>
+                            <div className="img_icons">
+                              <FontAwesomeIcon icon={faEye} size="2xl" />
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                size="2xl"
+                              />
+                              <FontAwesomeIcon icon={faTrash} size="2xl" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="img_part">
+                          <div className="img_part_img">
+                            <input
+                              type="checkbox"
+                              id="img3"
+                              name="img3"
+                              defaultValue="img1"
+                            />
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image3"
+                            />
+                          </div>
+                          <div className="img_text">
+                            <p>Food Image</p>
+                            <div className="img_icons">
+                              <FontAwesomeIcon icon={faEye} size="2xl" />
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                size="2xl"
+                              />
+                              <FontAwesomeIcon icon={faTrash} size="2xl" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="img_part">
+                          <div className="img_part_img">
+                            <input
+                              type="checkbox"
+                              id="img4"
+                              name="img4"
+                              defaultValue="img4"
+                            />
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image4"
+                            />
+                          </div>
+                          <div className="img_text">
+                            <p>Food Image</p>
+                            <div className="img_icons">
+                              <FontAwesomeIcon icon={faEye} size="2xl" />
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                size="2xl"
+                              />
+                              <FontAwesomeIcon icon={faTrash} size="2xl" />
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       <div className="img_upload">
                         <p>
                           Click on the "Choose File" button to upload a image:
                         </p>
                         <form action="">
-                          {/* <input type="file" id="myFile" name="filename" /> */}
+                          <input type="file" id="myFile" name="filename" />
                           {/* <input type="submit" /> */}
-                          <button
-                            type="button"
-                            className="edit"
-                            onClick={() => toggle()}
-                          >
-                            Upload
-                          </button>
                         </form>
                       </div>
                     </div>

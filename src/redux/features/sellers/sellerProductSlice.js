@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Seller_product_category, Seller_products, all_brand, productInfo, seller_prodInfo_update} from "../../../constants/Api/Api";
+import { Seller_product_category, Seller_products, all_brand, get_allvariants_data, get_product_image, productInfo, seller_prodInfo_update} from "../../../constants/Api/Api";
 // import swal from "sweetalert";
 // import { Bounce, toast } from "react-toastify";
 
@@ -15,7 +15,10 @@ const initialState = {
   subCategory: [],
   childCategory: [],
   brand: [],
-  productId: ''
+  productId: '',
+  variantId: '',
+  productImages: [],
+  allVariant: []
 };
 
 
@@ -108,12 +111,27 @@ export const productInformation = createAsyncThunk("productInformation", async(p
   }
 })
 
+//GET ALL VARIANTS DATA
+export const allVariants = createAsyncThunk("allVariants", async(productId) =>{
+  console.log(productId, 'ggh')
+  try {
+    const resAllVariants = await axios.get(`${get_allvariants_data}/${productId}`, {
+      headers: { Authorization: "Bearer " + localStorage.getItem("token")}
+    })
+    console.log(resAllVariants, 'resAllVariants')
+    return resAllVariants.data.data
+
+  }catch(error){
+    console.log(error)
+  }
+})
+
 //FOR SUBMIT PRICE VARIANT PAGE
-export const priceVarInfo = createAsyncThunk("priceVarInfo", async(priceInfo) =>{
+export const priceVarInfo = createAsyncThunk("priceVarInfo", async(priceInfo, {dispatch}) =>{
   console.log(priceInfo, 'priceInfo')
   try{
     // const varients = priceInfo.allPriceVar
-    const resOfPriceVar = await axios.post(productInfo, priceInfo.formData, {
+    const resOfPriceVar = await axios.post(productInfo, priceInfo.info, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token"),
           "Content-Type":"multipart/form-data"
          },
@@ -123,8 +141,48 @@ export const priceVarInfo = createAsyncThunk("priceVarInfo", async(priceInfo) =>
         },
     })
     console.log(resOfPriceVar.data, 'resOfPriceVar')
+    dispatch(allVariants(priceInfo.productId))
+    return resOfPriceVar.data
 
   }catch(error){
+    console.log(error)
+  }
+})
+
+
+
+//FOR GETTING IMAGES
+export const getImages = createAsyncThunk("getImages", async(variantId) =>{
+  console.log(variantId, 'variantId')
+  try {
+    const resForGettingImage = await axios.get(`${get_product_image}/${variantId}`, {
+         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+    })
+    console.log(resForGettingImage, 'resForGettingImage')
+    return resForGettingImage.data.data
+
+  }catch(error) {
+    console.log(error)
+  }
+})
+
+//FOR SAVE IMAGES IN PRODUCT INFO
+export const saveDataWithImage = createAsyncThunk("saveDataWithImage", async(data, {dispatch}) =>{
+  console.log(data, 'data')
+  try {
+    const resOfDataWithImage = await axios.post(productInfo, data.finalData, {
+       headers: { Authorization: "Bearer " + localStorage.getItem("token"),
+          "Content-Type":"multipart/form-data"
+         },
+        params: {
+          process: "imageUpload",
+          variantId: data.variantId 
+        },
+    })
+    console.log(resOfDataWithImage, 'resOfDataWithImage')
+    dispatch(getImages(data.variantId ))
+
+  }catch(error) {
     console.log(error)
   }
 })
@@ -160,6 +218,21 @@ export const updateInfo = createAsyncThunk("updateInfo", async(info) =>{
     console.log(resUpdateInfo, 'resUpdateInfo')
 
   }catch(error) {
+    console.log(error)
+  }
+})
+
+//UPDATE POTENCY SEC OF A SINGLE PRODUCT
+export const updatePotency = createAsyncThunk("updatePotency", async(potencyInfo, {dispatch}) =>{
+  try{
+    const resUpdatePotencyInfo = await axios.put(`${seller_prodInfo_update}/${potencyInfo.prodId}`, potencyInfo, {
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      params: {
+        process : "others"
+      }
+    })
+    console.log(resUpdatePotencyInfo, 'resUpdatePotencyInfo')
+  }catch(error){
     console.log(error)
   }
 })
@@ -202,7 +275,7 @@ const sellerProductSlice = createSlice({
     console.log(action.payload, 'lkl')
     state.loading = false
     state.category = action.payload?.catArr
-    const singleCat = action.payload.catArr.find((c) => c.name === action.payload?.name)
+    const singleCat = action.payload?.catArr?.find((c) => c.name === action.payload?.name)
     // console.log(singleCat, 'singleCat')
     state.subCategory = singleCat?.subCategory
   })
@@ -268,6 +341,49 @@ const sellerProductSlice = createSlice({
         state.error = action.payload
   })
 
+  //SUBMIT PRICE VARIANT
+        .addCase(priceVarInfo.pending, (state) =>{
+        state.loading = true
+  })
+      .addCase(priceVarInfo.fulfilled, (state, action) => {
+          state.loading = false
+          state.variantId = action.payload?.variant
+  })
+      .addCase(priceVarInfo.rejected, (state) => {
+       state.loading = false
+        state.error = action.payload
+  })
+
+  //GET ALL VARIANTS
+         .addCase(allVariants.pending, (state) =>{
+        state.loading = true
+  })
+      .addCase(allVariants.fulfilled, (state, action) => {
+          state.loading = false
+          state.allVariant = action.payload
+  })
+      .addCase(allVariants.rejected, (state) => {
+       state.loading = false
+        state.error = action.payload
+  })
+
+
+  //FOR GETTING IMAGE IN ADD PRODUCT
+          .addCase(getImages.pending, (state) =>{
+        state.loading = true
+        state.productImages= []
+  })
+      .addCase(getImages.fulfilled, (state, action) => {
+          state.loading = false
+          state.productImages = action.payload?.productPictures
+       
+  })
+      .addCase(getImages.rejected, (state) => {
+       state.loading = false
+        state.error = action.payload
+  })
+
+
   // FOR SINGLE PRODUCT DETAIL
       .addCase(singleProductDetail.pending, (state) =>{
         state.loading = true
@@ -289,6 +405,18 @@ const sellerProductSlice = createSlice({
           state.loading = false
   })
       .addCase(updateInfo.rejected, (state) => {
+       state.loading = false
+        state.error = action.payload
+  })
+
+  //UPDATE POTENCY SEC OF A SINGLE PRODUCT
+     .addCase(updatePotency.pending, (state) =>{
+        state.loading = true
+  })
+      .addCase(updatePotency.fulfilled, (state) => {
+          state.loading = false
+  })
+      .addCase(updatePotency.rejected, (state) => {
        state.loading = false
         state.error = action.payload
   })

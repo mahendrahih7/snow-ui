@@ -1,57 +1,73 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Sidebar from "../../common/Sidebar";
+import NavBar from "../../common/Nav/NavBar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBagShopping,
   faCloudArrowUp,
   faEye,
   faImage,
   faLayerGroup,
+  faMinus,
   faPenToSquare,
   faPlus,
   faTrash,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
-import Sidebar from "../../common/Sidebar";
-import NavBar from "../../common/Nav/NavBar";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   allBrand,
-  getImages,
-  priceVarInfo,
+  childCatUpdatePage,
+  prodCatUpdatePage,
   productCategory,
   productChildCat,
-  productInformation,
-  saveDataWithImage,
+  singleProductDetail,
+  updateInfo,
+  updatePotency,
 } from "../../../redux/features/sellers/sellerProductSlice";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { Seller_products } from "../../../constants/Api/Api";
+import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 
-// import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-
-import "react-dropzone-uploader/dist/styles.css";
-import { Bounce, toast } from "react-toastify";
-// For React Crop
-import ReactCrop from "react-image-crop";
-// import ImageCrop from "./ImageCrop";
-import ImageModal from "./ImageModal";
-
-const AddProduct = () => {
+const ProductDetail = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const [main, setMain] = useState([
+    { potency: [{ key: "", value: "" }], val: "" },
+  ]);
+
+  // console.log(main, "main555");
+  const [inputFields, setInputFields] = useState([
+    { Price: "" },
+    { "Product Image": [] },
+    { "Banner Image": [] },
+  ]);
+  console.log(inputFields, "inputFields");
+  const [arr, setArr] = useState([]);
+  // console.log(arr, "1009");
+  const [title, setTitle] = useState([
+    "Price",
+    "Color",
+    "Weight",
+    "Sku",
+    "Product Image",
+    "Banner Image",
+  ]);
+  const [tabs, setTabs] = useState("product_info");
   const [modal, setModal] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  console.log(modalOpen, "modalOpen");
   const [value, setValue] = useState("");
   const [modalHeading, setModalHeading] = useState("");
-
-  const [tabs, setTabs] = useState("product_info");
-  const [productInfo, setProductInfo] = useState({
-    name: "",
-    status: false,
-    category: "",
-    subCategory: "",
-    childCategory: "",
-    brand: "",
-    description: "",
-    shippingCharge: 0,
-    freeShipping: false,
-  });
+  console.log(modalHeading, "modalHeading");
+  const [createTitleName, setCreateTitleName] = useState("");
+  const [showCreateTitle, setShowCreateTitle] = useState(false);
+  const [catName, setCatName] = useState("");
+  const [subCatName, setSubCatName] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+  const [isEditForPotency, setIsEditForPotency] = useState(false);
+  const [show, setShow] = useState(false);
 
   // For showing name in dropdown
   const [dropDownData, setDropDownData] = useState({
@@ -61,88 +77,123 @@ const AddProduct = () => {
     brandName: "",
   });
 
-  const [main, setMain] = useState([
-    { potency: [{ key: "", value: "" }], val: "" },
-  ]);
-  const [catName, setCatName] = useState("");
-  const [showCreateTitle, setShowCreateTitle] = useState(false);
-  const [createTitleName, setCreateTitleName] = useState("");
-
-  const [title, setTitle] = useState([
-    "Price",
-    "Color",
-    "Weight",
-    // "Sku",
-    // "Product Image",
-    // "Banner Image",
-  ]);
-
-  const [inputFields, setInputFields] = useState([
-    { Price: "" },
-    { Save: "" },
-    { "Upload Image": "" },
-  ]);
-
-  const [modalData, setModalData] = useState({
-    imageName: "",
-    altName: "",
-    productImage: "",
-  });
-
-  const [arr, setArr] = useState([]);
   const [fileForProductInput, setFileForProductInput] = useState([]);
+  console.log(fileForProductInput, "fileForProductInput");
   const [fileForBannerInput, setFileForBannerInput] = useState([]);
   const [fileForProduct, setFileForProduct] = useState([]);
   const [fileForBanner, setFileForBanner] = useState([]);
   const [productPictures, setProductPictures] = useState([]);
+  console.log(productPictures, "productPictures");
   const [bannerPictures, setBannerPictures] = useState([]);
+  //store index of array -> Arr
   const [indexOfArr, setIndexOfArr] = useState();
-  const [error, setError] = useState("");
-  const [productImage, setProductImage] = useState("");
-  const [crop, setCrop] = useState({
-    unit: "%", // Can be 'px' or '%'
-    x: 25,
-    y: 25,
-    width: 50,
-    height: 50,
-  });
-  // console.log(crop, "crop");
-  const [variantId, setVariantId] = useState();
-  const [showForInput, setShowForInput] = useState(false);
-  const [showForArr, setShowForArr] = useState(Array(arr.length).fill(false));
 
-  /////////   GET REDUX STATE   //////////////////
+  //USE UseSelector
   const {
     loading,
+    productDetail,
     category,
     subCategory,
     childCategory,
     brand,
-    productId,
-    // variantId,
-    productImages,
-    allVariant,
   } = useSelector((state) => state.sellerProducts);
 
+  //State for Product Info
+  const [productInfo, setProductInfo] = useState({});
+
+  // console.log(productInfo, "productInfo");
+
+  //FOR dispatch action
   useEffect(() => {
+    dispatch(singleProductDetail(id));
     dispatch(productCategory());
     dispatch(allBrand());
-    // dispatch(getImages(variantId));
   }, []);
 
-  //Alert for refreshing Add product page
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event) => {
-  //     event.preventDefault();
-  //     event.returnValue = ""; // This is required for Chrome to show the warning
-  //   };
+  //GET SINGLE PRODUCT DETAILS
+  useEffect(() => {
+    axios
+      .get(`${Seller_products}/${id}`, {
+        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      })
+      .then((res) => {
+        console.log(res.data.data, "detail222");
+        //UPDATE 'main' STATE
+        setMain(res.data.data.otherDescription);
 
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
+        //UPDATE 'productInfo' STATE
+        console.log(res.data.data.productInfo, "infodetails");
+        setProductInfo(res.data.data.productInfo);
 
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // }, []);
+        //FOR inputField
+        console.log(res.data.data.variants[0], "vvvv");
+        const variant = res.data.data.variants[0].variant;
+        const arrForInputFields = [];
+        for (let key in variant) {
+          arrForInputFields.push({ [key]: variant[key] });
+        }
+        arrForInputFields.push({
+          id: res.data.data.variants[0]["_id"],
+        });
+        arrForInputFields.push({
+          "Product Image": res.data.data.variants[0]["productPictures"],
+        });
+        arrForInputFields.push({
+          "Banner Image": res.data.data.variants[0]["bannerPictures"],
+        });
+        // arrForInputFields.push({
+        //   id: res.data.data.variants[0]["_id"],
+        // });
+        console.log(arrForInputFields, "arrForInputFields");
+        setInputFields(arrForInputFields);
+
+        //FOR arr
+        const newVariants = res.data.data.variants.slice(1);
+        console.log(newVariants, "newVariants");
+        const newArray = newVariants.map((v) => {
+          return {
+            ...v.variant,
+            id: v._id,
+            "Product Image": [...v["productPictures"]],
+            "Banner Image": [...v["bannerPictures"]],
+            // id: v._id,
+          };
+        });
+
+        setArr(newArray);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [show]);
+
+  const toggle = (heading, val, arrInd) => {
+    setModal(!modal);
+    setModalHeading(heading);
+    setValue(val);
+    // setObj(object);
+    if (val === "inputFields") {
+      if (heading === "Product Image") {
+        setProductPictures(inputFields[arrInd]["Product Image"]);
+        setFileForProductInput(inputFields[arrInd]["Product Image"]);
+        // setProductPictures(inputViewProdPic);
+      } else if (heading === "Banner Image") {
+        setBannerPictures(inputFields[arrInd]["Banner Image"]);
+        setFileForBannerInput(inputFields[arrInd]["Banner Image"]);
+        // setBannerPictures(inputViewBannrPic);
+      }
+    }
+
+    if (val === "arr") {
+      if (heading === "Product Image") {
+        setProductPictures(arr[arrInd]["Product Image"]);
+        setFileForProduct(arr[arrInd]["Product Image"]);
+      } else if (heading === "Banner Image") {
+        setBannerPictures(arr[arrInd]["Banner Image"]);
+        setFileForBanner(arr[arrInd]["Banner Image"]);
+      }
+    }
+  };
 
   const addPotency = (passData) => {
     if (passData === "main") {
@@ -158,98 +209,208 @@ const AddProduct = () => {
       });
     }
   };
-  const headingChange = (e, index) => {
-    setMain((prev) => {
-      const heading = [...prev];
-      heading[index]["val"] = e.target.value;
-      return heading;
-    });
-  };
 
-  const changeHandler = (e, mainInd, childInd) => {
-    setMain((prevData) => {
-      const tableInfo = [...prevData];
-      tableInfo[mainInd]["potency"][childInd][e.target.name] = e.target.value;
-      return tableInfo;
-    });
+  const removePotency = (d, index, childInd) => {
+    if (d === "main") {
+      if (index > 0) {
+        const mainAfterRemove = main.filter((m, i) => i !== index);
+        setMain(mainAfterRemove);
+      }
+    } else {
+      if (childInd > 0) {
+        console.log(index, "hjcvghjs");
+        const mainAfterRemoveChild = main[index]["potency"].filter(
+          (c, i) => i !== childInd
+        );
+        setMain((prev) => {
+          const arr = [...prev];
+          arr[index]["potency"] = mainAfterRemoveChild;
+          return arr;
+        });
+      }
+    }
   };
 
   const changeProductInfo = (e) => {
     if (e.target.type === "text") {
       setProductInfo({ ...productInfo, [e.target.name]: e.target.value });
+      if (e.target.name === "shippingCharge") {
+        setProductInfo({
+          ...productInfo,
+          shippingDetails: {
+            ...productInfo.shippingDetails,
+            shippingCharge: e.target.value,
+          },
+        });
+      }
+    } else if (e.target.type === "checkbox") {
+      if (e.target.name === "status") {
+        setProductInfo({ ...productInfo, status: !productInfo?.status });
+      }
+      if (e.target.name === "freeShipping") {
+        setProductInfo({
+          ...productInfo,
+          shippingDetails: {
+            ...productInfo.shippingDetails,
+            freeShipping: !productInfo?.shippingDetails?.freeShipping,
+          },
+        });
+      }
     } else {
       if (e.target.name === "category") {
-        if (category.length > 0) {
-          category.map((cat) => {
-            if (cat.name === e.target.value) {
-              setDropDownData({
-                ...dropDownData,
-                categoryName: e.target.value,
-              });
-              setProductInfo({ ...productInfo, category: cat._id });
-            }
-          });
-          setCatName(e.target.value);
-          dispatch(productCategory(e.target.value));
-        }
-      } else if (e.target.name === "subCategory") {
-        if (subCategory?.length > 0) {
-          subCategory.map((subCat_item) => {
-            if (subCat_item.subCategoryName === e.target.value) {
-              setDropDownData({
-                ...dropDownData,
-                subCategoryName: e.target.value,
-              });
-              setProductInfo({
-                ...productInfo,
-                subCategory: subCat_item._id,
-              });
-            }
-          });
+        console.log(e.target.value, "valueTarget");
+        setCatName(e.target.value);
+        const catSingleObj = category.find(
+          (catObj) => catObj.name === e.target.value
+        );
+        setProductInfo({
+          ...productInfo,
+          category: { _id: catSingleObj?._id },
+          subCategory: { name: "" },
+          childCategory: { name: "" },
+        });
+        dispatch(prodCatUpdatePage(e.target.value));
+      }
 
-          dispatch(
-            productChildCat({ catName: catName, subCatName: e.target.value })
+      if (e.target.name === "subCategory") {
+        setSubCatName(e.target.value);
+        console.log(catName, "catName");
+
+        if (!catName) {
+          const catSingleObj = category.find(
+            (catObj) => catObj.name === productInfo?.category?.name
           );
-        }
-      } else if (e.target.name === "childCategory") {
-        if (childCategory.length > 0) {
-          childCategory.map((childCat_item) => {
-            if (childCat_item.childCategoryName === e.target.value) {
-              setDropDownData({
-                ...dropDownData,
-                childCategoryName: e.target.value,
-              });
-              setProductInfo({
-                ...productInfo,
-                childCategory: childCat_item._id,
-              });
-            }
+          const subCatSingleObj = catSingleObj?.subCategory?.find(
+            (subCatObj) => subCatObj.subCategoryName === e.target.value
+          );
+          setProductInfo({
+            ...productInfo,
+            subCategory: { _id: subCatSingleObj?._id },
+            childCategory: { _id: "" },
+          });
+        } else {
+          const catSingleObj = category.find(
+            (catObj) => catObj.name === catName
+          );
+          const subCatSingleObj = catSingleObj?.subCategory?.find(
+            (subCatObj) => subCatObj.subCategoryName === e.target.value
+          );
+          setProductInfo({
+            ...productInfo,
+            subCategory: { _id: subCatSingleObj?._id },
+            childCategory: { _id: "" },
           });
         }
-      } else if (e.target.name === "brand") {
-        if (brand.length > 0) {
-          brand.map((item) => {
-            if (item.name === e.target.value) {
-              setDropDownData({
-                ...dropDownData,
-                brandName: e.target.value,
-              });
-              setProductInfo({ ...productInfo, brand: item._id });
-            }
+
+        dispatch(childCatUpdatePage(e.target.value));
+      }
+
+      if (e.target.name === "childCategory") {
+        if (!subCatName) {
+          const subCatSingleObj = subCategory?.find(
+            (subCatObj) =>
+              subCatObj.subCategoryName === productInfo?.subCategory?.name
+          );
+          const childCatSingleObj = subCatSingleObj?.childCategory?.find(
+            (childCatObj) => childCatObj.childCategoryName === e.target.value
+          );
+          setProductInfo({
+            ...productInfo,
+            childCategory: { _id: childCatSingleObj?._id },
+          });
+        } else {
+          const subCatSingleObj = subCategory?.find(
+            (subCatObj) => subCatObj.subCategoryName === subCatName
+          );
+          const childCatSingleObj = subCatSingleObj?.childCategory?.find(
+            (childCatObj) => childCatObj.childCategoryName === e.target.value
+          );
+          setProductInfo({
+            ...productInfo,
+            childCategory: { _id: childCatSingleObj?._id },
           });
         }
       }
+    }
+
+    if (e.target.name === "brand") {
+      const brandSingleObj = brand?.find(
+        (brandObj) => brandObj.name === e.target.value
+      );
+      setProductInfo({ ...productInfo, brand: { _id: brandSingleObj?._id } });
     }
   };
 
   const submitProductInfo = (e) => {
     e.preventDefault();
-    const productData = {
-      info: productInfo,
-      others: JSON.stringify(main),
+    const productInfoUpdate = {
+      name: productInfo.name,
+      status: productInfo.status,
+      category: productInfo.category._id,
+      subCategory: !productInfo?.subCategory?._id
+        ? ""
+        : productInfo.subCategory._id,
+      childCategory: !productInfo?.childCategory?._id
+        ? ""
+        : productInfo?.childCategory?._id,
+      brand: productInfo?.brand?._id,
+      description: productInfo.description,
+      shippingCharge: productInfo.shippingDetails.shippingCharge,
+      freeShipping: productInfo.shippingDetails.freeShipping,
     };
 
-    dispatch(productInformation(productData));
+    console.log(productInfoUpdate, "productInfoUpdate");
+
+    dispatch(updateInfo({ productInfoUpdate, id }));
+  };
+
+  const headingChange = (e, ind, main_id) => {
+    console.log(main_id, "main_id");
+    if (main_id) {
+      setMain((prev) => {
+        const head = [...prev];
+        head[ind]["val"] = e.target.value;
+        head[ind]["_id"] = main_id;
+        return head;
+      });
+    } else {
+      setMain((prev) => {
+        const head = [...prev];
+        head[ind]["val"] = e.target.value;
+        return head;
+      });
+    }
+  };
+
+  const changeHandler = (e, mainInd, childInd, child_id) => {
+    if (child_id) {
+      setMain((prev) => {
+        const tableInfo = [...prev];
+        tableInfo[mainInd]["potency"][childInd][e.target.name] = e.target.value;
+        tableInfo[mainInd]["potency"][childInd]["_id"] = child_id;
+        return tableInfo;
+      });
+    } else {
+      setMain((prev) => {
+        const tableInfo = [...prev];
+        tableInfo[mainInd]["potency"][childInd][e.target.name] = e.target.value;
+        return tableInfo;
+      });
+    }
+  };
+
+  const savePotencyData = () => {
+    console.log("saved potency");
+    console.log(main, "mainPotency");
+    const potencyData = {
+      others: main,
+      prodId: id,
+    };
+    console.log(potencyData, "potencyData");
+    dispatch(updatePotency(potencyData)).then((res) => {
+      console.log(res);
+      setShow(!show);
+    });
   };
 
   const createTitle = () => {
@@ -263,7 +424,11 @@ const AddProduct = () => {
     if (title.includes(createTitleName)) {
       alert("already exist");
     } else {
-      setTitle([...title, createTitleName]);
+      const newArray = [...title];
+      const insertIndex = newArray.length - 2;
+      newArray.splice(insertIndex, 0, createTitleName);
+
+      setTitle(newArray);
     }
     setCreateTitleName("");
   };
@@ -279,6 +444,7 @@ const AddProduct = () => {
       alert("already exist");
     } else {
       const newModArr = [...inputFields];
+      console.log(newModArr, "newModArr");
       const inInd = newModArr.length - 2;
       newModArr.splice(inInd, 0, { [titleName]: "" });
       setInputFields(newModArr);
@@ -301,93 +467,52 @@ const AddProduct = () => {
     }
   };
 
+  const addField = () => {
+    // inputFields.pop();
+    const combinedData = inputFields.reduce(
+      (acc, obj) => ({ ...acc, ...obj }),
+      {}
+    );
+    console.log(combinedData, "combinedData");
+    const newObj = {};
+    for (let key in combinedData) {
+      if (key !== "id") {
+        newObj[key] = combinedData[key];
+      }
+    }
+    console.log(newObj, "newObj");
+    // setArr([...arr, combinedData]);
+    setArr([...arr, newObj]);
+  };
+
   const chngeFirstIndexData = (e, index) => {
+    console.log(index, "iiiiInput");
+    console.log(e.target.name, "namme");
     inputFields[index][e.target.name] = e.target.value;
   };
 
   const changeOtherIndexData = (e, index) => {
-    // console.log(index, "iiii");
+    console.log(index, "iiiiARR");
     arr[index][e.target.name] = e.target.value;
-  };
-
-  const saveVariantData = (heading, val, objIndex) => {
-    setModalHeading(heading);
-    setValue(val);
-    console.log(val, "val005");
-    if (val === "inputFields") {
-      const obj = inputFields
-        .slice(0, inputFields.length - 2)
-        .reduce((acc, obj) => ({ ...acc, ...obj }), {});
-      console.log(obj, "obj");
-      dispatch(
-        priceVarInfo({ info: obj, productId: "66839dbf0fead0f56552fe34" })
-      ).then((res) => {
-        console.log(res, "res666");
-        if (res?.payload?.message === "New variant added.") {
-          setShowForInput(true);
-        }
-      });
-    }
-    if (val === "arr") {
-      console.log(objIndex, "objIndex");
-      const newObj = { ...arr[objIndex] };
-      delete newObj["Save"];
-      delete newObj["Upload Image"];
-      console.log(newObj, "arrDetail");
-      dispatch(
-        priceVarInfo({ info: newObj, productId: "66839dbf0fead0f56552fe34" })
-      );
-
-      const newShowForArr = [...showForArr];
-      newShowForArr[objIndex] = true;
-      console.log(newShowForArr, "newShowForArr");
-      setShowForArr(newShowForArr);
-    }
-  };
-
-  const uploadImageBtn = (heading, val, index) => {
-    if (val === "inputFields") {
-      const combined = inputFields.reduce(
-        (acc, obj) => ({ ...acc, ...obj }),
-        {}
-      );
-      console.log(combined, "combined");
-      const inputFieldObj = allVariant.find(
-        (x) => x.variant.Price === combined.Price
-      );
-      console.log(inputFieldObj, "inputFieldObj");
-      setVariantId(inputFieldObj._id);
-      dispatch(getImages(inputFieldObj._id));
-    } else if (val === "arr") {
-      const targetObj = allVariant.find(
-        (x) => x.variant.Price === arr[index].Price
-      );
-      console.log(targetObj, "targetObj");
-      setVariantId(targetObj._id);
-      dispatch(getImages(targetObj._id));
-    }
-
-    if (heading === "Upload Image") {
-      setTabs("images");
-    }
-  };
-
-  const toggle = () => {
-    setModal(!modal);
   };
 
   const handleImageChange = (e, modalHeading) => {
     if (value === "inputFields") {
       if (modalHeading === "Product Image") {
-        const filesForProduct = Array.from(e.target.files);
-        setFileForProductInput(filesForProduct);
-        const newImages = filesForProduct.map((file) =>
+        const filesForProductInp = Array.from(e.target.files);
+        console.log(filesForProductInp, "filesForProductInp");
+        // setFileForProductInput(filesForProduct);
+        // setFileForProductInput([...productPictures, ...fileForProduct]);
+        const allFilesProduct = fileForProductInput.concat(filesForProductInp);
+        setFileForProductInput(allFilesProduct);
+        const newImages = filesForProductInp.map((file) =>
           URL.createObjectURL(file)
         );
         setProductPictures((prevImages) => [...prevImages, ...newImages]);
       } else if (modalHeading === "Banner Image") {
         const filesForBanner = Array.from(e.target.files);
-        setFileForBannerInput(filesForBanner);
+        const allFilesBanner = fileForBannerInput.concat(filesForBanner);
+        setFileForBannerInput(allFilesBanner);
         const newImages = filesForBanner.map((file) =>
           URL.createObjectURL(file)
         );
@@ -398,14 +523,17 @@ const AddProduct = () => {
     if (value === "arr") {
       if (modalHeading === "Product Image") {
         const filesForProduct = Array.from(e.target.files);
-        setFileForProduct(filesForProduct);
+        console.log(filesForProduct, "filesForProduct");
+        const allFilesProductOther = fileForProduct.concat(filesForProduct);
+        setFileForProduct(allFilesProductOther);
         const newImages = filesForProduct.map((file) =>
           URL.createObjectURL(file)
         );
         setProductPictures((prevImages) => [...prevImages, ...newImages]);
       } else if (modalHeading === "Banner Image") {
         const filesForBanner = Array.from(e.target.files);
-        setFileForBanner(filesForBanner);
+        const allFilesBannerOther = fileForBanner.concat(filesForBanner);
+        setFileForBanner(allFilesBannerOther);
         const newImages = filesForBanner.map((file) =>
           URL.createObjectURL(file)
         );
@@ -414,217 +542,129 @@ const AddProduct = () => {
     }
   };
 
-  // const modalInput = (e) => {
-  //   if (e.target.type === "text") {
-  //     setModalData({ ...modalData, [e.target.name]: e.target.value });
-  //   } else if (e.target.type === "file") {
-  //     setProductImage(e.target.files[0]);
-  //     setModalData({ ...modalData, productImage: e.target.files[0] });
-  //   }
-  // };
+  const removePoductImage = (index) => {
+    const updatedProductImage = productPictures.filter((p, i) => i !== index);
+    setProductPictures(updatedProductImage);
 
-  // const modalImage = (e) => {
-  //   console.log(e.target.files[0], "hhh");
-  //   setProductImage(e.target.files[0]);
-  //   setModalData({ ...modalData, productImage: e.target.files[0] });
-  // };
+    //FOR inputField
+    const updatedProductFile = fileForProductInput.filter(
+      (f, i) => i !== index
+    );
+    setFileForProductInput(updatedProductFile);
+
+    //FOR arr
+    const updatedFile = fileForProduct.filter((p, i) => i !== index);
+    setFileForProduct(updatedFile);
+  };
+
+  const removeBannerImage = (index) => {
+    const updatedBannerImage = bannerPictures.filter((b, i) => i !== index);
+    setBannerPictures(updatedBannerImage);
+
+    //FOR inputField
+    const updatedBannerFile = fileForBannerInput.filter((b, i) => i !== index);
+    setFileForBannerInput(updatedBannerFile);
+
+    //For arr
+    const updatedFile = fileForBanner.filter((b, i) => i !== index);
+    setFileForBanner(updatedFile);
+  };
 
   const saveImages = () => {
-    setInputFields((prevField) => {
-      const updatedField = [...prevField];
-      const indexForProductImage = updatedField.findIndex((obj) =>
-        obj.hasOwnProperty("Product Image")
-      );
-      const indexForBannerImage = updatedField.findIndex((obj) =>
-        obj.hasOwnProperty("Banner Image")
-      );
-      if (modalHeading === "Product Image") {
-        if (fileForProductInput.length > 3) {
-          alert("Product image not more than 3");
-        } else {
-          updatedField[indexForProductImage]["Product Image"] =
-            fileForProductInput;
+    console.log(value, "900");
+    if (value === "inputFields") {
+      setInputFields((prevField) => {
+        const updatedField = [...prevField];
+        const indexForProductImage = updatedField.findIndex((obj) =>
+          obj.hasOwnProperty("Product Image")
+        );
+        // console.log(indexForProductImage, "indexForProductImage");
+        const indexForBannerImage = updatedField.findIndex((obj) =>
+          obj.hasOwnProperty("Banner Image")
+        );
+        if (modalHeading === "Product Image") {
+          if (fileForProductInput.length > 3) {
+            alert("Product image not more than 3");
+          } else {
+            console.log(fileForProductInput, "fileForProductInput");
+            updatedField[indexForProductImage]["Product Image"] =
+              fileForProductInput;
+            return updatedField;
+          }
           return updatedField;
         }
-        return updatedField;
-      }
-
-      if (modalHeading === "Banner Image") {
-        if (fileForBannerInput.length > 4) {
-          alert("Banner image not more than 4");
-        } else {
-          updatedField[indexForBannerImage]["Banner Image"] =
-            fileForBannerInput;
+        if (modalHeading === "Banner Image") {
+          console.log("hello world");
+          console.log(fileForBannerInput, "0998");
+          console.log(indexForBannerImage, "indexForBannerImage");
+          if (fileForBannerInput.length > 4) {
+            alert("Banner image not more than 4");
+          } else {
+            updatedField[indexForBannerImage]["Banner Image"] =
+              fileForBannerInput;
+            return updatedField;
+          }
           return updatedField;
         }
-        return updatedField;
-      }
+      });
+    }
 
-      ////////////Alternate////////////////////////////////////////
-      // updatedField[indexForProductImage]["Product Image"] = fileForProductInput;
-      // updatedField[indexForBannerImage]["Banner Image"] = fileForBannerInput;
-      // return updatedField;
-    });
-
-    const otherFields = arr.map((field, index) => {
-      if (index === indexOfArr && modalHeading === "Product Image") {
-        if (fileForProduct.length > 3) {
-          alert("Product image not more than 3");
-        } else {
-          return {
-            ...field,
-            "Product Image": fileForProduct,
-            // "Banner Image": fileForBanner,
-          };
+    if (value === "arr") {
+      const otherFields = arr.map((field, index) => {
+        // console.log(indexOfArr, index, "indexOfArr");
+        if (index === indexOfArr && modalHeading === "Product Image") {
+          if (fileForProduct.length > 3) {
+            alert("Product image not more than 3");
+          } else {
+            return {
+              ...field,
+              "Product Image": fileForProduct,
+              // "Banner Image": fileForBanner,
+            };
+          }
         }
-      }
-      if (index === indexOfArr && modalHeading === "Banner Image") {
-        if (fileForBanner.length > 4) {
-          alert("Banner image not more than 4");
-        } else {
-          return {
-            ...field,
-            // "Product Image": fileForProduct,
-            "Banner Image": fileForBanner,
-          };
+        if (index === indexOfArr && modalHeading === "Banner Image") {
+          if (fileForBanner.length > 4) {
+            alert("Banner image not more than 4");
+          } else {
+            return {
+              ...field,
+              // "Product Image": fileForProduct,
+              "Banner Image": fileForBanner,
+            };
+          }
         }
-      }
-      return field;
-    });
+        return field;
+      });
 
-    // const otherFields = arr.map((field, index) => {
-    //   if (index === indexOfArr && modalHeading === "Product Image") {
-    //     return {
-    //       ...field,
-    //       "Product Image": fileForProduct,
-    //       // "Banner Image": fileForBanner,
-    //     };
-    //   }
-    //   if (index === indexOfArr && modalHeading === "Banner Image") {
-    //     return {
-    //       ...field,
-    //       // "Product Image": fileForProduct,
-    //       "Banner Image": fileForBanner,
-    //     };
-    //   }
-    //   return field;
-    // });
-    setArr(otherFields);
+      setArr(otherFields);
+    }
 
     toggle();
     setProductPictures([]);
     setBannerPictures([]);
+    setFileForProductInput([]);
+    setFileForBannerInput([]);
     setFileForProduct([]);
     setFileForBanner([]);
   };
 
-  // const saveModalData = () => {
-  //   let finalData = new FormData();
-  //   for (let key in modalData) {
-  //     finalData.append(key, modalData[key]);
-  //   }
-  //   console.log(modalData, "modalData");
-  //   console.log(finalData, "finalData");
-  //   dispatch(saveDataWithImage({ finalData, variantId }));
-  //   toggle();
-  // };
-
-  // const modalCancel = () => {
-  //   toggle();
-  //   setProductPictures([]);
-  //   setBannerPictures([]);
-  //   setFileForProduct([]);
-  //   setFileForBanner([]);
-  // };
-
-  const addField = () => {
-    const combinedData = inputFields.reduce(
-      (acc, obj) => ({ ...acc, ...obj }),
-      {}
-    );
-    setArr([...arr, combinedData]);
-
-    // if (arr.length === 0) {
-    //   setArr([...arr, combinedData]);
-    // }
-
-    // if (arr.length > 0) {
-    //   setArr([...arr, arr[arr.length - 1]]);
-    // }
+  const modalCancel = () => {
+    toggle();
   };
 
   const submitPriceVariant = (e) => {
     e.preventDefault();
+    setIsEdit(true);
     const ArrayOfdata = [
       inputFields.reduce((acc, obj) => ({ ...acc, ...obj }), {}),
     ].concat(arr);
     console.log(ArrayOfdata, "ArrayOfdata");
 
     ArrayOfdata.forEach((dataObj) => {
-      // let formData = new FormData();
-      // // Loop through each key in the object
-      // for (let key in dataObj) {
-      //   if (dataObj.hasOwnProperty(key)) {
-      //     // Check if the value is a file
-      //     if (dataObj[key] instanceof File) {
-      //       // Append the file to the FormData object
-      //       formData.append(key, dataObj[key], dataObj[key].name);
-      //     } else {
-      //       // Append other types of data (e.g., text)
-      //       formData.append(key, dataObj[key]);
-      //     }
-      //   }
-      // }
       // const formData = dataObj;
       // dispatch(priceVarInfo({ formData, productId }));
-      // dispatch(
-      //   priceVarInfo({ formData, productId: "6671804fd2b7492e346c16b4" })
-      // );
     });
-  };
-
-  const func1 = () => {
-    let clsname = "";
-    if (!showForInput) {
-      clsname = "edit";
-    } else {
-      clsname = "disabled_btn";
-    }
-    console.log(clsname, "clsname");
-    return clsname;
-  };
-
-  const func2 = () => {
-    let clsname = "";
-    if (!showForInput) {
-      clsname = "disabled_btn";
-    } else {
-      clsname = "edit";
-    }
-    console.log(clsname, "clsname");
-    return clsname;
-  };
-
-  const func3 = (objIndex) => {
-    let clsname = "";
-    if (!showForArr[objIndex]) {
-      clsname = "edit";
-    } else {
-      clsname = "disabled_btn";
-    }
-    console.log(clsname, "clsname");
-    return clsname;
-  };
-
-  const func4 = (objIndex) => {
-    let clsname = "";
-    if (!showForArr[objIndex]) {
-      clsname = "disabled_btn";
-    } else {
-      clsname = "edit";
-    }
-    console.log(clsname, "clsname");
-    return clsname;
   };
 
   return (
@@ -632,11 +672,130 @@ const AddProduct = () => {
       <main>
         <section className="total_parent_element">
           <>
-            <ImageModal
-              modal={modal}
-              setModal={setModal}
-              variantId={variantId}
-            />
+            <Modal
+              className="prdct_mdl"
+              isOpen={modal}
+              toggle={toggle}
+              centered
+              fade
+              size="lg"
+              backdrop
+            >
+              <ModalHeader toggle={toggle}>
+                {`${
+                  modalHeading === "Product Image"
+                    ? " Upload Product Images (Max 3)"
+                    : "Upload Banner Images (Max 4)"
+                }`}
+              </ModalHeader>
+              <ModalBody>
+                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                  {modalHeading === "Product Image" &&
+                    productPictures.length > 0 &&
+                    productPictures.map((image, index) => {
+                      return (
+                        <div className="projImg" key={index}>
+                          <img
+                            src={image}
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              objectFit: "cover",
+                              margin: "10px",
+                            }}
+                            alt=""
+                          />
+                          {isEdit && (
+                            <button
+                              className="times"
+                              onClick={() => removePoductImage(index)}
+                              style={{
+                                position: "absolute",
+                                top: "5px",
+                                right: "5px",
+                                background: "red",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faXmark} />
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  {modalHeading === "Banner Image" &&
+                    bannerPictures.length > 0 &&
+                    bannerPictures.map((image, index) => {
+                      return (
+                        <div className="projImg" key={index}>
+                          <img
+                            src={image}
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              objectFit: "cover",
+                              margin: "10px",
+                            }}
+                            alt=""
+                          />
+                          {isEdit && (
+                            <button
+                              className="times"
+                              onClick={() => removeBannerImage(index)}
+                              style={{
+                                position: "absolute",
+                                top: "5px",
+                                right: "5px",
+                                background: "red",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faXmark} />
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+
+                {isEdit && (
+                  <input
+                    type="file"
+                    name="Product Image"
+                    accept="image/*"
+                    onChange={(e) => handleImageChange(e, modalHeading)}
+                    multiple
+                  />
+                )}
+              </ModalBody>
+              <ModalFooter>
+                {isEdit && (
+                  <Button
+                    color="primary"
+                    className="modalBtn"
+                    // onClick={saveImages(obj, modalHeading)}
+                    onClick={saveImages}
+                  >
+                    Save Images
+                  </Button>
+                )}{" "}
+                {isEdit && (
+                  <Button
+                    color="secondary"
+                    className="modalBtn"
+                    onClick={modalCancel}
+                  >
+                    Cancel
+                  </Button>
+                )}
+              </ModalFooter>
+            </Modal>
           </>
 
           <div className="left_parent_element">
@@ -723,17 +882,33 @@ const AddProduct = () => {
 
                 {tabs === "product_info" && (
                   <div id="product_info" className="tb_c">
-                    <form onSubmit={submitProductInfo}>
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        if (!isEdit) {
+                          submitProductInfo(e);
+                        }
+                      }}
+                    >
                       <div className="p_info">
                         <div className="e-edit">
-                          <button
-                            type="submit"
-                            href="javascript:void(0);"
-                            className="edit"
-                            // onClick={submitProductInfo}
-                          >
-                            Save
-                          </button>
+                          {isEdit ? (
+                            <button
+                              type="submit"
+                              className="edit"
+                              onClick={() => setIsEdit(false)}
+                            >
+                              Save
+                            </button>
+                          ) : (
+                            <button
+                              type="submit"
+                              className="edit"
+                              onClick={() => setIsEdit(true)}
+                            >
+                              Edit
+                            </button>
+                          )}
                         </div>
                       </div>
                       <div className="total_p_rows">
@@ -742,12 +917,13 @@ const AddProduct = () => {
                           <div className="p_total" id="table_body1"></div>
                           <div className="p_total" id="table_body2">
                             <div className="p_c_lft">
-                              <label htmlFor="productName">Product Name</label>
+                              <label htmlFor="name">Product Name</label>
                               <input
+                                disabled={!isEdit}
                                 required
-                                id="productName"
+                                id="name"
                                 name="name"
-                                value={productInfo.name}
+                                value={productInfo?.name}
                                 type="text"
                                 placeholder="10Bandz"
                                 onChange={(e) => changeProductInfo(e)}
@@ -759,17 +935,15 @@ const AddProduct = () => {
                             <div className="p_c_lft">
                               <label htmlFor="status">Status</label>
                               <div className="form-check form-switch">
-                                <label class="switch">
+                                <label className="switch">
                                   <input
+                                    disabled={!isEdit}
+                                    name="status"
                                     type="checkbox"
-                                    onChange={() =>
-                                      setProductInfo({
-                                        ...productInfo,
-                                        status: !productInfo.status,
-                                      })
-                                    }
+                                    checked={productInfo?.status}
+                                    onChange={(e) => changeProductInfo(e)}
                                   />
-                                  <span class="slider round"></span>
+                                  <span className="slider round"></span>
                                 </label>
                               </div>
                             </div>
@@ -778,18 +952,19 @@ const AddProduct = () => {
                             <div className="p_c_lft">
                               <label>Category</label>
                               <select
+                                disabled={!isEdit}
                                 required
                                 name="category"
                                 id="category"
-                                value={dropDownData.categoryName}
+                                value={productInfo?.category?.name}
                                 onChange={(e) => changeProductInfo(e)}
                               >
                                 <option value="">Select Category</option>
-                                {category.length > 0 &&
+                                {category &&
                                   category.map((cat, i) => {
                                     return (
-                                      <option value={cat?.name} key={i}>
-                                        {cat?.name}
+                                      <option value={cat.name} key={i}>
+                                        {cat.name}
                                       </option>
                                     );
                                   })}
@@ -800,20 +975,22 @@ const AddProduct = () => {
                             <div className="p_c_lft">
                               <label>Sub Category</label>
                               <select
+                                disabled={!isEdit}
                                 name="subCategory"
                                 id="subCategory"
-                                value={dropDownData.subCategoryName}
+                                value={productInfo?.subCategory?.name}
                                 onChange={(e) => changeProductInfo(e)}
                               >
                                 <option value="">Select sub category</option>
-                                {subCategory?.length > 0 &&
-                                  subCategory.map((subCatItem) => {
+
+                                {subCategory &&
+                                  subCategory.map((subCat, i) => {
                                     return (
                                       <option
-                                        value={subCatItem.subCategoryName}
-                                        key={subCatItem._id}
+                                        value={subCat.subCategoryName}
+                                        key={i}
                                       >
-                                        {subCatItem.subCategoryName}
+                                        {subCat.subCategoryName}
                                       </option>
                                     );
                                   })}
@@ -824,13 +1001,13 @@ const AddProduct = () => {
                             <div className="p_c_lft">
                               <label>Child Category</label>
                               <select
+                                disabled={!isEdit}
                                 name="childCategory"
                                 id="childCategory"
-                                value={dropDownData.childCategoryName}
+                                value={productInfo?.childCategory?.name}
                                 onChange={(e) => changeProductInfo(e)}
                               >
                                 <option value="">Select child category</option>
-
                                 {childCategory?.length > 0 &&
                                   childCategory.map((childCatItem) => {
                                     return (
@@ -850,20 +1027,19 @@ const AddProduct = () => {
                             <div className="p_c_lft">
                               <label>Brand</label>
                               <select
+                                required
+                                disabled={!isEdit}
                                 name="brand"
                                 id="brand"
-                                value={dropDownData.brandName}
+                                value={productInfo?.brand?.name}
                                 onChange={(e) => changeProductInfo(e)}
                               >
                                 <option value="">Select brand</option>
-                                {brand.length > 0 &&
-                                  brand.map((brandItem) => {
+                                {brand &&
+                                  brand.map((b, i) => {
                                     return (
-                                      <option
-                                        value={brandItem.name}
-                                        key={brandItem._id}
-                                      >
-                                        {brandItem.name}
+                                      <option value={b.name} key={i}>
+                                        {b.name}
                                       </option>
                                     );
                                   })}
@@ -876,9 +1052,11 @@ const AddProduct = () => {
                               <label htmlFor="description">Description</label>
                               <input
                                 required
+                                disabled={!isEdit}
                                 id="description"
                                 name="description"
                                 type="text"
+                                value={productInfo?.description}
                                 placeholder="Introducing 10 Bandz"
                                 onChange={(e) => changeProductInfo(e)}
                               />
@@ -891,8 +1069,12 @@ const AddProduct = () => {
                               </label>
                               <input
                                 required
+                                disabled={!isEdit}
                                 id="shippingCharge"
                                 name="shippingCharge"
+                                value={
+                                  productInfo?.shippingDetails?.shippingCharge
+                                }
                                 type="text"
                                 placeholder="10"
                                 onChange={(e) => changeProductInfo(e)}
@@ -906,101 +1088,167 @@ const AddProduct = () => {
                               </label>
 
                               <div className="form-check form-switch">
-                                {/* <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  role="switch"
-                                  id="flexSwitchCheckChecked"
-                                  onChange={() =>
-                                    setProductInfo({
-                                      ...productInfo,
-                                      freeShipping: !productInfo.freeShipping,
-                                    })
-                                  }
-                                  checked={productInfo.freeShipping}
-                                /> */}
                                 <label class="switch">
                                   <input
+                                    disabled={!isEdit}
+                                    name="freeShipping"
                                     type="checkbox"
-                                    onChange={() =>
-                                      setProductInfo({
-                                        ...productInfo,
-                                        freeShipping: !productInfo.freeShipping,
-                                      })
+                                    onChange={(e) => changeProductInfo(e)}
+                                    checked={
+                                      productInfo?.shippingDetails?.freeShipping
                                     }
                                   />
-                                  <span class="slider round"></span>
+                                  <span className="slider round"></span>
                                 </label>
                               </div>
                             </div>
                           </div>
                         </div>
-                        {/* potency */}
 
+                        {/* potency */}
                         <div className="main_p_inform" id="tbDiv001">
-                          {main.map((v, ind) => {
+                          <div className="e-edit">
+                            {isEditForPotency ? (
+                              <button
+                                type="button"
+                                className="edit"
+                                onClick={(e) => {
+                                  setIsEditForPotency(false);
+                                  savePotencyData(e);
+                                }}
+                              >
+                                Save
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                className="edit"
+                                onClick={() => {
+                                  setIsEditForPotency(true);
+                                }}
+                              >
+                                Edit
+                              </button>
+                            )}
+                          </div>
+                          {main?.map((v, ind) => {
                             return (
                               <div className="p_inform" key={ind}>
                                 <div className="p_total p_hdng" id="table_body">
-                                  <div className="p_c_lft">
+                                  <div className="p_c_lft ext">
                                     <input
+                                      disabled={!isEditForPotency}
                                       required
                                       type="text"
                                       placeholder="Potency"
+                                      value={v.val}
                                       className="table_body01"
-                                      onChange={(e) => headingChange(e, ind)}
+                                      onChange={(e) =>
+                                        headingChange(e, ind, v._id)
+                                      }
                                     />
-                                    <span
-                                      className="add_btn"
-                                      onClick={() => addPotency("main")}
-                                    >
-                                      <div className="click_me" />
-                                      <FontAwesomeIcon icon={faPlus} />
-                                    </span>
+                                    <div className="otr_ttl_adbtn">
+                                      <span
+                                        className="add_btn"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                          if (isEditForPotency === true) {
+                                            addPotency("main");
+                                          }
+                                        }}
+                                      >
+                                        <div className="click_me" />
+                                        <FontAwesomeIcon
+                                          icon={faPlus}
+                                          size="xl"
+                                        />
+                                      </span>
+                                      <span
+                                        className="add_btn"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                          if (isEditForPotency === true) {
+                                            removePotency("main", ind);
+                                          }
+                                        }}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faMinus}
+                                          size="xl"
+                                        />
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
 
                                 <div className="p_rows">
-                                  <div
-                                    className="p_total"
-                                    id="table_body29"
-                                    // ref={tableRef}
-                                  >
-                                    {v.potency.map((c, ci) => {
+                                  <div className="p_total" id="table_body29">
+                                    {v.potency?.map((c, ci) => {
                                       return (
-                                        <div className="p_c_lft_dup" key={ci}>
+                                        <div
+                                          className="p_c_lft_dup ext"
+                                          key={ci}
+                                        >
                                           <input
-                                            // ref={keyRef}
                                             required
+                                            disabled={!isEditForPotency}
                                             name="key"
                                             type="text"
                                             className="addMain"
                                             placeholder="Total THC (mg)"
+                                            value={c.key}
                                             onChange={(e) =>
-                                              changeHandler(e, ind, ci)
+                                              changeHandler(e, ind, ci, c._id)
                                             }
                                           />
                                           <input
                                             required
-                                            // ref={valRef}
+                                            disabled={!isEditForPotency}
                                             name="value"
                                             type="text"
                                             className="addPrefer"
+                                            value={c.value}
                                             placeholder="0.00mg"
                                             onChange={(e) =>
-                                              changeHandler(e, ind, ci)
+                                              changeHandler(e, ind, ci, c._id)
                                             }
                                           />
-                                          <span
-                                            className="add_btn"
-                                            onClick={() => addPotency(ind)}
-                                            // onClick="create_tr('table_body29')"
-                                          >
-                                            <FontAwesomeIcon
-                                              icon={faPlus}
-                                              size="2xl"
-                                            />
-                                          </span>
+                                          <div className="otr_ttl_adbtn">
+                                            <span
+                                              className="add_btn"
+                                              style={{ cursor: "pointer" }}
+                                              onClick={() => {
+                                                if (isEditForPotency === true) {
+                                                  addPotency(ind);
+                                                }
+                                              }}
+                                            >
+                                              <FontAwesomeIcon
+                                                icon={faPlus}
+                                                size="xl"
+                                              />
+                                            </span>
+                                            <span
+                                              className="add_btn"
+                                              style={{ cursor: "pointer" }}
+                                            >
+                                              <FontAwesomeIcon
+                                                icon={faMinus}
+                                                size="xl"
+                                                onClick={() => {
+                                                  if (
+                                                    isEditForPotency === true
+                                                  ) {
+                                                    removePotency(
+                                                      "other",
+                                                      ind,
+                                                      ci
+                                                    );
+                                                  }
+                                                }}
+                                              />
+                                            </span>
+                                          </div>
                                         </div>
                                       );
                                     })}
@@ -1031,7 +1279,11 @@ const AddProduct = () => {
                                 <li
                                   className="litext"
                                   value={t}
-                                  onClick={() => getTitle(t)}
+                                  onClick={() => {
+                                    if (isEdit === true) {
+                                      getTitle(t);
+                                    }
+                                  }}
                                 >
                                   {t}
                                 </li>
@@ -1047,7 +1299,11 @@ const AddProduct = () => {
                         <button
                           type=""
                           className="add_title tab_lst_add"
-                          onClick={createTitle}
+                          onClick={() => {
+                            if (isEdit === true) {
+                              createTitle();
+                            }
+                          }}
                         >
                           <FontAwesomeIcon icon={faPlus} />
                         </button>
@@ -1094,75 +1350,81 @@ const AddProduct = () => {
                                 {/* {arr.length > 0 ? arr.map} */}
                                 {inputFields &&
                                   inputFields.map((input, i) => {
+                                    console.log(
+                                      Object.keys(input)[0],
+                                      "bbvhhj"
+                                    );
                                     return (
-                                      <div className="input-field-outr" key={i}>
-                                        {Object.keys(input)[0] !== "Save" &&
-                                          Object.keys(input)[0] !==
-                                            "Upload Image" && (
-                                            <span>{Object.keys(input)[0]}</span>
-                                          )}
-
-                                        {Object.keys(input)[0] === "Save" ||
-                                        Object.keys(input)[0] ===
-                                          "Upload Image" ? (
-                                          <button
-                                            disabled={
-                                              Object.keys(input)[0] === "Save"
-                                                ? showForInput
-                                                : !showForInput
-                                            }
-                                            type="button"
-                                            className={
-                                              Object.keys(input)[0] === "Save"
-                                                ? func1()
-                                                : func2()
-                                            }
-                                            // className="disabled_btn"
-                                            // className="edit"
-                                            onClick={() => {
-                                              if (
-                                                Object.keys(input)[0] === "Save"
-                                              ) {
-                                                saveVariantData(
-                                                  Object.keys(input)[0],
-                                                  "inputFields"
-                                                );
-                                              }
-                                              if (
-                                                Object.keys(input)[0] ===
-                                                "Upload Image"
-                                              ) {
-                                                uploadImageBtn(
-                                                  Object.keys(input)[0],
-                                                  "inputFields"
-                                                );
-                                              }
-                                            }}
-                                          >
-                                            {Object.keys(input)[0] === "Save"
-                                              ? "Save"
-                                              : "Upload Image"}
-                                          </button>
-                                        ) : (
-                                          <input
-                                            required
-                                            name={Object.keys(input)[0]}
-                                            type="text"
-                                            defaultValue={
-                                              input[Object.keys(input)[0]]
-                                            }
-                                            onChange={(e) =>
-                                              chngeFirstIndexData(e, i)
-                                            }
-                                          />
+                                      <>
+                                        {console.log(
+                                          input.hasOwnProperty("id"),
+                                          "ugyug"
                                         )}
-                                      </div>
+                                        {!input.hasOwnProperty("id") && (
+                                          <div
+                                            className="input-field-outr"
+                                            key={i}
+                                          >
+                                            <span>{Object.keys(input)[0]}</span>
+                                            {Object.keys(input)[0] ===
+                                              "Product Image" ||
+                                            Object.keys(input)[0] ===
+                                              "Banner Image" ? (
+                                              <button
+                                                type="button"
+                                                className="edit"
+                                                onClick={() => {
+                                                  toggle(
+                                                    Object.keys(input)[0],
+                                                    "inputFields",
+                                                    i
+                                                  );
+                                                }}
+                                              >
+                                                {isEdit ? "Upload" : "View"}{" "}
+                                                {isEdit && (
+                                                  <FontAwesomeIcon
+                                                    icon={faCloudArrowUp}
+                                                    // size="xl"
+                                                  />
+                                                )}{" "}
+                                                {Object.keys(input)[0] ===
+                                                  "Product Image" &&
+                                                  input["Product Image"].length}
+                                                {Object.keys(input)[0] ===
+                                                  "Banner Image" &&
+                                                  input["Banner Image"].length}
+                                              </button>
+                                            ) : (
+                                              <input
+                                                // required
+                                                disabled={!isEdit}
+                                                name={Object.keys(input)[0]}
+                                                type="text"
+                                                // value={
+                                                //   input[Object.keys(input)[0]]
+                                                // }
+                                                defaultValue={
+                                                  input[Object.keys(input)[0]]
+                                                }
+                                                onChange={(e) =>
+                                                  chngeFirstIndexData(e, i)
+                                                }
+                                              />
+                                            )}
+                                          </div>
+                                        )}
+                                      </>
                                     );
                                   })}
                                 <button
                                   type="button"
                                   className="add_row tab_lst_add"
-                                  onClick={addField}
+                                  onClick={() => {
+                                    if (isEdit === true) {
+                                      addField();
+                                    }
+                                  }}
                                 >
                                   <FontAwesomeIcon icon={faPlus} />
                                 </button>
@@ -1176,72 +1438,72 @@ const AddProduct = () => {
                                     <div className="all_title">
                                       {arrFromObj.map((key, keyIndex) => {
                                         return (
-                                          <div
-                                            className="input-field-outr"
-                                            key={objIndex}
-                                          >
-                                            {key === "Save" ||
-                                            key === "Upload Image" ? (
-                                              <button
-                                                disabled={
-                                                  key === "Save"
-                                                    ? showForArr[objIndex]
-                                                    : !showForArr[objIndex]
-                                                }
-                                                type="button"
-                                                href="javascript:void(0);"
-                                                className={
-                                                  key === "Save"
-                                                    ? func3(objIndex)
-                                                    : func4(objIndex)
-                                                }
-                                                // className="edit"
-                                                onClick={() => {
-                                                  if (key === "Save") {
-                                                    saveVariantData(
-                                                      key,
-                                                      "arr",
-                                                      objIndex
-                                                    );
-                                                    setIndexOfArr(objIndex);
-                                                  }
-                                                  if (key === "Upload Image") {
-                                                    uploadImageBtn(
-                                                      key,
-                                                      "arr",
-                                                      objIndex
-                                                    );
-                                                    setIndexOfArr(objIndex);
-                                                  }
-                                                }}
+                                          <>
+                                            {key !== "id" && (
+                                              <div
+                                                className="input-field-outr"
+                                                key={objIndex}
                                               >
-                                                {key === "Save"
-                                                  ? "Save"
-                                                  : "Upload Image"}
-                                              </button>
-                                            ) : (
-                                              <input
-                                                required
-                                                type="text"
-                                                name={key}
-                                                defaultValue={obj[key]}
-                                                key={keyIndex}
-                                                onChange={(e) =>
-                                                  changeOtherIndexData(
-                                                    e,
-                                                    objIndex
-                                                  )
-                                                }
-                                              />
+                                                {key === "Product Image" ||
+                                                key === "Banner Image" ? (
+                                                  <button
+                                                    type="button"
+                                                    href="javascript:void(0);"
+                                                    className="edit"
+                                                    onClick={() => {
+                                                      toggle(
+                                                        key,
+                                                        "arr",
+                                                        objIndex
+                                                      );
+                                                      setIndexOfArr(objIndex);
+                                                      // showImageNum(obj, key);
+                                                    }}
+                                                  >
+                                                    {isEdit ? "Upload" : "View"}{" "}
+                                                    {isEdit && (
+                                                      <FontAwesomeIcon
+                                                        icon={faCloudArrowUp}
+                                                        // size="xl"
+                                                      />
+                                                    )}{" "}
+                                                    {key === "Product Image" &&
+                                                      obj["Product Image"]
+                                                        .length}
+                                                    {key === "Banner Image" &&
+                                                      obj["Banner Image"]
+                                                        .length}
+                                                  </button>
+                                                ) : (
+                                                  <input
+                                                    disabled={!isEdit}
+                                                    // required
+                                                    type="text"
+                                                    name={key}
+                                                    defaultValue={obj[key]}
+                                                    key={keyIndex}
+                                                    onChange={(e) =>
+                                                      changeOtherIndexData(
+                                                        e,
+                                                        objIndex
+                                                      )
+                                                    }
+                                                  />
+                                                )}
+                                              </div>
                                             )}
-                                          </div>
+                                          </>
                                         );
                                       })}
 
                                       <button
                                         type="button"
                                         className="add_row tab_lst_add"
-                                        onClick={addField}
+                                        onClick={() => {
+                                          if (isEdit === true) {
+                                            addField();
+                                          }
+                                        }}
                                       >
                                         <FontAwesomeIcon icon={faPlus} />
                                       </button>
@@ -1251,10 +1513,21 @@ const AddProduct = () => {
                             </div>
 
                             <br />
-
-                            {/* <button type="submit" className="edit">
-                              Save
-                            </button> */}
+                            {/* <button
+                            type="button"
+                            className="delete_btn hidden tab_lst_add"
+                            onClick="removeItem(this)"
+                          >
+                            <FontAwesomeIcon icon={faMinus} />
+                          </button> */}
+                            <button
+                              type="submit"
+                              // type="button"
+                              className="edit"
+                              // onClick={submitPriceVariant}
+                            >
+                              {isEdit ? "Save" : "Edit"}
+                            </button>
                           </div>
                         </form>
                       </div>
@@ -1632,50 +1905,113 @@ const AddProduct = () => {
                   >
                     <div className="img_info">
                       <div className="img_contains">
-                        {productPictures &&
-                          productImages?.length > 0 &&
-                          productImages?.map((pic, index) => {
-                            return (
-                              <div className="img_part" key={index}>
-                                <div className="img_part_img">
-                                  <input
-                                    type="checkbox"
-                                    id="img1"
-                                    name="img1"
-                                    defaultValue="img1"
-                                  />
+                        <div className="img_part">
+                          <div className="img_part_img">
+                            <input
+                              type="checkbox"
+                              id="img1"
+                              name="img1"
+                              defaultValue="img1"
+                            />
 
-                                  <img src={pic?.url} alt={pic?.altName} />
-                                </div>
-                                <div className="img_text">
-                                  <p>{pic?.name}</p>
-                                </div>
-                                <div className="img_icons">
-                                  <FontAwesomeIcon icon={faEye} size="2xl" />
-                                  <FontAwesomeIcon
-                                    icon={faPenToSquare}
-                                    size="2xl"
-                                  />
-                                  <FontAwesomeIcon icon={faTrash} size="2xl" />
-                                </div>
-                              </div>
-                            );
-                          })}
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image1"
+                            />
+                          </div>
+                          <div className="img_text">
+                            <p>Food Image</p>
+                          </div>
+                          <div className="img_icons">
+                            <FontAwesomeIcon icon={faEye} size="2xl" />
+                            <FontAwesomeIcon icon={faPenToSquare} size="2xl" />
+                            <FontAwesomeIcon icon={faTrash} size="2xl" />
+                          </div>
+                        </div>
+                        <div className="img_part">
+                          <div className="img_part_img">
+                            <input
+                              type="checkbox"
+                              id="img2"
+                              name="img2"
+                              defaultValue="img2"
+                            />
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image2"
+                            />
+                          </div>
+                          <div className="img_text">
+                            <p>Food Image</p>
+                            <div className="img_icons">
+                              <FontAwesomeIcon icon={faEye} size="2xl" />
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                size="2xl"
+                              />
+                              <FontAwesomeIcon icon={faTrash} size="2xl" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="img_part">
+                          <div className="img_part_img">
+                            <input
+                              type="checkbox"
+                              id="img3"
+                              name="img3"
+                              defaultValue="img1"
+                            />
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image3"
+                            />
+                          </div>
+                          <div className="img_text">
+                            <p>Food Image</p>
+                            <div className="img_icons">
+                              <FontAwesomeIcon icon={faEye} size="2xl" />
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                size="2xl"
+                              />
+                              <FontAwesomeIcon icon={faTrash} size="2xl" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="img_part">
+                          <div className="img_part_img">
+                            <input
+                              type="checkbox"
+                              id="img4"
+                              name="img4"
+                              defaultValue="img4"
+                            />
+                            <img
+                              src={require("../../../assets/images/add_mnu_dish.png")}
+                              alt="image4"
+                            />
+                          </div>
+                          <div className="img_text">
+                            <p>Food Image</p>
+                            <div className="img_icons">
+                              <FontAwesomeIcon icon={faEye} size="2xl" />
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                size="2xl"
+                              />
+                              <FontAwesomeIcon icon={faTrash} size="2xl" />
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       <div className="img_upload">
                         <p>
                           Click on the "Choose File" button to upload a image:
                         </p>
                         <form action="">
-                          {/* <input type="file" id="myFile" name="filename" /> */}
+                          <input type="file" id="myFile" name="filename" />
                           {/* <input type="submit" /> */}
-                          <button
-                            type="button"
-                            className="edit"
-                            onClick={() => toggle()}
-                          >
-                            Upload
-                          </button>
                         </form>
                       </div>
                     </div>
@@ -1783,4 +2119,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default ProductDetail;

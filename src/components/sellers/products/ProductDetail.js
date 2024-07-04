@@ -9,9 +9,11 @@ import {
   faEye,
   faImage,
   faLayerGroup,
+  faMinus,
   faPenToSquare,
   faPlus,
   faTrash,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,9 +25,11 @@ import {
   productChildCat,
   singleProductDetail,
   updateInfo,
+  updatePotency,
 } from "../../../redux/features/sellers/sellerProductSlice";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { Seller_products } from "../../../constants/Api/Api";
+import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 
 const ProductDetail = () => {
   const dispatch = useDispatch();
@@ -34,30 +38,25 @@ const ProductDetail = () => {
   const [main, setMain] = useState([
     { potency: [{ key: "", value: "" }], val: "" },
   ]);
-  const [inputFields, setInputFields] = useState([
-    { Price: "" },
-    { "Product Image": [] },
-    { "Banner Image": [] },
-  ]);
+
+  // console.log(main, "main555");
+  const [inputFields, setInputFields] = useState([{ Price: "" }]);
+  console.log(inputFields, "inputFields");
   const [arr, setArr] = useState([]);
-  const [title, setTitle] = useState([
-    "Price",
-    "Color",
-    "Weight",
-    "Sku",
-    "Product Image",
-    "Banner Image",
-  ]);
+  // console.log(arr, "1009");
+  const [title, setTitle] = useState(["Price", "Color", "Weight"]);
   const [tabs, setTabs] = useState("product_info");
   const [modal, setModal] = useState(false);
   const [value, setValue] = useState("");
   const [modalHeading, setModalHeading] = useState("");
+  console.log(modalHeading, "modalHeading");
   const [createTitleName, setCreateTitleName] = useState("");
   const [showCreateTitle, setShowCreateTitle] = useState(false);
   const [catName, setCatName] = useState("");
   const [subCatName, setSubCatName] = useState("");
-
   const [isEdit, setIsEdit] = useState(false);
+  const [isEditForPotency, setIsEditForPotency] = useState(false);
+  const [show, setShow] = useState(false);
 
   // For showing name in dropdown
   const [dropDownData, setDropDownData] = useState({
@@ -68,12 +67,13 @@ const ProductDetail = () => {
   });
 
   const [fileForProductInput, setFileForProductInput] = useState([]);
+  console.log(fileForProductInput, "fileForProductInput");
   const [fileForBannerInput, setFileForBannerInput] = useState([]);
   const [fileForProduct, setFileForProduct] = useState([]);
   const [fileForBanner, setFileForBanner] = useState([]);
   const [productPictures, setProductPictures] = useState([]);
+  console.log(productPictures, "productPictures");
   const [bannerPictures, setBannerPictures] = useState([]);
-
   //store index of array -> Arr
   const [indexOfArr, setIndexOfArr] = useState();
 
@@ -86,12 +86,11 @@ const ProductDetail = () => {
     childCategory,
     brand,
   } = useSelector((state) => state.sellerProducts);
-  console.log(productDetail, "productDetail");
 
   //State for Product Info
   const [productInfo, setProductInfo] = useState({});
 
-  console.log(productInfo, "productInfo");
+  // console.log(productInfo, "productInfo");
 
   //FOR dispatch action
   useEffect(() => {
@@ -107,31 +106,46 @@ const ProductDetail = () => {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       })
       .then((res) => {
+        console.log(res.data.data, "detail222");
+        //UPDATE 'main' STATE
         setMain(res.data.data.otherDescription);
+
+        //UPDATE 'productInfo' STATE
         console.log(res.data.data.productInfo, "infodetails");
         setProductInfo(res.data.data.productInfo);
 
-        //For InputField
+        //FOR inputField
+        console.log(res.data.data.variants[0], "vvvv");
         const variant = res.data.data.variants[0].variant;
         const arrForInputFields = [];
         for (let key in variant) {
           arrForInputFields.push({ [key]: variant[key] });
         }
         arrForInputFields.push({
+          id: res.data.data.variants[0]["_id"],
+        });
+        arrForInputFields.push({
           "Product Image": res.data.data.variants[0]["productPictures"],
         });
         arrForInputFields.push({
           "Banner Image": res.data.data.variants[0]["bannerPictures"],
         });
+        // arrForInputFields.push({
+        //   id: res.data.data.variants[0]["_id"],
+        // });
+        console.log(arrForInputFields, "arrForInputFields");
         setInputFields(arrForInputFields);
 
-        //For ARR
+        //FOR arr
         const newVariants = res.data.data.variants.slice(1);
+        console.log(newVariants, "newVariants");
         const newArray = newVariants.map((v) => {
           return {
             ...v.variant,
+            id: v._id,
             "Product Image": [...v["productPictures"]],
             "Banner Image": [...v["bannerPictures"]],
+            // id: v._id,
           };
         });
 
@@ -140,7 +154,7 @@ const ProductDetail = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [show]);
 
   const toggle = (heading, val, arrInd) => {
     setModal(!modal);
@@ -150,9 +164,11 @@ const ProductDetail = () => {
     if (val === "inputFields") {
       if (heading === "Product Image") {
         setProductPictures(inputFields[arrInd]["Product Image"]);
+        setFileForProductInput(inputFields[arrInd]["Product Image"]);
         // setProductPictures(inputViewProdPic);
       } else if (heading === "Banner Image") {
         setBannerPictures(inputFields[arrInd]["Banner Image"]);
+        setFileForBannerInput(inputFields[arrInd]["Banner Image"]);
         // setBannerPictures(inputViewBannrPic);
       }
     }
@@ -160,8 +176,10 @@ const ProductDetail = () => {
     if (val === "arr") {
       if (heading === "Product Image") {
         setProductPictures(arr[arrInd]["Product Image"]);
+        setFileForProduct(arr[arrInd]["Product Image"]);
       } else if (heading === "Banner Image") {
         setBannerPictures(arr[arrInd]["Banner Image"]);
+        setFileForBanner(arr[arrInd]["Banner Image"]);
       }
     }
   };
@@ -178,6 +196,27 @@ const ProductDetail = () => {
         duplicateChild[passData]["potency"].push({ key: "", value: "" });
         return duplicateChild;
       });
+    }
+  };
+
+  const removePotency = (d, index, childInd) => {
+    if (d === "main") {
+      if (index > 0) {
+        const mainAfterRemove = main.filter((m, i) => i !== index);
+        setMain(mainAfterRemove);
+      }
+    } else {
+      if (childInd > 0) {
+        console.log(index, "hjcvghjs");
+        const mainAfterRemoveChild = main[index]["potency"].filter(
+          (c, i) => i !== childInd
+        );
+        setMain((prev) => {
+          const arr = [...prev];
+          arr[index]["potency"] = mainAfterRemoveChild;
+          return arr;
+        });
+      }
     }
   };
 
@@ -291,6 +330,78 @@ const ProductDetail = () => {
     }
   };
 
+  const submitProductInfo = (e) => {
+    e.preventDefault();
+    const productInfoUpdate = {
+      name: productInfo.name,
+      status: productInfo.status,
+      category: productInfo.category._id,
+      subCategory: !productInfo?.subCategory?._id
+        ? ""
+        : productInfo.subCategory._id,
+      childCategory: !productInfo?.childCategory?._id
+        ? ""
+        : productInfo?.childCategory?._id,
+      brand: productInfo?.brand?._id,
+      description: productInfo.description,
+      shippingCharge: productInfo.shippingDetails.shippingCharge,
+      freeShipping: productInfo.shippingDetails.freeShipping,
+    };
+
+    console.log(productInfoUpdate, "productInfoUpdate");
+
+    dispatch(updateInfo({ productInfoUpdate, id }));
+  };
+
+  const headingChange = (e, ind, main_id) => {
+    console.log(main_id, "main_id");
+    if (main_id) {
+      setMain((prev) => {
+        const head = [...prev];
+        head[ind]["val"] = e.target.value;
+        head[ind]["_id"] = main_id;
+        return head;
+      });
+    } else {
+      setMain((prev) => {
+        const head = [...prev];
+        head[ind]["val"] = e.target.value;
+        return head;
+      });
+    }
+  };
+
+  const changeHandler = (e, mainInd, childInd, child_id) => {
+    if (child_id) {
+      setMain((prev) => {
+        const tableInfo = [...prev];
+        tableInfo[mainInd]["potency"][childInd][e.target.name] = e.target.value;
+        tableInfo[mainInd]["potency"][childInd]["_id"] = child_id;
+        return tableInfo;
+      });
+    } else {
+      setMain((prev) => {
+        const tableInfo = [...prev];
+        tableInfo[mainInd]["potency"][childInd][e.target.name] = e.target.value;
+        return tableInfo;
+      });
+    }
+  };
+
+  const savePotencyData = () => {
+    console.log("saved potency");
+    console.log(main, "mainPotency");
+    const potencyData = {
+      others: main,
+      prodId: id,
+    };
+    console.log(potencyData, "potencyData");
+    dispatch(updatePotency(potencyData)).then((res) => {
+      console.log(res);
+      setShow(!show);
+    });
+  };
+
   const createTitle = () => {
     setShowCreateTitle(true);
   };
@@ -322,6 +433,7 @@ const ProductDetail = () => {
       alert("already exist");
     } else {
       const newModArr = [...inputFields];
+      console.log(newModArr, "newModArr");
       const inInd = newModArr.length - 2;
       newModArr.splice(inInd, 0, { [titleName]: "" });
       setInputFields(newModArr);
@@ -345,47 +457,189 @@ const ProductDetail = () => {
   };
 
   const addField = () => {
+    // inputFields.pop();
     const combinedData = inputFields.reduce(
       (acc, obj) => ({ ...acc, ...obj }),
       {}
     );
-    setArr([...arr, combinedData]);
+    console.log(combinedData, "combinedData");
+    const newObj = {};
+    for (let key in combinedData) {
+      if (key !== "id") {
+        newObj[key] = combinedData[key];
+      }
+    }
+    console.log(newObj, "newObj");
+    // setArr([...arr, combinedData]);
+    setArr([...arr, newObj]);
   };
 
-  const saveImages = () => {};
+  const chngeFirstIndexData = (e, index) => {
+    console.log(index, "iiiiInput");
+    console.log(e.target.name, "namme");
+    inputFields[index][e.target.name] = e.target.value;
+  };
 
-  const modalCancel = () => {};
+  const changeOtherIndexData = (e, index) => {
+    console.log(index, "iiiiARR");
+    arr[index][e.target.name] = e.target.value;
+  };
 
-  const submitProductInfo = (e) => {
-    e.preventDefault();
-    const productInfoUpdate = {
-      name: productInfo.name,
-      status: productInfo.status,
-      category: productInfo.category._id,
-      subCategory: !productInfo?.subCategory?._id
-        ? ""
-        : productInfo.subCategory._id,
-      childCategory: !productInfo?.childCategory?._id
-        ? ""
-        : productInfo?.childCategory?._id,
-      brand: productInfo?.brand?._id,
-      description: productInfo.description,
-      shippingCharge: productInfo.shippingDetails.shippingCharge,
-      freeShipping: productInfo.shippingDetails.freeShipping,
-    };
+  const handleImageChange = (e, modalHeading) => {
+    if (value === "inputFields") {
+      if (modalHeading === "Product Image") {
+        const filesForProductInp = Array.from(e.target.files);
+        console.log(filesForProductInp, "filesForProductInp");
+        // setFileForProductInput(filesForProduct);
+        // setFileForProductInput([...productPictures, ...fileForProduct]);
+        const allFilesProduct = fileForProductInput.concat(filesForProductInp);
+        setFileForProductInput(allFilesProduct);
+        const newImages = filesForProductInp.map((file) =>
+          URL.createObjectURL(file)
+        );
+        setProductPictures((prevImages) => [...prevImages, ...newImages]);
+      } else if (modalHeading === "Banner Image") {
+        const filesForBanner = Array.from(e.target.files);
+        const allFilesBanner = fileForBannerInput.concat(filesForBanner);
+        setFileForBannerInput(allFilesBanner);
+        const newImages = filesForBanner.map((file) =>
+          URL.createObjectURL(file)
+        );
+        setBannerPictures((prevImages) => [...prevImages, ...newImages]);
+      }
+    }
 
-    console.log(productInfoUpdate, "productInfoUpdate");
+    if (value === "arr") {
+      if (modalHeading === "Product Image") {
+        const filesForProduct = Array.from(e.target.files);
+        console.log(filesForProduct, "filesForProduct");
+        const allFilesProductOther = fileForProduct.concat(filesForProduct);
+        setFileForProduct(allFilesProductOther);
+        const newImages = filesForProduct.map((file) =>
+          URL.createObjectURL(file)
+        );
+        setProductPictures((prevImages) => [...prevImages, ...newImages]);
+      } else if (modalHeading === "Banner Image") {
+        const filesForBanner = Array.from(e.target.files);
+        const allFilesBannerOther = fileForBanner.concat(filesForBanner);
+        setFileForBanner(allFilesBannerOther);
+        const newImages = filesForBanner.map((file) =>
+          URL.createObjectURL(file)
+        );
+        setBannerPictures((prevImages) => [...prevImages, ...newImages]);
+      }
+    }
+  };
 
-    dispatch(updateInfo({ productInfoUpdate, id }));
+  const removePoductImage = (index) => {
+    const updatedProductImage = productPictures.filter((p, i) => i !== index);
+    setProductPictures(updatedProductImage);
 
-    // console.log(productInfo, "productInfo");
+    //FOR inputField
+    const updatedProductFile = fileForProductInput.filter(
+      (f, i) => i !== index
+    );
+    setFileForProductInput(updatedProductFile);
 
-    // const productData = {
-    //   info: productInfo,
-    //   // others: JSON.stringify(main),
-    // };
+    //FOR arr
+    const updatedFile = fileForProduct.filter((p, i) => i !== index);
+    setFileForProduct(updatedFile);
+  };
 
-    // console.log(productData.info, "productInfoDetail");
+  const removeBannerImage = (index) => {
+    const updatedBannerImage = bannerPictures.filter((b, i) => i !== index);
+    setBannerPictures(updatedBannerImage);
+
+    //FOR inputField
+    const updatedBannerFile = fileForBannerInput.filter((b, i) => i !== index);
+    setFileForBannerInput(updatedBannerFile);
+
+    //For arr
+    const updatedFile = fileForBanner.filter((b, i) => i !== index);
+    setFileForBanner(updatedFile);
+  };
+
+  const saveImages = () => {
+    console.log(value, "900");
+    if (value === "inputFields") {
+      setInputFields((prevField) => {
+        const updatedField = [...prevField];
+        const indexForProductImage = updatedField.findIndex((obj) =>
+          obj.hasOwnProperty("Product Image")
+        );
+        // console.log(indexForProductImage, "indexForProductImage");
+        const indexForBannerImage = updatedField.findIndex((obj) =>
+          obj.hasOwnProperty("Banner Image")
+        );
+        if (modalHeading === "Product Image") {
+          if (fileForProductInput.length > 3) {
+            alert("Product image not more than 3");
+          } else {
+            console.log(fileForProductInput, "fileForProductInput");
+            updatedField[indexForProductImage]["Product Image"] =
+              fileForProductInput;
+            return updatedField;
+          }
+          return updatedField;
+        }
+        if (modalHeading === "Banner Image") {
+          console.log("hello world");
+          console.log(fileForBannerInput, "0998");
+          console.log(indexForBannerImage, "indexForBannerImage");
+          if (fileForBannerInput.length > 4) {
+            alert("Banner image not more than 4");
+          } else {
+            updatedField[indexForBannerImage]["Banner Image"] =
+              fileForBannerInput;
+            return updatedField;
+          }
+          return updatedField;
+        }
+      });
+    }
+
+    if (value === "arr") {
+      const otherFields = arr.map((field, index) => {
+        // console.log(indexOfArr, index, "indexOfArr");
+        if (index === indexOfArr && modalHeading === "Product Image") {
+          if (fileForProduct.length > 3) {
+            alert("Product image not more than 3");
+          } else {
+            return {
+              ...field,
+              "Product Image": fileForProduct,
+              // "Banner Image": fileForBanner,
+            };
+          }
+        }
+        if (index === indexOfArr && modalHeading === "Banner Image") {
+          if (fileForBanner.length > 4) {
+            alert("Banner image not more than 4");
+          } else {
+            return {
+              ...field,
+              // "Product Image": fileForProduct,
+              "Banner Image": fileForBanner,
+            };
+          }
+        }
+        return field;
+      });
+
+      setArr(otherFields);
+    }
+
+    toggle();
+    setProductPictures([]);
+    setBannerPictures([]);
+    setFileForProductInput([]);
+    setFileForBannerInput([]);
+    setFileForProduct([]);
+    setFileForBanner([]);
+  };
+
+  const modalCancel = () => {
+    toggle();
   };
 
   const submitPriceVariant = (e) => {
@@ -426,35 +680,75 @@ const ProductDetail = () => {
               <ModalBody>
                 <div style={{ display: "flex", flexWrap: "wrap" }}>
                   {modalHeading === "Product Image" &&
+                    productPictures.length > 0 &&
                     productPictures.map((image, index) => {
                       return (
-                        <img
-                          key={index}
-                          src={image}
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            objectFit: "cover",
-                            margin: "10px",
-                          }}
-                          alt=""
-                        />
+                        <div className="projImg" key={index}>
+                          <img
+                            src={image}
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              objectFit: "cover",
+                              margin: "10px",
+                            }}
+                            alt=""
+                          />
+                          {isEdit && (
+                            <button
+                              className="times"
+                              onClick={() => removePoductImage(index)}
+                              style={{
+                                position: "absolute",
+                                top: "5px",
+                                right: "5px",
+                                background: "red",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faXmark} />
+                            </button>
+                          )}
+                        </div>
                       );
                     })}
                   {modalHeading === "Banner Image" &&
+                    bannerPictures.length > 0 &&
                     bannerPictures.map((image, index) => {
                       return (
-                        <img
-                          key={index}
-                          src={image}
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            objectFit: "cover",
-                            margin: "10px",
-                          }}
-                          alt=""
-                        />
+                        <div className="projImg" key={index}>
+                          <img
+                            src={image}
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              objectFit: "cover",
+                              margin: "10px",
+                            }}
+                            alt=""
+                          />
+                          {isEdit && (
+                            <button
+                              className="times"
+                              onClick={() => removeBannerImage(index)}
+                              style={{
+                                position: "absolute",
+                                top: "5px",
+                                right: "5px",
+                                background: "red",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faXmark} />
+                            </button>
+                          )}
+                        </div>
                       );
                     })}
                 </div>
@@ -477,7 +771,7 @@ const ProductDetail = () => {
                     // onClick={saveImages(obj, modalHeading)}
                     onClick={saveImages}
                   >
-                    Add
+                    Save Images
                   </Button>
                 )}{" "}
                 {isEdit && (
@@ -799,88 +1093,151 @@ const ProductDetail = () => {
                             </div>
                           </div>
                         </div>
-                        {/* potency */}
 
+                        {/* potency */}
                         <div className="main_p_inform" id="tbDiv001">
+                          <div className="e-edit">
+                            {isEditForPotency ? (
+                              <button
+                                type="button"
+                                className="edit"
+                                onClick={(e) => {
+                                  setIsEditForPotency(false);
+                                  savePotencyData(e);
+                                }}
+                              >
+                                Save
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                className="edit"
+                                onClick={() => {
+                                  setIsEditForPotency(true);
+                                }}
+                              >
+                                Edit
+                              </button>
+                            )}
+                          </div>
                           {main?.map((v, ind) => {
                             return (
                               <div className="p_inform" key={ind}>
                                 <div className="p_total p_hdng" id="table_body">
-                                  <div className="p_c_lft">
+                                  <div className="p_c_lft ext">
                                     <input
-                                      disabled={!isEdit}
+                                      disabled={!isEditForPotency}
                                       required
                                       type="text"
                                       placeholder="Potency"
                                       value={v.val}
                                       className="table_body01"
-                                      onChange={(e) => headingChange(e, ind)}
+                                      onChange={(e) =>
+                                        headingChange(e, ind, v._id)
+                                      }
                                     />
-                                    <span
-                                      className="add_btn"
-                                      onClick={() => {
-                                        if (isEdit === true) {
-                                          addPotency("main");
-                                        }
-                                      }}
-                                    >
-                                      <div className="click_me" />
-                                      <FontAwesomeIcon
-                                        icon={faPlus}
-                                        size="xl"
-                                      />
-                                    </span>
+                                    <div className="otr_ttl_adbtn">
+                                      <span
+                                        className="add_btn"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                          if (isEditForPotency === true) {
+                                            addPotency("main");
+                                          }
+                                        }}
+                                      >
+                                        <div className="click_me" />
+                                        <FontAwesomeIcon
+                                          icon={faPlus}
+                                          size="xl"
+                                        />
+                                      </span>
+                                      <span
+                                        className="add_btn"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                          if (isEditForPotency === true) {
+                                            removePotency("main", ind);
+                                          }
+                                        }}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faMinus}
+                                          size="xl"
+                                        />
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
 
                                 <div className="p_rows">
-                                  <div
-                                    className="p_total"
-                                    id="table_body29"
-                                    // ref={tableRef}
-                                  >
-                                    {v.potency.map((c, ci) => {
+                                  <div className="p_total" id="table_body29">
+                                    {v.potency?.map((c, ci) => {
                                       return (
-                                        <div className="p_c_lft_dup" key={ci}>
+                                        <div
+                                          className="p_c_lft_dup ext"
+                                          key={ci}
+                                        >
                                           <input
-                                            // ref={keyRef}
                                             required
-                                            disabled={!isEdit}
+                                            disabled={!isEditForPotency}
                                             name="key"
                                             type="text"
                                             className="addMain"
                                             placeholder="Total THC (mg)"
                                             value={c.key}
                                             onChange={(e) =>
-                                              changeHandler(e, ind, ci)
+                                              changeHandler(e, ind, ci, c._id)
                                             }
                                           />
                                           <input
                                             required
-                                            disabled={!isEdit}
-                                            // ref={valRef}
+                                            disabled={!isEditForPotency}
                                             name="value"
                                             type="text"
                                             className="addPrefer"
                                             value={c.value}
                                             placeholder="0.00mg"
                                             onChange={(e) =>
-                                              changeHandler(e, ind, ci)
+                                              changeHandler(e, ind, ci, c._id)
                                             }
                                           />
-                                          <span
-                                            className="add_btn"
-                                            onClick={() => {
-                                              if (isEdit === true) {
-                                                addPotency(ind);
-                                              }
-                                            }}
-                                          >
-                                            <FontAwesomeIcon
-                                              icon={faPlus}
-                                              size="2xl"
-                                            />
-                                          </span>
+                                          <div className="otr_ttl_adbtn">
+                                            <span
+                                              className="add_btn"
+                                              style={{ cursor: "pointer" }}
+                                              onClick={() => {
+                                                if (isEditForPotency === true) {
+                                                  addPotency(ind);
+                                                }
+                                              }}
+                                            >
+                                              <FontAwesomeIcon
+                                                icon={faPlus}
+                                                size="xl"
+                                              />
+                                            </span>
+                                            <span
+                                              className="add_btn"
+                                              style={{ cursor: "pointer" }}
+                                            >
+                                              <FontAwesomeIcon
+                                                icon={faMinus}
+                                                size="xl"
+                                                onClick={() => {
+                                                  if (
+                                                    isEditForPotency === true
+                                                  ) {
+                                                    removePotency(
+                                                      "other",
+                                                      ind,
+                                                      ci
+                                                    );
+                                                  }
+                                                }}
+                                              />
+                                            </span>
+                                          </div>
                                         </div>
                                       );
                                     })}
@@ -983,50 +1340,35 @@ const ProductDetail = () => {
                                 {inputFields &&
                                   inputFields.map((input, i) => {
                                     return (
-                                      <div className="input-field-outr" key={i}>
-                                        <span>{Object.keys(input)[0]}</span>
-                                        {Object.keys(input)[0] ===
-                                          "Product Image" ||
-                                        Object.keys(input)[0] ===
-                                          "Banner Image" ? (
-                                          <button
-                                            type="button"
-                                            className="edit"
-                                            onClick={() => {
-                                              toggle(
-                                                Object.keys(input)[0],
-                                                "inputFields",
-                                                i
-                                              );
-                                            }}
-                                          >
-                                            {isEdit ? "Upload" : "View"}{" "}
-                                            {isEdit && (
-                                              <FontAwesomeIcon
-                                                icon={faCloudArrowUp}
-                                                // size="xl"
-                                              />
-                                            )}{" "}
-                                            {Object.keys(input)[0] ===
-                                              "Product Image" &&
-                                              input["Product Image"].length}
-                                            {Object.keys(input)[0] ===
-                                              "Banner Image" &&
-                                              input["Banner Image"].length}
-                                          </button>
-                                        ) : (
+                                      <>
+                                        <div
+                                          className="input-field-outr"
+                                          key={i}
+                                        >
                                           <input
-                                            required
-                                            disabled={!isEdit}
                                             name={Object.keys(input)[0]}
                                             type="text"
-                                            value={input[Object.keys(input)[0]]}
+                                            defaultValue={
+                                              input[Object.keys(input)[0]]
+                                            }
                                             onChange={(e) =>
                                               chngeFirstIndexData(e, i)
                                             }
                                           />
-                                        )}
-                                      </div>
+                                          <button
+                                            type="button"
+                                            className="edit"
+                                          >
+                                            Save
+                                          </button>
+                                          <button
+                                            type="button"
+                                            className="edit"
+                                          >
+                                            Upload Image
+                                          </button>
+                                        </div>
+                                      </>
                                     );
                                   })}
                                 <button
@@ -1050,51 +1392,61 @@ const ProductDetail = () => {
                                     <div className="all_title">
                                       {arrFromObj.map((key, keyIndex) => {
                                         return (
-                                          <div
-                                            className="input-field-outr"
-                                            key={objIndex}
-                                          >
-                                            {key === "Product Image" ||
-                                            key === "Banner Image" ? (
-                                              <button
-                                                type="button"
-                                                href="javascript:void(0);"
-                                                className="edit"
-                                                onClick={() => {
-                                                  toggle(key, "arr", objIndex);
-                                                  setIndexOfArr(objIndex);
-                                                  // showImageNum(obj, key);
-                                                }}
+                                          <>
+                                            {key !== "id" && (
+                                              <div
+                                                className="input-field-outr"
+                                                key={objIndex}
                                               >
-                                                {isEdit ? "Upload" : "View"}{" "}
-                                                {isEdit && (
-                                                  <FontAwesomeIcon
-                                                    icon={faCloudArrowUp}
-                                                    // size="xl"
+                                                {key === "Product Image" ||
+                                                key === "Banner Image" ? (
+                                                  <button
+                                                    type="button"
+                                                    href="javascript:void(0);"
+                                                    className="edit"
+                                                    onClick={() => {
+                                                      toggle(
+                                                        key,
+                                                        "arr",
+                                                        objIndex
+                                                      );
+                                                      setIndexOfArr(objIndex);
+                                                      // showImageNum(obj, key);
+                                                    }}
+                                                  >
+                                                    {isEdit ? "Upload" : "View"}{" "}
+                                                    {isEdit && (
+                                                      <FontAwesomeIcon
+                                                        icon={faCloudArrowUp}
+                                                        // size="xl"
+                                                      />
+                                                    )}{" "}
+                                                    {key === "Product Image" &&
+                                                      obj["Product Image"]
+                                                        .length}
+                                                    {key === "Banner Image" &&
+                                                      obj["Banner Image"]
+                                                        .length}
+                                                  </button>
+                                                ) : (
+                                                  <input
+                                                    disabled={!isEdit}
+                                                    // required
+                                                    type="text"
+                                                    name={key}
+                                                    defaultValue={obj[key]}
+                                                    key={keyIndex}
+                                                    onChange={(e) =>
+                                                      changeOtherIndexData(
+                                                        e,
+                                                        objIndex
+                                                      )
+                                                    }
                                                   />
-                                                )}{" "}
-                                                {key === "Product Image" &&
-                                                  obj["Product Image"].length}
-                                                {key === "Banner Image" &&
-                                                  obj["Banner Image"].length}
-                                              </button>
-                                            ) : (
-                                              <input
-                                                disabled={!isEdit}
-                                                required
-                                                type="text"
-                                                name={key}
-                                                defaultValue={obj[key]}
-                                                key={keyIndex}
-                                                onChange={(e) =>
-                                                  changeOtherIndexData(
-                                                    e,
-                                                    objIndex
-                                                  )
-                                                }
-                                              />
+                                                )}
+                                              </div>
                                             )}
-                                          </div>
+                                          </>
                                         );
                                       })}
 

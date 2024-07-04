@@ -13,3 +13,5 @@ export const Seller_product_category = `${BASE_URL}/api/category`;
 export const all_brand = `${BASE_URL}/api/brands`;
 export const productInfo = `${BASE_URL}/api/products`;
 export const seller_prodInfo_update = `${BASE_URL}/api/products/update`;
+export const get_product_image = `${BASE_URL}/api/products/getVariantById`;
+export const get_allvariants_data = `${BASE_URL}/api/products/getVariantByProductId`;
