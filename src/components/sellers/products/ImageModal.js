@@ -5,7 +5,8 @@ import "react-image-crop/dist/ReactCrop.css";
 import { useDispatch, useSelector } from "react-redux";
 import { saveDataWithImage } from "../../../redux/features/sellers/sellerProductSlice";
 
-const ImageModal = ({ modal, setModal, variantId }) => {
+const ImageModal = ({ modal, setModal, variantId, picDetail }) => {
+  console.log(picDetail, "picDetail");
   const imgRef = useRef(null);
   const dispatch = useDispatch();
   const [productImage, setProductImage] = useState(null);
@@ -19,13 +20,20 @@ const ImageModal = ({ modal, setModal, variantId }) => {
   });
   const [crop, setCrop] = useState(null);
   const [completedCrop, setCompletedCrop] = useState(null);
-  // const { variantId } = useSelector((state) => state.sellerProducts);
+  const [isCropped, setIsCropped] = useState(false);
+  console.log(isCropped, "isCropped");
+  const { productImages } = useSelector((state) => state.sellerProducts);
 
-  const toggle = () => setModal(!modal);
+  const toggle = () => {
+    setModal(!modal);
+    setProductImageUrl("");
+    setCroppedImage("");
+  };
 
   const modalCancel = () => toggle();
 
   const modalInput = (e) => {
+    setIsCropped(false);
     const { name, type, value, files } = e.target;
     if (type === "text") {
       setModalData({ ...modalData, [name]: value });
@@ -38,6 +46,7 @@ const ImageModal = ({ modal, setModal, variantId }) => {
   };
 
   const saveModalData = () => {
+    setIsCropped(false);
     const finalData = new FormData();
     for (const key in modalData) {
       finalData.append(key, modalData[key]);
@@ -70,6 +79,7 @@ const ImageModal = ({ modal, setModal, variantId }) => {
   };
 
   const handleCropComplete = async () => {
+    setIsCropped(true);
     if (completedCrop?.width && completedCrop?.height && imgRef.current) {
       const canvas = document.createElement("canvas");
       const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
@@ -107,7 +117,7 @@ const ImageModal = ({ modal, setModal, variantId }) => {
   };
 
   return (
-    <div>
+    <div className="ttl_mdl">
       <Modal
         className="prdct_mdl adp_new_modal"
         isOpen={modal}
@@ -117,25 +127,48 @@ const ImageModal = ({ modal, setModal, variantId }) => {
         size="lg"
         backdrop
       >
-        <ModalHeader toggle={toggle}>Upload Image & Details</ModalHeader>
+        {picDetail._id ? (
+          <ModalHeader>Image Details</ModalHeader>
+        ) : (
+          <ModalHeader toggle={toggle}>Upload Image & Details</ModalHeader>
+        )}
         <ModalBody>
           <div className="modal_body_flxone">
             <label htmlFor="imageName">Image Name: </label>
-            <input
-              id="imageName"
-              type="text"
-              name="imageName"
-              onChange={modalInput}
-            />
+            {picDetail._id ? (
+              <input
+                id="imageName"
+                type="text"
+                name="imageName"
+                value={picDetail?.imageName}
+              />
+            ) : (
+              <input
+                id="imageName"
+                type="text"
+                name="imageName"
+                onChange={modalInput}
+              />
+            )}
             <br />
             <label htmlFor="altName">Alt Name: </label>
-            <input
-              id="altName"
-              type="text"
-              name="altName"
-              onChange={modalInput}
-            />
+            {picDetail._id ? (
+              <input
+                id="altName"
+                type="text"
+                name="altName"
+                value={picDetail?.altName}
+              />
+            ) : (
+              <input
+                id="altName"
+                type="text"
+                name="altName"
+                onChange={modalInput}
+              />
+            )}
             <br />
+            {/* {picDetail._id && <img src={picDetail?.url} />} */}
             {croppedImage && (
               <div>
                 <h3>Cropped Image Preview:</h3>
@@ -144,47 +177,66 @@ const ImageModal = ({ modal, setModal, variantId }) => {
             )}
           </div>
           <br />
-          <div className="modal_body_flxtwo">
-            <input
-              type="file"
-              name="Product Image"
-              accept="image/*"
-              onChange={modalInput}
-            />
-            <br />
-            {productImageUrl && (
-              <>
-                <ReactCrop
-                  crop={crop}
-                  onChange={(newCrop) => setCrop(newCrop)}
-                  onComplete={onComplete}
-                >
-                  <img
-                    ref={imgRef}
-                    alt="Product"
-                    src={productImageUrl}
-                    onLoad={onImageLoad}
-                  />
-                </ReactCrop>
-                <button
-                  type="button"
-                  className="edit"
-                  onClick={handleCropComplete}
-                >
-                  Crop
-                </button>
-              </>
+          <>
+            {picDetail._id ? (
+              <img src={picDetail?.url} />
+            ) : (
+              <div className="modal_body_flxtwo">
+                <input
+                  type="file"
+                  name="Product Image"
+                  accept="image/*"
+                  onChange={modalInput}
+                />
+                <br />
+                <br />
+                {productImageUrl && (
+                  <>
+                    <ReactCrop
+                      crop={crop}
+                      onChange={(newCrop) => setCrop(newCrop)}
+                      onComplete={onComplete}
+                    >
+                      <img
+                        ref={imgRef}
+                        alt="Product"
+                        src={productImageUrl}
+                        onLoad={onImageLoad}
+                      />
+                    </ReactCrop>
+                    <button
+                      type="button"
+                      className="edit"
+                      onClick={handleCropComplete}
+                    >
+                      Crop
+                    </button>
+                  </>
+                )}
+              </div>
             )}
-          </div>
+          </>
         </ModalBody>
-        <ModalFooter>
-          <Button color="primary" className="modalBtn" onClick={saveModalData}>
-            Add
-          </Button>
-          <Button color="secondary" className="modalBtn" onClick={modalCancel}>
-            Cancel
-          </Button>
-        </ModalFooter>
+        {!picDetail._id && (
+          <ModalFooter>
+            <Button
+              disabled={!isCropped}
+              color="primary"
+              className="modalBtn"
+              onClick={saveModalData}
+            >
+              Add
+            </Button>
+            <Button
+              color="secondary"
+              // className="modalBtn"
+              className="edit"
+              onClick={modalCancel}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        )}
       </Modal>
     </div>
   );

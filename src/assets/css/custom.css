@@ -5054,3 +5054,63 @@ input:checked+.slider:before {
       border-bottom: #808080 !important;
 
 }
+
+/* ayon paul start / 05.07.2024 */
+
+.tb_c.ext_tb_c .ck.ck-editor__editable_inline p{
+  font-size: 18px;
+}
+.tb_c.ext_tb_c  .ck.ck-editor__editable_inline{
+  min-height: 300px;
+}
+.tb_c.ext_tb_c .edtr_paras p{
+  font-size: 18px;
+}
+
+/* ayon paul start / 08.07.2024 */
+
+.tb_c.nw_imgs_tbc .img_info{
+  flex-direction: column;
+}
+.tb_c.nw_imgs_tbc .img_info .img_upload{
+  order: 1;
+}
+.tb_c.nw_imgs_tbc .img_info .img_contains{
+  order: 2;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 2%;
+  padding-top: 20px;
+}
+.tb_c.nw_imgs_tbc .img_info .img_contains .img_part{
+  width: 32%;
+}
+.tb_c.nw_imgs_tbc .img_info .img_contains .img_part_img img{
+  width: 50%;
+  height: 248px;
+}
+.modal-dialog.adp_new_modal .modal-content{
+  height: auto!important;
+}
+.modal-dialog.adp_new_modal .ReactCrop__child-wrapper{
+  height: 500px;
+}
+.modal-dialog.adp_new_modal .ReactCrop__child-wrapper img{
+  height: 100%;
+}
+.modal.show .modal-dialog.adp_new_modal .modal-body{
+  padding-bottom: 72px;
+}
+.modal-dialog.adp_new_modal .modal_body_flxtwo{
+  position: relative;
+}
+.modal-dialog.adp_new_modal .modal_body_flxtwo .edit{
+  position: static;
+  display: block;
+}
+.tb_c.nw_imgs_tbc .form-check-input{
+  width: 20px;
+  height: 20px;
+  border: 1px solid #0004;
+}

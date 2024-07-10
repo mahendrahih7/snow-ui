@@ -1,5 +1,6 @@
 import {
   faBagShopping,
+  faCircleInfo,
   faCloudArrowUp,
   faEye,
   faImage,
@@ -14,7 +15,9 @@ import Sidebar from "../../common/Sidebar";
 import NavBar from "../../common/Nav/NavBar";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addThumbNail,
   allBrand,
+  deleteImage,
   getImages,
   priceVarInfo,
   productCategory,
@@ -31,6 +34,8 @@ import { Bounce, toast } from "react-toastify";
 import ReactCrop from "react-image-crop";
 // import ImageCrop from "./ImageCrop";
 import ImageModal from "./ImageModal";
+import MyEditor from "./MyEditor";
+import swal from "sweetalert";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
@@ -39,7 +44,6 @@ const AddProduct = () => {
   console.log(modalOpen, "modalOpen");
   const [value, setValue] = useState("");
   const [modalHeading, setModalHeading] = useState("");
-
   const [tabs, setTabs] = useState("product_info");
   const [productInfo, setProductInfo] = useState({
     name: "",
@@ -110,6 +114,8 @@ const AddProduct = () => {
   const [variantId, setVariantId] = useState();
   const [showForInput, setShowForInput] = useState(false);
   const [showForArr, setShowForArr] = useState(Array(arr.length).fill(false));
+  const [pictureId, setPictureId] = useState("");
+  const [picDetail, setPicDetail] = useState("");
 
   /////////   GET REDUX STATE   //////////////////
   const {
@@ -363,7 +369,8 @@ const AddProduct = () => {
         (x) => x.variant.Price === arr[index].Price
       );
       console.log(targetObj, "targetObj");
-      setVariantId(targetObj._id);
+      setVariantId(targetObj?._id);
+      // setPicDetail("");
       dispatch(getImages(targetObj._id));
     }
 
@@ -374,45 +381,46 @@ const AddProduct = () => {
 
   const toggle = () => {
     setModal(!modal);
+    setPicDetail("");
   };
 
-  const handleImageChange = (e, modalHeading) => {
-    if (value === "inputFields") {
-      if (modalHeading === "Product Image") {
-        const filesForProduct = Array.from(e.target.files);
-        setFileForProductInput(filesForProduct);
-        const newImages = filesForProduct.map((file) =>
-          URL.createObjectURL(file)
-        );
-        setProductPictures((prevImages) => [...prevImages, ...newImages]);
-      } else if (modalHeading === "Banner Image") {
-        const filesForBanner = Array.from(e.target.files);
-        setFileForBannerInput(filesForBanner);
-        const newImages = filesForBanner.map((file) =>
-          URL.createObjectURL(file)
-        );
-        setBannerPictures((prevImages) => [...prevImages, ...newImages]);
-      }
-    }
+  // const handleImageChange = (e, modalHeading) => {
+  //   if (value === "inputFields") {
+  //     if (modalHeading === "Product Image") {
+  //       const filesForProduct = Array.from(e.target.files);
+  //       setFileForProductInput(filesForProduct);
+  //       const newImages = filesForProduct.map((file) =>
+  //         URL.createObjectURL(file)
+  //       );
+  //       setProductPictures((prevImages) => [...prevImages, ...newImages]);
+  //     } else if (modalHeading === "Banner Image") {
+  //       const filesForBanner = Array.from(e.target.files);
+  //       setFileForBannerInput(filesForBanner);
+  //       const newImages = filesForBanner.map((file) =>
+  //         URL.createObjectURL(file)
+  //       );
+  //       setBannerPictures((prevImages) => [...prevImages, ...newImages]);
+  //     }
+  //   }
 
-    if (value === "arr") {
-      if (modalHeading === "Product Image") {
-        const filesForProduct = Array.from(e.target.files);
-        setFileForProduct(filesForProduct);
-        const newImages = filesForProduct.map((file) =>
-          URL.createObjectURL(file)
-        );
-        setProductPictures((prevImages) => [...prevImages, ...newImages]);
-      } else if (modalHeading === "Banner Image") {
-        const filesForBanner = Array.from(e.target.files);
-        setFileForBanner(filesForBanner);
-        const newImages = filesForBanner.map((file) =>
-          URL.createObjectURL(file)
-        );
-        setBannerPictures((prevImages) => [...prevImages, ...newImages]);
-      }
-    }
-  };
+  //   if (value === "arr") {
+  //     if (modalHeading === "Product Image") {
+  //       const filesForProduct = Array.from(e.target.files);
+  //       setFileForProduct(filesForProduct);
+  //       const newImages = filesForProduct.map((file) =>
+  //         URL.createObjectURL(file)
+  //       );
+  //       setProductPictures((prevImages) => [...prevImages, ...newImages]);
+  //     } else if (modalHeading === "Banner Image") {
+  //       const filesForBanner = Array.from(e.target.files);
+  //       setFileForBanner(filesForBanner);
+  //       const newImages = filesForBanner.map((file) =>
+  //         URL.createObjectURL(file)
+  //       );
+  //       setBannerPictures((prevImages) => [...prevImages, ...newImages]);
+  //     }
+  //   }
+  // };
 
   // const modalInput = (e) => {
   //   if (e.target.type === "text") {
@@ -429,94 +437,94 @@ const AddProduct = () => {
   //   setModalData({ ...modalData, productImage: e.target.files[0] });
   // };
 
-  const saveImages = () => {
-    setInputFields((prevField) => {
-      const updatedField = [...prevField];
-      const indexForProductImage = updatedField.findIndex((obj) =>
-        obj.hasOwnProperty("Product Image")
-      );
-      const indexForBannerImage = updatedField.findIndex((obj) =>
-        obj.hasOwnProperty("Banner Image")
-      );
-      if (modalHeading === "Product Image") {
-        if (fileForProductInput.length > 3) {
-          alert("Product image not more than 3");
-        } else {
-          updatedField[indexForProductImage]["Product Image"] =
-            fileForProductInput;
-          return updatedField;
-        }
-        return updatedField;
-      }
+  // const saveImages = () => {
+  //   setInputFields((prevField) => {
+  //     const updatedField = [...prevField];
+  //     const indexForProductImage = updatedField.findIndex((obj) =>
+  //       obj.hasOwnProperty("Product Image")
+  //     );
+  //     const indexForBannerImage = updatedField.findIndex((obj) =>
+  //       obj.hasOwnProperty("Banner Image")
+  //     );
+  //     if (modalHeading === "Product Image") {
+  //       if (fileForProductInput.length > 3) {
+  //         alert("Product image not more than 3");
+  //       } else {
+  //         updatedField[indexForProductImage]["Product Image"] =
+  //           fileForProductInput;
+  //         return updatedField;
+  //       }
+  //       return updatedField;
+  //     }
 
-      if (modalHeading === "Banner Image") {
-        if (fileForBannerInput.length > 4) {
-          alert("Banner image not more than 4");
-        } else {
-          updatedField[indexForBannerImage]["Banner Image"] =
-            fileForBannerInput;
-          return updatedField;
-        }
-        return updatedField;
-      }
+  //     if (modalHeading === "Banner Image") {
+  //       if (fileForBannerInput.length > 4) {
+  //         alert("Banner image not more than 4");
+  //       } else {
+  //         updatedField[indexForBannerImage]["Banner Image"] =
+  //           fileForBannerInput;
+  //         return updatedField;
+  //       }
+  //       return updatedField;
+  //     }
 
-      ////////////Alternate////////////////////////////////////////
-      // updatedField[indexForProductImage]["Product Image"] = fileForProductInput;
-      // updatedField[indexForBannerImage]["Banner Image"] = fileForBannerInput;
-      // return updatedField;
-    });
+  //     ////////////Alternate////////////////////////////////////////
+  //     // updatedField[indexForProductImage]["Product Image"] = fileForProductInput;
+  //     // updatedField[indexForBannerImage]["Banner Image"] = fileForBannerInput;
+  //     // return updatedField;
+  //   });
 
-    const otherFields = arr.map((field, index) => {
-      if (index === indexOfArr && modalHeading === "Product Image") {
-        if (fileForProduct.length > 3) {
-          alert("Product image not more than 3");
-        } else {
-          return {
-            ...field,
-            "Product Image": fileForProduct,
-            // "Banner Image": fileForBanner,
-          };
-        }
-      }
-      if (index === indexOfArr && modalHeading === "Banner Image") {
-        if (fileForBanner.length > 4) {
-          alert("Banner image not more than 4");
-        } else {
-          return {
-            ...field,
-            // "Product Image": fileForProduct,
-            "Banner Image": fileForBanner,
-          };
-        }
-      }
-      return field;
-    });
+  //   const otherFields = arr.map((field, index) => {
+  //     if (index === indexOfArr && modalHeading === "Product Image") {
+  //       if (fileForProduct.length > 3) {
+  //         alert("Product image not more than 3");
+  //       } else {
+  //         return {
+  //           ...field,
+  //           "Product Image": fileForProduct,
+  //           // "Banner Image": fileForBanner,
+  //         };
+  //       }
+  //     }
+  //     if (index === indexOfArr && modalHeading === "Banner Image") {
+  //       if (fileForBanner.length > 4) {
+  //         alert("Banner image not more than 4");
+  //       } else {
+  //         return {
+  //           ...field,
+  //           // "Product Image": fileForProduct,
+  //           "Banner Image": fileForBanner,
+  //         };
+  //       }
+  //     }
+  //     return field;
+  //   });
 
-    // const otherFields = arr.map((field, index) => {
-    //   if (index === indexOfArr && modalHeading === "Product Image") {
-    //     return {
-    //       ...field,
-    //       "Product Image": fileForProduct,
-    //       // "Banner Image": fileForBanner,
-    //     };
-    //   }
-    //   if (index === indexOfArr && modalHeading === "Banner Image") {
-    //     return {
-    //       ...field,
-    //       // "Product Image": fileForProduct,
-    //       "Banner Image": fileForBanner,
-    //     };
-    //   }
-    //   return field;
-    // });
-    setArr(otherFields);
+  //   // const otherFields = arr.map((field, index) => {
+  //   //   if (index === indexOfArr && modalHeading === "Product Image") {
+  //   //     return {
+  //   //       ...field,
+  //   //       "Product Image": fileForProduct,
+  //   //       // "Banner Image": fileForBanner,
+  //   //     };
+  //   //   }
+  //   //   if (index === indexOfArr && modalHeading === "Banner Image") {
+  //   //     return {
+  //   //       ...field,
+  //   //       // "Product Image": fileForProduct,
+  //   //       "Banner Image": fileForBanner,
+  //   //     };
+  //   //   }
+  //   //   return field;
+  //   // });
+  //   setArr(otherFields);
 
-    toggle();
-    setProductPictures([]);
-    setBannerPictures([]);
-    setFileForProduct([]);
-    setFileForBanner([]);
-  };
+  //   toggle();
+  //   setProductPictures([]);
+  //   setBannerPictures([]);
+  //   setFileForProduct([]);
+  //   setFileForBanner([]);
+  // };
 
   // const saveModalData = () => {
   //   let finalData = new FormData();
@@ -553,35 +561,35 @@ const AddProduct = () => {
     // }
   };
 
-  const submitPriceVariant = (e) => {
-    e.preventDefault();
-    const ArrayOfdata = [
-      inputFields.reduce((acc, obj) => ({ ...acc, ...obj }), {}),
-    ].concat(arr);
-    console.log(ArrayOfdata, "ArrayOfdata");
+  // const submitPriceVariant = (e) => {
+  //   e.preventDefault();
+  //   const ArrayOfdata = [
+  //     inputFields.reduce((acc, obj) => ({ ...acc, ...obj }), {}),
+  //   ].concat(arr);
+  //   console.log(ArrayOfdata, "ArrayOfdata");
 
-    ArrayOfdata.forEach((dataObj) => {
-      // let formData = new FormData();
-      // // Loop through each key in the object
-      // for (let key in dataObj) {
-      //   if (dataObj.hasOwnProperty(key)) {
-      //     // Check if the value is a file
-      //     if (dataObj[key] instanceof File) {
-      //       // Append the file to the FormData object
-      //       formData.append(key, dataObj[key], dataObj[key].name);
-      //     } else {
-      //       // Append other types of data (e.g., text)
-      //       formData.append(key, dataObj[key]);
-      //     }
-      //   }
-      // }
-      // const formData = dataObj;
-      // dispatch(priceVarInfo({ formData, productId }));
-      // dispatch(
-      //   priceVarInfo({ formData, productId: "6671804fd2b7492e346c16b4" })
-      // );
-    });
-  };
+  //   ArrayOfdata.forEach((dataObj) => {
+  //     // let formData = new FormData();
+  //     // // Loop through each key in the object
+  //     // for (let key in dataObj) {
+  //     //   if (dataObj.hasOwnProperty(key)) {
+  //     //     // Check if the value is a file
+  //     //     if (dataObj[key] instanceof File) {
+  //     //       // Append the file to the FormData object
+  //     //       formData.append(key, dataObj[key], dataObj[key].name);
+  //     //     } else {
+  //     //       // Append other types of data (e.g., text)
+  //     //       formData.append(key, dataObj[key]);
+  //     //     }
+  //     //   }
+  //     // }
+  //     // const formData = dataObj;
+  //     // dispatch(priceVarInfo({ formData, productId }));
+  //     // dispatch(
+  //     //   priceVarInfo({ formData, productId: "6671804fd2b7492e346c16b4" })
+  //     // );
+  //   });
+  // };
 
   const func1 = () => {
     let clsname = "";
@@ -627,17 +635,54 @@ const AddProduct = () => {
     return clsname;
   };
 
+  const thumbNailPic = (e, imageId) => {
+    dispatch(addThumbNail({ imageId, variantId }));
+  };
+
+  const handleVeiw = (picId) => {
+    toggle();
+    const obj = productImages.find((img) => img._id === picId);
+    console.log(obj, "obj999");
+    setPicDetail(obj);
+  };
+
+  const handleDelete = (picId) => {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this image!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        dispatch(
+          deleteImage({
+            productId: "66839dbf0fead0f56552fe34",
+            variantId: variantId,
+            imageId: picId,
+          })
+        );
+        swal("Image has been deleted!", {
+          icon: "success",
+        });
+      } else {
+        // swal("Your imaginary file is safe!");
+      }
+    });
+  };
+
   return (
     <>
       <main>
         <section className="total_parent_element">
-          <>
+          <div className="ttl_mdl">
             <ImageModal
               modal={modal}
               setModal={setModal}
               variantId={variantId}
+              picDetail={picDetail}
             />
-          </>
+          </div>
 
           <div className="left_parent_element">
             <div className="total_upper_left">
@@ -715,6 +760,17 @@ const AddProduct = () => {
                         <FontAwesomeIcon icon={faImage} />
                       </span>{" "}
                       Images
+                    </button>
+                    <button
+                      className={`tabs_c ${
+                        tabs === "product_description" ? "active" : ""
+                      }`}
+                      onClick={() => setTabs("product_description")}
+                    >
+                      <span>
+                        <FontAwesomeIcon icon={faCircleInfo} />
+                      </span>{" "}
+                      Product Description
                     </button>
                   </div>
                 </div>
@@ -1086,7 +1142,9 @@ const AddProduct = () => {
                         </form>
                       </div>
                       <div id="pro_header">
-                        <form onSubmit={submitPriceVariant}>
+                        <form
+                        // onSubmit={submitPriceVariant}
+                        >
                           {/* <form > */}
                           <div className="outr_all_header">
                             <div className="all_otr">
@@ -1624,7 +1682,7 @@ const AddProduct = () => {
                 {tabs === "images" && (
                   <div
                     id="images"
-                    className="tb_c"
+                    className="tb_c nw_imgs_tbc"
                     style={{
                       // display: "none",
                       marginTop: "20px",
@@ -1632,31 +1690,44 @@ const AddProduct = () => {
                   >
                     <div className="img_info">
                       <div className="img_contains">
-                        {productPictures &&
+                        {productImages &&
                           productImages?.length > 0 &&
                           productImages?.map((pic, index) => {
+                            console.log(pic, "pic");
                             return (
                               <div className="img_part" key={index}>
                                 <div className="img_part_img">
                                   <input
-                                    type="checkbox"
+                                    // type="checkbox"
+                                    className="form-check-input"
+                                    type="radio"
                                     id="img1"
                                     name="img1"
                                     defaultValue="img1"
+                                    checked={pic.thumbnail}
+                                    onChange={(e) => thumbNailPic(e, pic._id)}
                                   />
 
                                   <img src={pic?.url} alt={pic?.altName} />
                                 </div>
                                 <div className="img_text">
-                                  <p>{pic?.name}</p>
+                                  <p>{pic?.imageName}</p>
                                 </div>
                                 <div className="img_icons">
-                                  <FontAwesomeIcon icon={faEye} size="2xl" />
                                   <FontAwesomeIcon
+                                    icon={faEye}
+                                    size="2xl"
+                                    onClick={() => handleVeiw(pic._id)}
+                                  />
+                                  {/* <FontAwesomeIcon
                                     icon={faPenToSquare}
                                     size="2xl"
+                                  /> */}
+                                  <FontAwesomeIcon
+                                    icon={faTrash}
+                                    size="2xl"
+                                    onClick={() => handleDelete(pic._id)}
                                   />
-                                  <FontAwesomeIcon icon={faTrash} size="2xl" />
                                 </div>
                               </div>
                             );
@@ -1679,6 +1750,15 @@ const AddProduct = () => {
                         </form>
                       </div>
                     </div>
+                  </div>
+                )}
+
+                {/* //Product Description */}
+                {tabs === "product_description" && (
+                  <div className="tb_c ext_tb_c">
+                    <br />
+                    <br />
+                    <MyEditor />
                   </div>
                 )}
               </div>

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Seller_product_category, Seller_products, all_brand, get_allvariants_data, get_product_image, productInfo, seller_prodInfo_update} from "../../../constants/Api/Api";
+import { Seller_product_category, Seller_products, all_brand, get_allvariants_data, get_product_image, productInfo, product_description, product_update, seller_prodInfo_update} from "../../../constants/Api/Api";
+import { Bounce, toast } from "react-toastify";
 // import swal from "sweetalert";
 // import { Bounce, toast } from "react-toastify";
 
@@ -103,6 +104,18 @@ export const productInformation = createAsyncThunk("productInformation", async(p
         },
     })
     console.log(resOfProductInfo.data, 'resOfProductInfo')
+    toast.success(resOfProductInfo.data.message, {
+        className: "toast-message",
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce
+      });
     return resOfProductInfo.data
 
   }catch(error){
@@ -139,9 +152,22 @@ export const priceVarInfo = createAsyncThunk("priceVarInfo", async(priceInfo, {d
           process: "variants",
           productId: priceInfo.productId
         },
+
     })
     console.log(resOfPriceVar.data, 'resOfPriceVar')
     dispatch(allVariants(priceInfo.productId))
+    toast.success(resOfPriceVar.data.message, {
+        className: "toast-message",
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce
+      });
     return resOfPriceVar.data
 
   }catch(error){
@@ -232,6 +258,72 @@ export const updatePotency = createAsyncThunk("updatePotency", async(potencyInfo
       }
     })
     console.log(resUpdatePotencyInfo, 'resUpdatePotencyInfo')
+  }catch(error){
+    console.log(error)
+  }
+})
+
+//FOR PRODUCT DESCRIPTION
+export const productDescription = createAsyncThunk("productDescription", async(desData) =>{
+  console.log(desData, 'desData')
+  try{
+    const resProdDes = await axios.post(product_description, desData, {
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      params: {
+        process: "productDescription",
+        productId: desData.productId
+      }
+    })
+    console.log(resProdDes, 'resProdDes')
+  }catch(error){
+    console.log(error)
+  }
+})
+
+//FOR THUMBNAIL AND IMAGE PAGE
+export const addThumbNail = createAsyncThunk("addThumbNail",  async(dataId, {dispatch}) =>{
+  try {
+    const resAddThumbNail = await axios.post(productInfo, dataId, {
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      params: {
+        process: "thumbnail",
+        variantId: dataId.variantId
+      }
+    })
+    console.log(resAddThumbNail)
+    swal("Done!", "Thumbnail selected successfully", "success");
+    dispatch(getImages(dataId.variantId))
+    // toast.success('Thumbnail selected successfully', {
+    //     className: "toast-message",
+    //     position: 'top-center',
+    //     autoClose: 5000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: 'dark',
+    //     transition: Bounce
+    //   });
+
+  }catch(error){
+    console.log(error)
+  }
+})
+
+//FOR DELETE IMAGE
+export const deleteImage = createAsyncThunk("deleteImage", async(data, {dispatch}) =>{
+  try{
+    const resDeleteImage = await axios.put(`${product_update}/${data.productId}`, data,  {
+      headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      params: {
+        process: "deleteImage",
+        variantId: data.variantId
+      }
+    })
+    console.log(resDeleteImage, 'resDeleteImage')
+    dispatch(getImages(data.variantId))
+
   }catch(error){
     console.log(error)
   }
