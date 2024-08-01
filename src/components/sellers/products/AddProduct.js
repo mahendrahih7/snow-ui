@@ -71,12 +71,11 @@ const AddProduct = () => {
   const [catName, setCatName] = useState("");
   const [showCreateTitle, setShowCreateTitle] = useState(false);
   const [createTitleName, setCreateTitleName] = useState("");
-
   const [title, setTitle] = useState([
     "Price",
     "Color",
     "Weight",
-    // "Sku",
+    "Reordered Level",
     // "Product Image",
     // "Banner Image",
   ]);
@@ -325,14 +324,14 @@ const AddProduct = () => {
         .slice(0, inputFields.length - 2)
         .reduce((acc, obj) => ({ ...acc, ...obj }), {});
       console.log(obj, "obj");
-      dispatch(
-        priceVarInfo({ info: obj, productId: "66839dbf0fead0f56552fe34" })
-      ).then((res) => {
-        console.log(res, "res666");
-        if (res?.payload?.message === "New variant added.") {
-          setShowForInput(true);
+      dispatch(priceVarInfo({ info: obj, productId: productId })).then(
+        (res) => {
+          console.log(res, "res666");
+          if (res?.payload?.message === "New variant added.") {
+            setShowForInput(true);
+          }
         }
-      });
+      );
     }
     if (val === "arr") {
       console.log(objIndex, "objIndex");
@@ -340,9 +339,7 @@ const AddProduct = () => {
       delete newObj["Save"];
       delete newObj["Upload Image"];
       console.log(newObj, "arrDetail");
-      dispatch(
-        priceVarInfo({ info: newObj, productId: "66839dbf0fead0f56552fe34" })
-      );
+      dispatch(priceVarInfo({ info: newObj, productId: productId }));
 
       const newShowForArr = [...showForArr];
       newShowForArr[objIndex] = true;
@@ -384,167 +381,6 @@ const AddProduct = () => {
     setPicDetail("");
   };
 
-  // const handleImageChange = (e, modalHeading) => {
-  //   if (value === "inputFields") {
-  //     if (modalHeading === "Product Image") {
-  //       const filesForProduct = Array.from(e.target.files);
-  //       setFileForProductInput(filesForProduct);
-  //       const newImages = filesForProduct.map((file) =>
-  //         URL.createObjectURL(file)
-  //       );
-  //       setProductPictures((prevImages) => [...prevImages, ...newImages]);
-  //     } else if (modalHeading === "Banner Image") {
-  //       const filesForBanner = Array.from(e.target.files);
-  //       setFileForBannerInput(filesForBanner);
-  //       const newImages = filesForBanner.map((file) =>
-  //         URL.createObjectURL(file)
-  //       );
-  //       setBannerPictures((prevImages) => [...prevImages, ...newImages]);
-  //     }
-  //   }
-
-  //   if (value === "arr") {
-  //     if (modalHeading === "Product Image") {
-  //       const filesForProduct = Array.from(e.target.files);
-  //       setFileForProduct(filesForProduct);
-  //       const newImages = filesForProduct.map((file) =>
-  //         URL.createObjectURL(file)
-  //       );
-  //       setProductPictures((prevImages) => [...prevImages, ...newImages]);
-  //     } else if (modalHeading === "Banner Image") {
-  //       const filesForBanner = Array.from(e.target.files);
-  //       setFileForBanner(filesForBanner);
-  //       const newImages = filesForBanner.map((file) =>
-  //         URL.createObjectURL(file)
-  //       );
-  //       setBannerPictures((prevImages) => [...prevImages, ...newImages]);
-  //     }
-  //   }
-  // };
-
-  // const modalInput = (e) => {
-  //   if (e.target.type === "text") {
-  //     setModalData({ ...modalData, [e.target.name]: e.target.value });
-  //   } else if (e.target.type === "file") {
-  //     setProductImage(e.target.files[0]);
-  //     setModalData({ ...modalData, productImage: e.target.files[0] });
-  //   }
-  // };
-
-  // const modalImage = (e) => {
-  //   console.log(e.target.files[0], "hhh");
-  //   setProductImage(e.target.files[0]);
-  //   setModalData({ ...modalData, productImage: e.target.files[0] });
-  // };
-
-  // const saveImages = () => {
-  //   setInputFields((prevField) => {
-  //     const updatedField = [...prevField];
-  //     const indexForProductImage = updatedField.findIndex((obj) =>
-  //       obj.hasOwnProperty("Product Image")
-  //     );
-  //     const indexForBannerImage = updatedField.findIndex((obj) =>
-  //       obj.hasOwnProperty("Banner Image")
-  //     );
-  //     if (modalHeading === "Product Image") {
-  //       if (fileForProductInput.length > 3) {
-  //         alert("Product image not more than 3");
-  //       } else {
-  //         updatedField[indexForProductImage]["Product Image"] =
-  //           fileForProductInput;
-  //         return updatedField;
-  //       }
-  //       return updatedField;
-  //     }
-
-  //     if (modalHeading === "Banner Image") {
-  //       if (fileForBannerInput.length > 4) {
-  //         alert("Banner image not more than 4");
-  //       } else {
-  //         updatedField[indexForBannerImage]["Banner Image"] =
-  //           fileForBannerInput;
-  //         return updatedField;
-  //       }
-  //       return updatedField;
-  //     }
-
-  //     ////////////Alternate////////////////////////////////////////
-  //     // updatedField[indexForProductImage]["Product Image"] = fileForProductInput;
-  //     // updatedField[indexForBannerImage]["Banner Image"] = fileForBannerInput;
-  //     // return updatedField;
-  //   });
-
-  //   const otherFields = arr.map((field, index) => {
-  //     if (index === indexOfArr && modalHeading === "Product Image") {
-  //       if (fileForProduct.length > 3) {
-  //         alert("Product image not more than 3");
-  //       } else {
-  //         return {
-  //           ...field,
-  //           "Product Image": fileForProduct,
-  //           // "Banner Image": fileForBanner,
-  //         };
-  //       }
-  //     }
-  //     if (index === indexOfArr && modalHeading === "Banner Image") {
-  //       if (fileForBanner.length > 4) {
-  //         alert("Banner image not more than 4");
-  //       } else {
-  //         return {
-  //           ...field,
-  //           // "Product Image": fileForProduct,
-  //           "Banner Image": fileForBanner,
-  //         };
-  //       }
-  //     }
-  //     return field;
-  //   });
-
-  //   // const otherFields = arr.map((field, index) => {
-  //   //   if (index === indexOfArr && modalHeading === "Product Image") {
-  //   //     return {
-  //   //       ...field,
-  //   //       "Product Image": fileForProduct,
-  //   //       // "Banner Image": fileForBanner,
-  //   //     };
-  //   //   }
-  //   //   if (index === indexOfArr && modalHeading === "Banner Image") {
-  //   //     return {
-  //   //       ...field,
-  //   //       // "Product Image": fileForProduct,
-  //   //       "Banner Image": fileForBanner,
-  //   //     };
-  //   //   }
-  //   //   return field;
-  //   // });
-  //   setArr(otherFields);
-
-  //   toggle();
-  //   setProductPictures([]);
-  //   setBannerPictures([]);
-  //   setFileForProduct([]);
-  //   setFileForBanner([]);
-  // };
-
-  // const saveModalData = () => {
-  //   let finalData = new FormData();
-  //   for (let key in modalData) {
-  //     finalData.append(key, modalData[key]);
-  //   }
-  //   console.log(modalData, "modalData");
-  //   console.log(finalData, "finalData");
-  //   dispatch(saveDataWithImage({ finalData, variantId }));
-  //   toggle();
-  // };
-
-  // const modalCancel = () => {
-  //   toggle();
-  //   setProductPictures([]);
-  //   setBannerPictures([]);
-  //   setFileForProduct([]);
-  //   setFileForBanner([]);
-  // };
-
   const addField = () => {
     const combinedData = inputFields.reduce(
       (acc, obj) => ({ ...acc, ...obj }),
@@ -560,36 +396,6 @@ const AddProduct = () => {
     //   setArr([...arr, arr[arr.length - 1]]);
     // }
   };
-
-  // const submitPriceVariant = (e) => {
-  //   e.preventDefault();
-  //   const ArrayOfdata = [
-  //     inputFields.reduce((acc, obj) => ({ ...acc, ...obj }), {}),
-  //   ].concat(arr);
-  //   console.log(ArrayOfdata, "ArrayOfdata");
-
-  //   ArrayOfdata.forEach((dataObj) => {
-  //     // let formData = new FormData();
-  //     // // Loop through each key in the object
-  //     // for (let key in dataObj) {
-  //     //   if (dataObj.hasOwnProperty(key)) {
-  //     //     // Check if the value is a file
-  //     //     if (dataObj[key] instanceof File) {
-  //     //       // Append the file to the FormData object
-  //     //       formData.append(key, dataObj[key], dataObj[key].name);
-  //     //     } else {
-  //     //       // Append other types of data (e.g., text)
-  //     //       formData.append(key, dataObj[key]);
-  //     //     }
-  //     //   }
-  //     // }
-  //     // const formData = dataObj;
-  //     // dispatch(priceVarInfo({ formData, productId }));
-  //     // dispatch(
-  //     //   priceVarInfo({ formData, productId: "6671804fd2b7492e346c16b4" })
-  //     // );
-  //   });
-  // };
 
   const func1 = () => {
     let clsname = "";
@@ -657,7 +463,7 @@ const AddProduct = () => {
       if (willDelete) {
         dispatch(
           deleteImage({
-            productId: "66839dbf0fead0f56552fe34",
+            productId: productId,
             variantId: variantId,
             imageId: picId,
           })

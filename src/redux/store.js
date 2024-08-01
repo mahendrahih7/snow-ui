@@ -6,6 +6,9 @@ import sellerLoginSlice from "./features/sellers/sellerLoginSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import sellerProductSlice from "./features/sellers/sellerProductSlice";
+import sellerPurchaseSlice from "./features/sellers/sellerPurchaseSlice";
+import sellerWarehouseSlice from "./features/sellers/sellerWarehouseSlice";
+import sellerInventorySlice from "./features/sellers/sellerInventorySlice";
 
 
 
@@ -29,7 +32,10 @@ export const store = configureStore({
     regUser: regSlice,
     loginUser: loginSlice,
     loginSeller: sellerLoginSlice,
-    sellerProducts: sellerProductSlice
+    sellerProducts: sellerProductSlice,
+    sellerPurchase: sellerPurchaseSlice,
+    sellerWarehouse: sellerWarehouseSlice,
+    sellerInventory: sellerInventorySlice
   },
   // reducer: persistedReducer,
   // middleware: (getDefaultMiddleware) =>

@@ -1,5 +1,4 @@
-@media (max-width: 1920px) {
-}
+@media (max-width: 1920px) {}
 
 @media (max-width: 1680px) {
   .container {
@@ -72,15 +71,19 @@
     display: flex;
     gap: 5px;
   }
+
   .batch_info table th {
     font-size: 14px;
   }
+
   .batch_info tbody td {
     font-size: 13px;
   }
+
   .btns .edit {
     font-size: 12px;
   }
+
   /* .prchase_order_main.snow_trnsctn .ordr_tbl table tr td,
   .prchase_order_main.snow_trnsctn .ordr_tbl table tr td:nth-child(4) {
     width: 116px;
@@ -522,75 +525,165 @@
   .batch_info tbody td:nth-child(6) {
     width: 18%;
   }
+
   /* ayon paul start / 6.3.24 */
   .ivnt_units span {
     font-size: 14px;
   }
+
   .ivnt_tbl_hdng h5 {
     font-size: 18px;
   }
+
   .ivnt_tbl_form .ivnt_tbl_prt label,
   .ivnt_tbl_chk label,
   .ivnt_ottr .payment_filter.ivnt_filter .payment_filter_lft label,
   .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_bttm_td_ottr td {
     font-size: 13px;
   }
+
   .ivnt_trns_actv .ivnt_trns_tbl th {
     font-size: 14px;
   }
+
   .payment_filter_both.ivnt_filter_btn .sv_btn {
     width: auto;
   }
+
   .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr {
     overflow: auto;
   }
+
   .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr table {
     width: 2000px;
     overflow: hidden;
   }
+
   .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr td {
     width: 100px !important;
   }
+
   .ordr_tbl.dbrd_inv_ordr_tbl th {
     width: 100px;
   }
+
   .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr {
     overflow: hidden;
   }
+
   .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr td {
     width: fit-content !important;
   }
+
   .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr table {
     width: 100%;
   }
+
   .dashbrd__invc .ordr_tbl.dbrd_inv_ordr_tbl th {
     width: auto;
   }
+
   .prchase_order_main.snow_trnsctn .ordr_tbl table tr td:nth-child(1) {
     width: 200px !important;
   }
+
   .prchase_order_main.snow_trnsctn .ordr_tbl.dbrd_inv_ordr_tbl th {
     width: 196px;
   }
+
   .prchase_order_main.snow_trnsctn .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr {
     overflow: scroll;
   }
+
   .td_table th {
     padding: 9px;
     font-size: 14px;
   }
+
   .payment_ii .td_i_span {
     padding: 10px 0px;
   }
+
   .td_i_c .td_i_span span:nth-child(1) {
     width: 30%;
   }
+
   .td_i_l {
     width: 60%;
   }
+
   /* .td_i_span span:nth-child(1) {
     width: 30%;
   } */
+
+  /* ayon paul start / 19.07.2024 */
+  .outr-right-content.splr_frm_cntnt .splr_frm_flx .form-group label {
+    font-size: 13px !important;
+  }
+
+  .outr-right-content.splr_frm_cntnt .splr_frm_flx .form-group .form-control {
+    font-size: 13px !important;
+  }
+
+  .outr-right-content.splr_frm_cntnt .splr_frm_flx .form-group .sppl_tgls span {
+    font-size: 13px !important;
+  }
+
+  /* ayon paul end / 19.07.2024 */
+
+  /* ayon paul start / 23.07.2024 */
+
+  .bnds_adrs h6 {
+    font-size: 13px;
+  }
+
+  .bnds_adrs p {
+    font-size: 13px;
+  }
+
+  .prchs_itm_tbl th {
+    font-size: 13px !important;
+  }
+
+  .prchs_itm_tbl td select {
+    font-size: 13px !important;
+  }
+
+  .prchs_itm_tbl td {
+    font-size: 13px !important;
+  }
+
+  .prchs_itm_tbl td.cross {
+    font-size: 16px !important;
+  }
+
+  .prchs_add_row {
+    font-size: 14px;
+  }
+
+  .prchs_ttl span {
+    font-size: 13px;
+  }
+
+  /* ayon paul start / 29.07.2024 */
+
+  .blfull_lft,
+  .blfull_rght,
+  .spn_rght,
+  .spn_lft,
+  .adrs_dtls span {
+    font-size: 13px;
+  }
+
+  .ord_bl_otr h6 {
+    font-size: 13px;
+  }
+
+  .prchs_ttl_qntnt,
+  .prchs_ttl_qntnt span {
+    font-size: 13px !important;
+  }
+
 }
 
 /*** ==================<<<<<>>>>>================== ***/
@@ -719,22 +812,28 @@
   .edit {
     padding: 7px 15px;
   }
+
   /* moumi 6.3.24 */
   .tp_txt_mdl h6 {
     font-size: 18px;
   }
+
   .btm_mdl_cls .batch_top.edit {
     font-size: 13px;
   }
+
   ul.breadcrumb li a {
     font-size: 15px;
   }
+
   .td_table th {
     padding: 10px 3px;
   }
+
   .td_main {
     padding: 0;
   }
+
   .td_btm_btn {
     padding-right: 0;
   }
@@ -1030,35 +1129,44 @@
   .ivnt_units span {
     font-size: 13px;
   }
+
   .ivnt_tbl_hdng h5 {
     font-size: 17px;
   }
+
   .ivnt_trns_actv .ivnt_trns_tbl th {
     font-size: 13px;
   }
+
   .td_i_l {
     width: 65%;
   }
+
   /* moumi 19.3.24 */
   .po_mains h3 {
     font-size: 17px;
   }
+
   .td_hdr h6,
   .td_hdr h6 span {
     font-size: 14px;
   }
-  .td_hdr > div {
+
+  .td_hdr>div {
     padding-bottom: 5px;
   }
+
   .td_hdr div .edt {
     font-size: 13px;
   }
+
   /* .td_i_span span {
   font-size: 13px;
 } */
   .td_i_l {
     width: 59%;
   }
+
   .td_i_r h6,
   .td_i_r h6 span {
     /* font-size: 13px; */
@@ -1068,13 +1176,16 @@
   .td_i_r h6:nth-child(6) {
     margin-top: 13px;
   }
+
   .td_table th {
     /* font-size: 13px; */
     padding-left: 7px;
   }
+
   .td_table .item h5 {
     font-size: 13px;
   }
+
   /* .td_table td span {
     font-size: 13px;
   } */
@@ -1082,23 +1193,33 @@
     font-size: 13px;
     padding: 5px;
   }
+
   .t_foot.po_mains h3 {
     font-size: 13px;
   }
+
   .t_foot.po_mains {
     margin-bottom: 0;
   }
+
   .td_i_span span:nth-child(1) {
     width: 50%;
   }
+
   /* .td_i_span span:nth-child(1) {
   width: auto;
 } */
   .td_btm_btn .edit {
     font-size: 13px;
   }
+
   .t_foot {
     gap: 50px;
+  }
+
+  /* ayon paul start / 29.07.2024 */
+  .prchs_ttl.prchs_ordr_bl span {
+    font-size: 17px;
   }
 }
 
@@ -1242,6 +1363,7 @@
   .batch_info {
     overflow: auto;
   }
+
   /* moumi 19.3.24 */
   /* .td_i_span span {
     font-size: 13px;
@@ -1249,17 +1371,21 @@
   ul.breadcrumb li a {
     font-size: 14px;
   }
+
   .t_foot {
     gap: 40px;
   }
+
   .trnsct_tbl_dtls tr td:nth-child(2) {
     width: 230px;
   }
+
   .trnsct_tbl_dtls tr td:nth-child(4) {
     width: 111px;
     word-wrap: break-word;
     word-break: break-all;
   }
+
   .trnsct_tbl_dtls tr td:nth-child(6),
   .trnsct_tbl_dtls tr td:nth-child(7) {
     width: 100px;
@@ -1560,21 +1686,26 @@
   .img_contains {
     width: 58%;
   }
+
   .img_upload {
     width: 40%;
   }
+
   .img_upload input {
     margin-top: 10px;
   }
+
   .img_upload p,
   .img_upload form input,
   .img_text p {
     font-size: 16px;
   }
+
   .img_text p,
   .img_icons {
     padding-top: 5px;
   }
+
   /* moumi 6.3.24 */
   .modal-content.batches_ {
     width: 45%;
@@ -1584,27 +1715,35 @@
   .ivnt_tbl_hdng h5 {
     font-size: 15px;
   }
+
   .prchase_order_main .ordr_tbl table tr td:last-child {
     gap: 8px;
   }
+
   .orders_purchase {
     overflow: auto;
   }
+
   .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr table {
     overflow: auto;
   }
+
   .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr {
     overflow: auto;
   }
+
   .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr td {
     width: 200px !important;
   }
+
   .prchase_order_main .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr table {
     width: 1000px;
   }
+
   .po_odr .po_main_info {
     width: 70%;
   }
+
   /* moumi 19.3.24 */
   .td_hdr h6,
   .td_hdr h6 span {
@@ -1615,32 +1754,40 @@
   .td_hdr h6 span {
     font-size: 13px;
   }
+
   .td_i_l {
     width: 61%;
   }
+
   .trnsct_tbl_dtls {
     overflow: auto;
   }
+
   .td_table table {
     width: 1000px;
     table-layout: auto;
     overflow: hidden;
   }
+
   .trnsct_tbl_dtls tr td:nth-child(2) {
     width: auto;
   }
+
   .trnsct_tbl_dtls tr td:nth-child(4) {
     width: auto;
     word-wrap: unset;
     word-break: unset;
   }
+
   .trnsct_tbl_dtls tr td:nth-child(6),
   .trnsct_tbl_dtls tr td:nth-child(7) {
     width: auto;
   }
+
   .td_i_c .td_i_span span:nth-child(1) {
     width: 24%;
   }
+
   .fnl_r .td_i_c .td_i_span span:nth-child(1) {
     width: auto;
   }
@@ -1648,10 +1795,25 @@
   .fnl_r .td_i_span span:nth-child(1) {
     width: auto;
   }
+
+  /* ayon paul start / 19.07.2024 */
+
+  .outr-right-content.splr_frm_cntnt .splr_frm_flx {
+    row-gap: 15px;
+  }
+
+  /* ayon paul end / 19.07.2024 */
+
+  /* ayon paul start / 19.07.2024 */
+  .prchs_ordr_bl_ttl {
+    width: 45%;
+  }
+
 }
 
 /* ============================================================= */
 @media (max-width: 1024px) {
+
   /* moumi 12.02.24  */
   .ordr_tbl table tr td:nth-child(1) {
     width: 235px;
@@ -1721,49 +1883,63 @@
   .itm_lft_ds h4 span {
     font-size: 20px;
   }
+
   /* moumi 6.3.24 */
   .p_info_hdr h6 {
     font-size: 18px;
   }
+
   .batch_top .edit {
     font-size: 12px;
   }
+
   .tp_txt_mdl h6 {
     font-size: 17px;
   }
+
   .mddl_mdl table th {
     padding-bottom: 14px;
   }
+
   .mddl_mdl td {
     font-size: 13px;
   }
+
   .mddl_mdl {
     padding: 10px;
   }
+
   .tp_mdl {
     padding: 20px 10px;
   }
+
   /* shreyasu(14.3.24) */
   .prnt_info h4 {
     font-size: 17px;
   }
+
   .prnt_lbl_prt label {
     font-size: 15px;
   }
+
   .po_main .hdr h3 {
     font-size: 20px;
   }
+
   .edit {
     font-size: 14px;
   }
+
   .prnt_info {
     margin: 9px 0 16px;
     padding-bottom: 10px;
   }
+
   /* moumi 19.3.24 */
   .td_i_l .td_i_c .td_i_span span:nth-child(1) {
     width: 28%;
   }
+
   .payment_ii .td_i_span span:nth-child(1) {
     width: 100%;
   }
@@ -1772,6 +1948,7 @@
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 991px) {
+
   /* moumi 9.2.24 */
   .frm_innr button,
   .v_frm_innr button {
@@ -1912,6 +2089,7 @@
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 900px) {
+
   /* moumi 9.2.24 */
   .a_txt p {
     font-size: 14px;
@@ -2038,10 +2216,12 @@
   .mdl_ftr h5 {
     font-size: 17px;
   }
+
   /* moumi 6.3.24 */
   .batch_info table th {
     font-size: 13px;
   }
+
   .btm_mdl_cls .batch_top.edit {
     font-size: 11px;
   }
@@ -2050,6 +2230,7 @@
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 840px) {
+
   /* moumi 9.2.24 */
   .sign_up_otr {
     width: 60%;
@@ -2192,17 +2373,36 @@
   .batch_info tbody td {
     font-size: 12px;
   }
+
   .btns .edit {
     font-size: 11px;
   }
+
   .modal-content.batches_ {
     width: 55%;
   }
+
+  /* ayon paul start / 23.07.2024 */
+
+  .prchs_itm_tbl td select {
+    font-size: 14px !important;
+    width: 100%;
+  }
+
+  .prchs_itm_tbl td.cross {
+    font-size: 15px !important;
+  }
+
+  .prchs_itm_tbl td.cross {
+    padding-inline: 5px;
+  }
+
 }
 
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 768px) {
+
   /* moumi 10.2.24 */
   .nt_txt h6 {
     font-size: 13px;
@@ -2320,31 +2520,39 @@
   .tp_txt_mdl h6 {
     font-size: 16px;
   }
+
   .mddl_mdl table th {
     font-size: 14px;
   }
+
   .mddl_mdl td {
     font-size: 12px;
   }
+
   tbody tr td {
     padding: 13px 0;
   }
+
   /* ayon paul start / 6.3.24 */
   .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_td_ottr table {
     width: 1800px;
   }
+
   /* moumi 19.3.24 */
   .td_info {
     flex-direction: column;
     gap: 20px;
   }
+
   .td_i_l {
     width: 77%;
   }
+
   .td_i_r h6 {
     text-align: left;
     padding-bottom: 5px;
   }
+
   .fnl_r {
     width: 60%;
   }
@@ -2426,10 +2634,7 @@
     margin-bottom: 15px;
   }
 
-  .tb_cntct_rght_form
-    form
-    .tb_cntct_rght_top.drpn:nth-child(2)
-    .form-group.slct:nth-child(3) {
+  .tb_cntct_rght_form form .tb_cntct_rght_top.drpn:nth-child(2) .form-group.slct:nth-child(3) {
     width: 100%;
   }
 
@@ -2567,106 +2772,168 @@
   .add_btn svg {
     font-size: 14px;
   }
+
   /* moumi 6.3.24 */
   .batch_info {
     overflow: auto;
   }
+
   /* ayon paul start / 6.3.24 */
   .ivnt_tbl_form .ivnt_tbl_strt {
     flex-wrap: wrap;
   }
+
   .ivnt_tbl_form .ivnt_tbl_prt:last-child {
     width: 20%;
   }
+
   .ivnt_tbl_form .ivnt_tbl_prt {
     width: 49%;
   }
+
   .payment_filter_both.ivnt_filter_btn .sv_btn {
     margin-left: auto;
   }
+
   .ordr_tbl.dbrd_inv_ordr_tbl.ivnt_bttm_td_ottr td {
     width: 35% !important;
   }
+
   .sv_btn {
     padding: 10px 14px;
   }
+
   .ivnt_tp_btns {
     gap: 22px;
   }
+
   .prchs_ctgry a {
     font-size: 14px;
   }
+
   .prchs_ctgry {
     padding: 6px 20px;
   }
+
   .po_odr .po_main_info {
     width: 100%;
   }
+
   .po_odr .labl label {
     padding: 10px 5px;
     font-size: 15px;
   }
+
   .po_main .hdr h6 {
     font-size: 15px;
   }
+
   .optn select,
   .optn input {
     font-size: 14px;
   }
+
   .po_btm_info {
     overflow: auto;
   }
+
   .prchase_order.po_odr .order_btn {
     gap: 20px;
     flex-wrap: wrap;
     margin: auto;
     justify-content: center;
   }
+
   .prchase_order .po_order_info .po_main_info .txt {
     margin-bottom: 0;
   }
+
   .po_btm_info table th {
     font-size: 14px;
   }
+
   .po_info select {
     font-size: 15px;
   }
+
   /* shreyasi(14.3.24) */
   .prnt_info {
     margin: 8px 0;
   }
+
   .prnt_info h4 {
     font-size: 16px;
   }
+
   .po_main .hdr h3 {
     font-size: 19px;
   }
+
   .prnt_label_dtls {
     flex-wrap: wrap;
   }
+
   .prnt_lbl_prt {
     width: 50%;
   }
+
   .prnt_lbl_prt .optn {
     width: 95%;
   }
+
   .prnt_info {
     gap: 16%;
   }
+
   /* moumi 19.3.24 */
   .td_i_c {
     padding-right: 5px;
   }
+
   .td_btm_btn {
     gap: 13px;
   }
+
   .td_btm_btn {
     gap: 13px;
   }
+
+  /* ayon paul start / 19.07.2024 */
+
+  .outr-right-content.splr_frm_cntnt .splr_frm_flx .form-group {
+    width: 100%;
+  }
+
+  /* ayon paul end / 19.07.2024 */
+
+  /* ayon paul start / 23.07.2024 */
+
+  .bnds_adrs p br {
+    display: none;
+  }
+
+  .prchs_rows {
+    row-gap: 15px;
+  }
+
+  .prchs_itm_tbl {
+    overflow: auto;
+  }
+
+  .prchs_itm_tbl table {
+    width: 1000px;
+  }
+
+  .prchs_ttl {
+    width: 40%;
+  }
+
 }
+
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 667px) {
+
   /* moumi 9.2.24 */
   .sign_up_otr {
     width: 70%;
@@ -2848,31 +3115,44 @@
   .lft_p_nav {
     padding: 15px;
   }
+
   /* shreyasi */
   .img_part {
     width: 100%;
   }
+
   .img_part_img img {
     width: 80%;
   }
+
   /* moumi 6.3.24 */
   .btm_mdl_cls {
     padding: 20px 10px;
   }
+
   .modal-content.batches_ {
     width: 70%;
   }
+
   .td_i_l {
     width: 90%;
   }
+
   .fnl_r {
     width: 80%;
   }
+
+  /* ayon paul start / 19.07.2024 */
+  .prchs_ordr_bl_ttl {
+    width: 47%;
+  }
+
 }
 
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 600px) {
+
   /* moumi 9.2.24 */
   .sign_up_innr {
     padding: 4rem;
@@ -2958,40 +3238,60 @@
   .total {
     font-size: 12px !important;
   }
+
   .po_odr .po_btns {
     margin-top: 20px;
   }
+
   /* moumi 19.3.24 */
   .td_i_l {
     width: 90%;
   }
+
   .td_i_c .td_i_span span:nth-child(1) {
     width: 35%;
   }
+
   .po_tp_hdr_div ul.breadcrumb {
     padding: 11px;
   }
+
   .td_main .td_hdr h3 {
     padding-bottom: 14px;
   }
+
   .td_i_h.po_mains {
     margin-bottom: 0;
   }
+
   .td_i_l .td_i_c .td_i_span span:nth-child(1) {
     width: 24%;
   }
+
   .td_i_l {
     width: 95%;
   }
+
   .po_mains h3 {
     font-size: 16px;
     padding-bottom: 10px;
   }
+
+  /* ayon paul start / 19.07.2024 */
+  .prchs_ttl.prchs_ordr_bl span {
+    font-size: 16px;
+  }
+
+  .prchs_ordr_bl_ttl {
+    width: 48%;
+  }
+
 }
 
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 575px) {
+
   /* moumi 9.2.24 */
   .sign_up_otr {
     width: 80%;
@@ -3142,107 +3442,154 @@
   .tb_lft.product_i {
     /* overflow-x: scroll; */
   }
+
   /* shreyasi */
   .quick-btn {
     font-size: 13px;
     padding: 6px 7px;
   }
+
   .img_upload p,
   .img_upload form input,
   .img_text p {
     font-size: 14px;
   }
+
   .img_upload {
     width: 45%;
   }
+
   /* moumi 6.3.24 */
   .batch_top .edit,
   .btns .edit {
     font-size: 10px;
   }
+
   .p_info_hdr h6 {
     font-size: 16px;
   }
+
   .batch_info table th {
     font-size: 12px;
   }
+
   .batch_info tbody td {
     font-size: 11px;
   }
+
   .batch_info {
     margin-top: 30px;
   }
+
   /* ayon paul start / 6.3.24 */
   .ivnt_tbl_form .ivnt_tbl_prt {
     width: 100%;
   }
+
   .ivnt_tbl_hdng h5 {
     font-size: 14px;
   }
+
   .ivnt_tbl_form .ivnt_tbl_prt:last-child {
     width: 35%;
   }
+
   .ivnt_tp_btns {
     flex-direction: column;
     gap: 22px;
     align-items: flex-start;
   }
+
   .ivnt_ottr {
     padding: 30px 20px;
   }
+
   .orders.dbrd_inv_orders {
     overflow-x: auto;
   }
+
   .payment_filter_both.ivnt_filter_btn .sv_btn {
     margin-left: 0;
     margin-right: auto;
   }
+
   .ivnt_trns_actv .ivnt_trns_tbl th {
     padding: 10px;
   }
+
   .prchs_ctgry {
     flex-wrap: wrap;
   }
+
   /* shreyasi(14.3.24) */
   .prnt_info h4 {
     font-size: 14px;
   }
+
   .po_main .hdr h3 {
     font-size: 18px;
   }
+
   .edit {
     font-size: 13px;
     padding: 6px 12px;
   }
+
   .prnt_info {
     gap: 14%;
   }
+
   .prnt_lbl_prt label {
     font-size: 14px;
   }
+
   .prnt_lbl_prt .optn select,
   .prnt_lbl_prt .optn input,
   .prnt_lbl_prt .optn input::placeholder {
     font-size: 13px;
   }
+
   .po_tp_hdr_div ul.breadcrumb {
     padding: 8px 14px;
   }
+
   ul.breadcrumb li a {
     font-size: 14px;
   }
+
   .trans-info {
     padding: 0 1px;
   }
+
   .snow_trnsctn .tb_lft.product_i {
     overflow-x: scroll !important;
   }
+
   /* moumi  */
+
+  /* ayon paul start / 24.07.2024 */
+
+  .prchs_add_btn {
+    width: 100%;
+  }
+
+  .prchs_ttl {
+    width: 100%;
+    padding-block: 15px;
+  }
+
+  /* ayon paul start / 29.07.2024 */
+
+  .prchs_ordr_bl_ttl {
+    width: 100%;
+  }
+
 }
 
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 480px) {
+
   /* moumi 9.2.24 */
   .sign_up_otr {
     width: 100%;
@@ -3448,28 +3795,36 @@
   .batch_info table th {
     font-size: 11px;
   }
+
   .p_info_hdr h6 {
     font-size: 14px;
   }
+
   .p_info.batch {
     margin-left: 0;
     margin-right: 0;
   }
+
   .modal-content.batches_ {
     width: 80%;
   }
+
   .tp_txt_mdl h6 {
     font-size: 15px;
   }
+
   .mddl_mdl table th {
     font-size: 13px;
   }
+
   .mddl_mdl td {
     font-size: 11px;
   }
+
   ul.breadcrumb li a {
     font-size: 13px;
   }
+
   /* .po_tp_hdr_div ul.breadcrumb {
     padding: 20px 10px;
   } */
@@ -3477,33 +3832,42 @@
     padding: 5px 8px;
     font-size: 13px;
   }
+
   .prchs_ctgry {
     margin: 20px 10px;
   }
+
   .payment_filter_rght.prchs_srch {
     margin: 10px;
     width: auto;
   }
+
   .orders_purchase {
     margin: 10px;
   }
+
   .prnt_info {
     gap: 5%;
   }
+
   .prnt_lbl_prt .optn {
     padding: 6px 0;
   }
+
   .rgt_p_nav,
   .lft_p_nav {
     padding: 10px;
   }
+
   .breadcrumb-item a {
     font-size: 15px;
   }
+
   /* moumi 19.3.24 */
   .td_i_l .td_i_c .td_i_span span:nth-child(2) {
     width: 68%;
   }
+
   .td_i_l .td_i_c .td_i_span span:nth-child(1) {
     width: 30%;
   }
@@ -3512,6 +3876,7 @@
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 430px) {
+
   /* ayon paul 09.02.24  */
   .outr-right-content {
     padding: 20px;
@@ -3556,42 +3921,54 @@
   .itm_lft_ds h4 span {
     font-size: 16px;
   }
+
   /* moummi 6.3.24 */
   .modal_hdr h6 {
     font-size: 12px;
   }
+
   .p_info.batch {
     padding-left: 10px;
   }
+
   .batch_top {
     padding-right: 0;
   }
+
   .e-edit {
     padding-right: 0;
   }
+
   .batch_info {
     margin-right: 0px;
   }
+
   .modal-content.batches_ {
     width: 90%;
   }
+
   /* moumi 19.3.24 */
   .td_i_l {
     width: 100%;
   }
+
   .td_i_l .td_i_c .td_i_span span:nth-child(1) {
     width: 35%;
   }
+
   .td_i_l .td_i_c .td_i_span span:nth-child(2) {
     width: 68%;
   }
+
   .final_orders {
     flex-direction: column;
     gap: 15px;
   }
+
   .fnl_r {
     width: 100%;
   }
+
   .td_btm_btn {
     flex-direction: column;
   }
@@ -3600,6 +3977,7 @@
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 390px) {
+
   /* moumi 9.2.24 */
   .a_txt p {
     font-size: 13px;
@@ -3749,25 +4127,55 @@
     width: 100%;
     padding-left: 10px;
   }
+
   .img_info {
     display: block;
   }
+
   /* ayon paul start / 6.3.24 */
   .ivnt_ottr {
     margin-inline: 10px;
   }
+
   .trans-info {
     padding: 0 10px;
   }
+
   /* moumi 19.3.24 */
   .po_odr {
     padding: 10px;
   }
+
+  /* ayon paul start / 19.07.2024 */
+
+  .outr-right-content.splr_frm_cntnt .splr_frm_flx {
+    padding-inline: 10px;
+  }
+
+  /* ayon paul end / 19.07.2024 */
+
+  /* ayon paul start / 24.07.2024 */
+
+  .prchs_itm_tbl {
+    padding-inline: 10px;
+  }
+
+  .prchs_rows {
+    padding-inline: 10px;
+  }
+
+  /* ayon paul start / 29.07.2024 */
+
+  .sply_edcvt_btns {
+    padding-inline: 10px;
+  }
+
 }
 
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 375px) {
+
   /* moumi 9.2.24 */
   .apple,
   .ggle {
@@ -3799,6 +4207,7 @@
 /*** ==================<<<<<>>>>>================== ***/
 
 @media (max-width: 360px) {
+
   /* moumi 9.2.24 */
   .sign_up_innr {
     padding: 4rem 2rem;

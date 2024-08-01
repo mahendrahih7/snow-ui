@@ -13,7 +13,35 @@ export const Seller_product_category = `${BASE_URL}/api/category`;
 export const all_brand = `${BASE_URL}/api/brands`;
 export const productInfo = `${BASE_URL}/api/products`;
 export const seller_prodInfo_update = `${BASE_URL}/api/products/update`;
-export const get_product_image = `${BASE_URL}/api/products/getVariantById`;
-export const get_allvariants_data = `${BASE_URL}/api/products/getVariantByProductId`;
+export const get_product_image = `${BASE_URL}/api/variant/getVariantById`;
+export const get_allvariants_data = `${BASE_URL}/api/variant/getVariantByProductId`;
 export const product_description = `${BASE_URL}/api/products`;
 export const product_update = `${BASE_URL}/api/products/update`;
+
+//add supplier info
+export const add_supplier = `${BASE_URL}/api/supplier/create`;
+//Get all suppliers
+export const get_suppliers = `${BASE_URL}/api/supplier`;
+//Update status
+export const update_status = `${BASE_URL}/api/supplier/update`;
+
+//ADD WAREHOSE
+export const add_warehouse = `${BASE_URL}/api/warehouse/create`;
+
+//GET ALL WAREHOUSE LIST
+export const get_warehouse = `${BASE_URL}/api/warehouse`;
+
+//CREATE PURCHASE ORDER
+export const create_purchase_order = `${BASE_URL}/api/po/create`;
+
+//GET ALL PURCHASE ORDER
+export const getAllPO = `${BASE_URL}/api/po/getAllPO`;
+
+//PURCHASE ORDER DETAIL
+export const purchase_order_detail = `${BASE_URL}/api/po/getPoById`;
+
+//FOR ADD BILL
+export const add_bill = `${BASE_URL}/api/bill/addBill`;
+
+//FOR INVENTORY SUMMERY
+export const get_inventory_summery = `${BASE_URL}/api/variant/getAllVariants`;

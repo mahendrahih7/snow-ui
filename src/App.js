@@ -21,6 +21,15 @@ import PrivateRoute from "./routes/PrivateRoute";
 import ProductList from "./components/sellers/products/ProductList";
 import AddProduct from "./components/sellers/products/AddProduct";
 import ProductDetail from "./components/sellers/products/ProductDetail";
+import SupplierList from "./components/sellers/purchase/SupplierList";
+import AddSupplier from "./components/sellers/purchase/AddSupplier";
+import WarehouseList from "./components/sellers/warehouse/WarehouseList";
+import AddWarehouse from "./components/sellers/warehouse/AddWarehouse";
+import PurchaseOrder from "./components/sellers/purchase/PurchaseOrder";
+import PurchaseOrderList from "./components/sellers/purchase/PurchaseOrderList";
+import PurchaseOrderDetail from "./components/sellers/purchase/PurchaseOrderDetail";
+import Bill from "./components/sellers/purchase/Bill";
+import InventorySummery from "./components/sellers/inventory/InventorySummery";
 
 function App() {
   return (
@@ -48,6 +57,39 @@ function App() {
             <Route
               path="/products/product-detail/:id"
               element={<ProductDetail />}
+            ></Route>
+            <Route
+              path="/purchase/supplier-list"
+              element={<SupplierList />}
+            ></Route>
+            <Route
+              path="/purchase/add-supplier"
+              element={<AddSupplier />}
+            ></Route>
+            <Route
+              path="/purchase/purchase-order-list"
+              element={<PurchaseOrderList />}
+            ></Route>
+            <Route
+              path="/purchase/purchase-order"
+              element={<PurchaseOrder />}
+            ></Route>
+            <Route
+              path="/purchase/purchase-order-detail/:id"
+              element={<PurchaseOrderDetail />}
+            ></Route>
+            <Route path="/purchase/bill/:id" element={<Bill />}></Route>
+            <Route
+              path="/warehouse/warehouse-list"
+              element={<WarehouseList />}
+            ></Route>
+            <Route
+              path="/warehouse/add-warehouse"
+              element={<AddWarehouse />}
+            ></Route>
+            <Route
+              path="/inventory/inventory-summery"
+              element={<InventorySummery />}
             ></Route>
           </Route>
           <Route path="/seller-login" element={<SellerLogin />}></Route>

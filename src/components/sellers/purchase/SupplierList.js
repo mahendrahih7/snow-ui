@@ -5,9 +5,11 @@ import {
   faEllipsisVertical,
   faEye,
   faMagnifyingGlass,
+  faPlus,
   faStar,
   faTrash,
   faUser,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import ordr_img1 from "../../../assets/images/ordr_img1.png";
@@ -22,61 +24,40 @@ import {
 import { allProducts } from "../../../redux/features/sellers/sellerProductSlice";
 import axios from "axios";
 import NavBar from "../../common/Nav/NavBar";
+import {
+  allSuppliers,
+  updateStatus,
+} from "../../../redux/features/sellers/sellerPurchaseSlice";
+import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-const ProductList = () => {
+const SupplierList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [toggle, setToggle] = useState(false);
+  // const [toggle, setToggle] = useState(false);
   const [toggleClick, setToggleClick] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [statusDetail, setStatusDetail] = useState();
+  const [modal, setModal] = useState(false);
 
-  const { loading, products } = useSelector((state) => state.sellerProducts);
-  console.log(products, "productsList");
+  const toggle = () => setModal(!modal);
+
+  const { loading, suppliers } = useSelector((state) => state.sellerPurchase);
 
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 5;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const records = products?.slice(firstIndex, lastIndex);
+  const records = suppliers?.slice(firstIndex, lastIndex);
   console.log(records, "records");
 
-  const npage = Math.ceil(products.length / recordsPerPage);
+  const npage = Math.ceil(suppliers.length / recordsPerPage);
   console.log(npage, "npage");
   const numbers = [...Array(npage + 1).keys()].slice(1);
   console.log(numbers, "numbers");
 
-  const handleLogout = () => {
-    // e.preventDefault();
-    console.log("called", "logout");
-    swal({
-      title: "Are you sure?",
-      // text: "Once deleted, you will not be able to recover this imaginary file!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        dispatch(logout());
-        // console.log(res, "response");
-        localStorage.removeItem("token");
-        toast.success("logout successfully", {
-          className: "toast-message",
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          // theme: 'dark',
-          transition: Bounce,
-        });
-        navigate("/seller-login");
-      }
-    });
-  };
-
   useEffect(() => {
-    dispatch(allProducts());
+    dispatch(allSuppliers());
   }, []);
 
   const prePage = () => {
@@ -98,8 +79,44 @@ const ProductList = () => {
     window.scrollTo(0, 0);
   };
 
+  const changeStatus = (props) => {
+    console.log(props, "props");
+    setStatusDetail(props);
+    // console.log(!props.statusActive, "6666");
+  };
+
+  const toggleForChangeStatus = () => {
+    setModal(!modal);
+    console.log(statusDetail, "statusDetail");
+    dispatch(updateStatus(statusDetail));
+  };
+
   return (
     <>
+      <div className="ttl_mdl">
+        <Modal
+          isOpen={modal}
+          toggle={toggle}
+          centered
+          backdrop
+          className="nw_ttl_mdl"
+        >
+          {/* <ModalHeader toggle={toggle}>Modal title</ModalHeader> */}
+          <ModalBody>Do you want to change status ?</ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={toggle} className="edit">
+              Cancel
+            </Button>{" "}
+            <Button
+              color="primary"
+              onClick={toggleForChangeStatus}
+              className="blu_edit"
+            >
+              Yes
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
       <main>
         <section className="total_parent_element">
           <div className="left_parent_element">
@@ -131,7 +148,7 @@ const ProductList = () => {
               <div className="oder_history">
                 <div className="order_hdr">
                   <div className="ordre_lft">
-                    <h6>Product List</h6>
+                    <h6>Supplier List</h6>
                     {/* <p>Manage your recent products and invoices.</p> */}
                   </div>
                   <div className="ordre_rght">
@@ -147,67 +164,92 @@ const ProductList = () => {
                   </div>
                 </div>
                 <div className="orders">
+                  <button
+                    type="submit"
+                    href="javascript:void(0);"
+                    className="edit"
+                    onClick={() => navigate("/purchase/add-supplier")}
+                  >
+                    <FontAwesomeIcon icon={faPlus} /> New Supplier
+                  </button>
                   <div className="ordr_tbl">
                     <table>
                       <thead>
                         <tr>
-                          <th>Product Name</th>
-                          <th>Brand</th>
-                          <th>Category</th>
-                          <th>
-                            Sub
-                            <br />
-                            Category
-                          </th>
-                          <th>
-                            Shipping <br />
-                            Charge
-                          </th>
+                          <th>Supplier Name</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Status</th>
+                          <th>Admin Verified</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {records &&
                           records.length > 0 &&
-                          records.map((product) => {
-                            console.log(product, "99");
+                          records.map((supplier) => {
                             return (
-                              <tr key={product?._id}>
+                              <tr key={supplier?._id}>
                                 <td>
                                   <div className="div1">
                                     <div className="o_div_txt">
-                                      <h5>{product?.productInfo?.name}</h5>
+                                      <h5>{supplier?.name}</h5>
                                     </div>
                                   </div>
                                 </td>
                                 <td>
                                   <div className="div2">
-                                    <h5>{product?.productInfo?.brand?.name}</h5>
+                                    <h5>{supplier?.email}</h5>
                                   </div>
                                 </td>
                                 <td>
                                   <div className="div2">
-                                    <h5>
-                                      {product?.productInfo?.category?.name}
-                                    </h5>
+                                    <h5>{supplier?.phoneNumber}</h5>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="div2 sl-list-status">
+                                    <label className="switch">
+                                      <input
+                                        type="checkbox"
+                                        checked={supplier?.status?.isActive}
+                                        onChange={() =>
+                                          changeStatus({
+                                            statusActive:
+                                              supplier.status.isActive,
+                                            id: supplier._id,
+                                          })
+                                        }
+                                        onClick={toggle}
+                                      />
+                                      <span className="slider round" />
+                                    </label>
                                   </div>
                                 </td>
                                 <td>
                                   <div className="div2">
-                                    <h5>
-                                      {product?.productInfo?.subCategory?.name}
-                                    </h5>
-                                  </div>
-                                </td>
+                                    <label
+                                      className="switch"
+                                      style={{
+                                        margin: "auto",
 
-                                <td>
-                                  <div className="div2">
-                                    <h5>
-                                      {
-                                        product?.productInfo?.shippingDetails
-                                          ?.shippingCharge
-                                      }
-                                    </h5>
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      {supplier?.status?.isVerified ? (
+                                        <FontAwesomeIcon
+                                          icon={faCircleCheck}
+                                          size="2xl"
+                                          style={{ color: "#63E6BE" }}
+                                        />
+                                      ) : (
+                                        <FontAwesomeIcon
+                                          icon={faXmark}
+                                          size="2xl"
+                                          style={{ color: "#ff0000" }}
+                                        />
+                                      )}
+                                    </label>
                                   </div>
                                 </td>
 
@@ -218,15 +260,15 @@ const ProductList = () => {
                                         style={{ cursor: "pointer" }}
                                         icon={faEye}
                                         size="2xl"
-                                        onClick={() =>
-                                          navigate(
-                                            `/products/product-detail/${product?._id}`
-                                          )
-                                        }
+                                        // onClick={() =>
+                                        //   navigate(
+                                        //     `/products/product-detail/${product?._id}`
+                                        //   )
+                                        // }
                                       />
                                     </span>
                                     <span style={{ marginLeft: "20px" }} />
-                                    <span>
+                                    {/* <span>
                                       <FontAwesomeIcon
                                         style={{
                                           color: "#da0b20",
@@ -235,7 +277,7 @@ const ProductList = () => {
                                         icon={faTrash}
                                         size="2xl"
                                       />
-                                    </span>
+                                    </span> */}
                                   </div>
                                 </td>
                               </tr>
@@ -281,4 +323,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default SupplierList;

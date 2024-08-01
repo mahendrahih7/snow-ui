@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { productDescription } from "../../../redux/features/sellers/sellerProductSlice";
 
 const MyEditor = () => {
   const dispatch = useDispatch();
   const [editorData, setEditorData] = useState("");
+
+  const { productId } = useSelector((state) => state.sellerProducts);
 
   return (
     <div>
@@ -43,7 +45,7 @@ const MyEditor = () => {
             dispatch(
               productDescription({
                 productDescription: editorData,
-                productId: "66839dbf0fead0f56552fe34",
+                productId: productId,
               })
             );
           }}

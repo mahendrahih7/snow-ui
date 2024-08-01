@@ -2,81 +2,42 @@ import React, { useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faEllipsisVertical,
   faEye,
   faMagnifyingGlass,
-  faStar,
-  faTrash,
-  faUser,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import ordr_img1 from "../../../assets/images/ordr_img1.png";
+import { useNavigate } from "react-router-dom";
 
-import { Bounce, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from "../../common/Sidebar";
-import {
-  logout,
-  sellerProduct,
-} from "../../../redux/features/sellers/sellerLoginSlice";
-import { allProducts } from "../../../redux/features/sellers/sellerProductSlice";
-import axios from "axios";
-import NavBar from "../../common/Nav/NavBar";
 
-const ProductList = () => {
+import NavBar from "../../common/Nav/NavBar";
+import { allPurchaseOrder } from "../../../redux/features/sellers/sellerPurchaseSlice";
+
+const PurchaseOrderList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [toggle, setToggle] = useState(false);
-  const [toggleClick, setToggleClick] = useState(false);
 
-  const { loading, products } = useSelector((state) => state.sellerProducts);
-  console.log(products, "productsList");
+  const [modal, setModal] = useState(false);
+
+  const { loading, POList } = useSelector((state) => state.sellerPurchase);
+
+  console.log(POList, "POList");
 
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 5;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const records = products?.slice(firstIndex, lastIndex);
+  const records = POList?.slice(firstIndex, lastIndex);
   console.log(records, "records");
 
-  const npage = Math.ceil(products.length / recordsPerPage);
+  const npage = POList?.length > 0 && Math.ceil(POList.length / recordsPerPage);
   console.log(npage, "npage");
   const numbers = [...Array(npage + 1).keys()].slice(1);
   console.log(numbers, "numbers");
 
-  const handleLogout = () => {
-    // e.preventDefault();
-    console.log("called", "logout");
-    swal({
-      title: "Are you sure?",
-      // text: "Once deleted, you will not be able to recover this imaginary file!",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        dispatch(logout());
-        // console.log(res, "response");
-        localStorage.removeItem("token");
-        toast.success("logout successfully", {
-          className: "toast-message",
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          // theme: 'dark',
-          transition: Bounce,
-        });
-        navigate("/seller-login");
-      }
-    });
-  };
-
   useEffect(() => {
-    dispatch(allProducts());
+    dispatch(allPurchaseOrder());
   }, []);
 
   const prePage = () => {
@@ -100,6 +61,7 @@ const ProductList = () => {
 
   return (
     <>
+      <div className="ttl_mdl"></div>
       <main>
         <section className="total_parent_element">
           <div className="left_parent_element">
@@ -123,16 +85,12 @@ const ProductList = () => {
           </div>
           <div className="right_parent_element">
             <NavBar />
-            {/* <Topbar/> */}
 
             <div className="outr-right-content">
-              {/* <HomePage/> */}
-              {/* <Outlet /> */}
               <div className="oder_history">
                 <div className="order_hdr">
                   <div className="ordre_lft">
-                    <h6>Product List</h6>
-                    {/* <p>Manage your recent products and invoices.</p> */}
+                    <h6>List Of Purchase Order</h6>
                   </div>
                   <div className="ordre_rght">
                     {/* <div className="ordr_srch_bx">
@@ -147,93 +105,104 @@ const ProductList = () => {
                   </div>
                 </div>
                 <div className="orders">
+                  <button
+                    type="submit"
+                    href="javascript:void(0);"
+                    className="edit"
+                    onClick={() => navigate("/purchase/purchase-order")}
+                  >
+                    <FontAwesomeIcon icon={faPlus} /> Create Purchase Order
+                  </button>
                   <div className="ordr_tbl">
                     <table>
                       <thead>
                         <tr>
-                          <th>Product Name</th>
-                          <th>Brand</th>
-                          <th>Category</th>
-                          <th>
-                            Sub
-                            <br />
-                            Category
-                          </th>
-                          <th>
-                            Shipping <br />
-                            Charge
-                          </th>
+                          <th>Date</th>
+                          <th>Purchase Order</th>
+                          <th>Supplier Name</th>
+                          <th>Payment Terms</th>
+                          <th>Status</th>
+                          <th>Amount</th>
+                          <th>Expected Delivery Date</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {records &&
                           records.length > 0 &&
-                          records.map((product) => {
-                            console.log(product, "99");
+                          records.map((po) => {
                             return (
-                              <tr key={product?._id}>
+                              <tr key={po?._id}>
                                 <td>
                                   <div className="div1">
                                     <div className="o_div_txt">
-                                      <h5>{product?.productInfo?.name}</h5>
+                                      <h5>
+                                        {po?.dateOfPurchaseOrder
+                                          .slice(0, 10)
+                                          .split("-")
+                                          .reverse()
+                                          .join("/")}
+                                      </h5>
                                     </div>
                                   </div>
                                 </td>
                                 <td>
                                   <div className="div2">
-                                    <h5>{product?.productInfo?.brand?.name}</h5>
+                                    <h5>{po?.purchaseOrderNumber}</h5>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="div2">
+                                    <h5>{po?.supplierId?.name}</h5>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="div2">
+                                    <h5>{po?.paymentTerm}</h5>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="div2">
+                                    {po.isBilled ? (
+                                      <h5 style={{ color: "blue" }}>Billed</h5>
+                                    ) : (
+                                      <h5 style={{ color: "red" }}>
+                                        Not Billed
+                                      </h5>
+                                    )}
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="div2">
+                                    <h5>{po?.totalAmount}</h5>
                                   </div>
                                 </td>
                                 <td>
                                   <div className="div2">
                                     <h5>
-                                      {product?.productInfo?.category?.name}
+                                      {po?.expectedDeliveryDate
+                                        .slice(0, 10)
+                                        .split("-")
+                                        .reverse()
+                                        .join("/")}
                                     </h5>
                                   </div>
                                 </td>
-                                <td>
-                                  <div className="div2">
-                                    <h5>
-                                      {product?.productInfo?.subCategory?.name}
-                                    </h5>
-                                  </div>
-                                </td>
-
-                                <td>
-                                  <div className="div2">
-                                    <h5>
-                                      {
-                                        product?.productInfo?.shippingDetails
-                                          ?.shippingCharge
-                                      }
-                                    </h5>
-                                  </div>
-                                </td>
-
                                 <td>
                                   <div className="div2">
                                     <span>
                                       <FontAwesomeIcon
-                                        style={{ cursor: "pointer" }}
+                                        style={{
+                                          cursor: "pointer",
+                                          color: "black",
+                                        }}
                                         icon={faEye}
                                         size="2xl"
                                         onClick={() =>
                                           navigate(
-                                            `/products/product-detail/${product?._id}`
+                                            `/purchase/purchase-order-detail/${po._id}`
                                           )
                                         }
-                                      />
-                                    </span>
-                                    <span style={{ marginLeft: "20px" }} />
-                                    <span>
-                                      <FontAwesomeIcon
-                                        style={{
-                                          color: "#da0b20",
-                                          cursor: "pointer",
-                                        }}
-                                        icon={faTrash}
-                                        size="2xl"
                                       />
                                     </span>
                                   </div>
@@ -275,10 +244,8 @@ const ProductList = () => {
           </div>
         </section>
       </main>
-
-      {/* moumi 12.2.24 */}
     </>
   );
 };
 
-export default ProductList;
+export default PurchaseOrderList;

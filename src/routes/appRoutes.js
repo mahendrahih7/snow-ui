@@ -20,6 +20,12 @@ import SellerLogin from "../components/sellers/SellerLogin";
 // import OrderHistory from "../components/orders/OrderHistory";
 import ProductList from "../components/sellers/products/ProductList";
 import AddProduct from "../components/sellers/products/AddProduct";
+import SupplierList from "../components/sellers/purchase/SupplierList";
+import AddSupplier from "../components/sellers/purchase/AddSupplier";
+import WarehouseList from "../components/sellers/warehouse/WarehouseList";
+import PurchaseOrder from "../components/sellers/purchase/PurchaseOrder";
+import PurchaseOrderList from "../components/sellers/purchase/PurchaseOrderList";
+import InventorySummery from "../components/sellers/inventory/InventorySummery";
 
 const appRoutes = [
   // {
@@ -164,6 +170,71 @@ const appRoutes = [
         state: "products.add-product",
         sidebarProps: {
           displayText: "Add Product",
+        },
+      },
+    ],
+  },
+  {
+    path: "/purchase",
+    element: "",
+    state: "purchase",
+    sidebarProps: {
+      displayText: "Purchase",
+      icon: "nav_icon13.png",
+    },
+    child: [
+      {
+        path: "/purchase/supplier-list",
+        element: <SupplierList />,
+        state: "purchase.supplier-list",
+        sidebarProps: {
+          displayText: "Suppliers",
+        },
+      },
+      {
+        path: "/purchase/purchase-order-list",
+        element: <PurchaseOrderList />,
+        state: "purchase.purchase-order",
+        sidebarProps: {
+          displayText: "Purchase Order List",
+        },
+      },
+    ],
+  },
+  {
+    path: "/warehouse",
+    element: "",
+    state: "warehouse",
+    sidebarProps: {
+      displayText: "Warehouse",
+      icon: "nav_icon8.png",
+    },
+    child: [
+      {
+        path: "/warehouse/warehouse-list",
+        element: <WarehouseList />,
+        state: "warehouse.warehouse-list",
+        sidebarProps: {
+          displayText: "Warehouses",
+        },
+      },
+    ],
+  },
+  {
+    path: "/inventory",
+    element: "",
+    state: "inventory",
+    sidebarProps: {
+      displayText: "Inventory",
+      icon: "nav_icon8.png",
+    },
+    child: [
+      {
+        path: "/inventory/inventory-summery",
+        element: <InventorySummery />,
+        state: "inventory.inventory-summery",
+        sidebarProps: {
+          displayText: "Inventory Summery",
         },
       },
     ],
